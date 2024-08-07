@@ -1,0 +1,139 @@
+html {
+    display: flex;
+    height: 100vh;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #0d0d0d;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0 10px;
+}
+
+h1 {
+    font-size: 4rem;
+    margin-bottom: 50px;
+    color: #1abc9c;
+    border: 5px solid #1abc9c;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+#chatForm {
+    display: flex;
+    width: 75%;
+    min-width: 375px;
+    max-width: 700px;
+    margin-bottom: 10px;
+}
+
+#userInput {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 20px 0 0 20px;
+    background: #2c3e50;
+    color: #ecf0f1;
+}
+
+button {
+    padding: 10px;
+    background: #1abc9c;
+    border: none;
+    border-radius: 0 20px 20px 0;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #16a085;
+}
+
+.chatbox {
+    width: 75%;
+    min-width: 375px;
+    max-width: 700px;
+    height: calc(100vh - 60px);
+    padding: 10px;
+    background: #222;
+    border-radius: 10px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    display: block;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    width: fit-content;
+    word-break: break-word;
+    max-width: 60%;
+}
+
+.user {
+    background: #34495e;
+    text-align: right;
+    margin-left: auto;
+    margin-right: 30px;
+}
+
+.bot {
+    background: #1abc9c;
+    text-align: left;
+    margin-left: 30px;
+}
+
+.message p {
+    margin: 0;
+}
+
+.user p {
+    color: #ecf0f1;
+}
+
+.bot p {
+    color: #fff;
+}
+
+a {
+    font-size: 2rem;
+    padding: 10px 20px;
+    background: #1abc9c;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 20px;
+    transition: background 0.3s;
+}
+
+a:hover {
+    background: #16a085;
+}
+
+@media (max-width: 500px) {
+    #chatForm, .chatbox {
+        width: 100%;
+    }
+
+    .chatbox {
+        padding: 5px;
+    }
+
+    .user  {
+        margin-right: 5px;
+    }
+
+    .bot {
+        margin-left: 5px;
+    }
+}
