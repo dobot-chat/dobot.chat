@@ -7,16 +7,14 @@ import java.util.List;
 
 public abstract class MeuChat {
 
-    protected String resposta;
-    protected static final List<Mensagem> mensagens = new ArrayList<>();
+    private static final List<Mensagem> mensagens = new ArrayList<>();
 
-    public MeuChat() {
-        this.resposta = "";
+    public final void receberMensagem(String msg) throws YormException {
+        String resposta = responderMensagem(msg);
+        mensagens.add(new Mensagem(msg, resposta));
     }
 
-    public abstract void receberMensagem(String msg) throws YormException;
-
-//    protected abstract void processarMensagem(String msg);
+    protected abstract String responderMensagem(String mensagemUsuario) throws YormException;
 
     public List<Mensagem> getMensagens() {
         return mensagens;

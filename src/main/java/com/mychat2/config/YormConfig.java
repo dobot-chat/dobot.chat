@@ -28,7 +28,13 @@ public class YormConfig {
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         DataSource dataSource = new HikariDataSource(config);
 
+        criarTabelas(dataSource);
+        yorm = new Yorm(dataSource);
+    }
+
+    private static void criarTabelas(DataSource dataSource) {
         List<Class<?>> entidades = BuscaAnotacoesUtil.buscarEntidades();
+
         try {
             if (!entidades.isEmpty()) {
                 CriaTabelasUtil.criarTabelas(dataSource, entidades);
@@ -37,8 +43,6 @@ public class YormConfig {
         } catch (SQLException e) {
             logger.error("Erro na criação de tabelas no banco: {}", e.getMessage());
         }
-
-        yorm = new Yorm(dataSource);
     }
 
     public static Yorm getYorm() {

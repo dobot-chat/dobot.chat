@@ -11,15 +11,15 @@ import java.util.List;
 
 public class CriaTabelasUtil {
 
-    public static void criarTabelas(DataSource dataSource, List<Class<?>> recordsPersistencia) throws SQLException {
+    public static void criarTabelas(DataSource dataSource, List<Class<?>> entidades) throws SQLException {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
 
-            for (Class<?> recordClass : recordsPersistencia) {
-                String tableName = recordClass.getSimpleName().toLowerCase();
+            for (Class<?> entidade : entidades) {
+                String tableName = entidade.getSimpleName().toLowerCase();
                 StringBuilder createTableSQL = new StringBuilder("CREATE TABLE IF NOT EXISTS " + tableName + " (");
 
-                Field[] fields = recordClass.getDeclaredFields();
+                Field[] fields = entidade.getDeclaredFields();
                 for (Field field : fields) {
                     if (field.getName().equalsIgnoreCase("id")) {
                         createTableSQL.append(field.getName()).append(" INT PRIMARY KEY AUTO_INCREMENT, ");
@@ -27,7 +27,7 @@ public class CriaTabelasUtil {
                         createTableSQL.append(field.getName()).append(" ").append(getSQLType(field.getType())).append(", ");
                     }
                 }
-                createTableSQL.setLength(createTableSQL.length() - 2); // Remove a última vírgula
+                createTableSQL.setLength(createTableSQL.length() - 2);
                 createTableSQL.append(");");
 
                 statement.executeUpdate(createTableSQL.toString());

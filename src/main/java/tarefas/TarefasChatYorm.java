@@ -14,6 +14,7 @@ public class TarefasChatYorm extends MeuChat {
 
     private static final ChatbotService<Tarefa> chatbotService = new ChatbotService<>(Tarefa.class);
     private String estadoAtual = ESTADO_INICIAL;
+    private String resposta = "";
 
     private static final String MENSAGEM_BOAS_VINDAS = "Olá, eu sou o Gerenciador de Tarefas, em que posso ajudar? <br>1 - Adicionar tarefa <br>2 - Listar tarefas <br>3 - Remover tarefa";
     private static final String MENSAGEM_ADICIONAR_TAREFA = "Qual tarefa deseja adicionar? (Digite 0 para cancelar)";
@@ -31,7 +32,7 @@ public class TarefasChatYorm extends MeuChat {
 
 
     @Override
-    public void receberMensagem(String msg) throws YormException {
+    protected String responderMensagem(String msg) throws YormException {
         System.out.println("Recebendo mensagem: " + msg);
 
         String msgTratada = msg == null ? "0" : msg;
@@ -47,7 +48,7 @@ public class TarefasChatYorm extends MeuChat {
             processarMensagem(msgTratada);
         }
 
-        mensagens.add(new Mensagem(msg, resposta));
+        return resposta;
     }
 
     private void processarComando(String comando) throws YormException {
