@@ -1,10 +1,8 @@
 package com.mychat2.config;
 
-import com.mychat2.annotations.Chatbot;
 import com.mychat2.controllers.ChatbotController;
 import com.mychat2.domain.MeuChat;
-import io.github.classgraph.ClassGraph;
-import io.github.classgraph.ScanResult;
+import com.mychat2.util.BuscaAnotacoesUtil;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.rendering.template.JavalinThymeleaf;
@@ -30,12 +28,12 @@ public class JavalinConfig {
                 config.fileRenderer(new JavalinThymeleaf(createThymeleafEngine()));
             }).start(8080);
 
-            MeuChat meuChat = buscaClasseChatbot();
+            MeuChat meuChat = BuscaAnotacoesUtil.buscarClasseChatbot();
             if (meuChat == null) {
                 logger.error("Nenhuma classe extendendo de MeuChat e anotada com @ChatBot foi encontrada.");
                 return;
             }
-            logger.info("Instância de " + meuChat.getClass().getSimpleName() + " criada");
+            logger.info("Instância de {} criada", meuChat.getClass().getSimpleName());
 
             app.before(ctx -> {
                 ctx.attribute("meuChat", meuChat);
@@ -45,15 +43,9 @@ public class JavalinConfig {
 
             ChatbotController controller = new ChatbotController(meuChat);
 
-            app.get("/", ctx -> {
-                ctx.render("/index.html", controller.processHomePage(ctx));
-            });
-            app.get("/chatbot", ctx -> {
-                ctx.render("/chatbot.html");
-            });
-            app.post("/chatbot", ctx -> {
-                ctx.render("/chatbot.html", controller.processChatbotPage(ctx));
-            });
+            app.get("/", ctx -> ctx.render("/index.html", controller.processHomePage(ctx)));
+            app.get("/chatbot", ctx -> ctx.render("/chatbot.html"));
+            app.post("/chatbot", ctx -> ctx.render("/chatbot.html", controller.processChatbotPage(ctx)));
 
             logger.info("Aplicação inicializada com sucesso!");
         } catch (Exception e) {
@@ -74,16 +66,5 @@ public class JavalinConfig {
         templateResolver.setTemplateMode("HTML");
         templateResolver.setCharacterEncoding("UTF-8");
         return templateResolver;
-    }
-
-    private static MeuChat buscaClasseChatbot() throws Exception {
-        try (ScanResult scanResult = new ClassGraph().enableAnnotationInfo().scan()) {
-            for (Class<?> clazz : scanResult.getClassesWithAnnotation(Chatbot.class.getName()).loadClasses()) {
-                if (MeuChat.class.isAssignableFrom(clazz)) {
-                    return (MeuChat) clazz.getDeclaredConstructor().newInstance();
-                }
-            }
-        }
-        return null;
     }
 }

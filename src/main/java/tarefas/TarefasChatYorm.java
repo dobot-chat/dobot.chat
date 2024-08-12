@@ -4,14 +4,15 @@ package tarefas;
 import com.mychat2.annotations.Chatbot;
 import com.mychat2.domain.Mensagem;
 import com.mychat2.domain.MeuChat;
+import com.mychat2.service.ChatbotService;
+import org.yorm.exception.YormException;
 
-import java.util.ArrayList;
 import java.util.List;
 
-//@Chatbot
-public class TarefasChat extends MeuChat {
+@Chatbot
+public class TarefasChatYorm extends MeuChat {
 
-    private final List<String> tarefas = new ArrayList<>();
+    private static final ChatbotService<Tarefa> chatbotService = new ChatbotService<>(Tarefa.class);
     private String estadoAtual = ESTADO_INICIAL;
 
     private static final String MENSAGEM_BOAS_VINDAS = "Olá, eu sou o Gerenciador de Tarefas, em que posso ajudar? <br>1 - Adicionar tarefa <br>2 - Listar tarefas <br>3 - Remover tarefa";
@@ -30,7 +31,7 @@ public class TarefasChat extends MeuChat {
 
 
     @Override
-    public void receberMensagem(String msg) {
+    public void receberMensagem(String msg) throws YormException {
         System.out.println("Recebendo mensagem: " + msg);
 
         String msgTratada = msg == null ? "0" : msg;
@@ -49,7 +50,7 @@ public class TarefasChat extends MeuChat {
         mensagens.add(new Mensagem(msg, resposta));
     }
 
-    private void processarComando(String comando) {
+    private void processarComando(String comando) throws YormException {
         switch (comando) {
             case "0":
                 estadoAtual = ESTADO_INICIAL;
@@ -63,7 +64,7 @@ public class TarefasChat extends MeuChat {
                 resposta = listarTarefas();
                 break;
             case "3":
-                if (tarefas.isEmpty()) {
+                if (chatbotService.getAll().isEmpty()) {
                     resposta = MENSAGEM_SEM_TAREFAS_CADASTRADAS;
                 } else {
                     estadoAtual = ESTADO_REMOVER_TAREFA;
@@ -76,7 +77,7 @@ public class TarefasChat extends MeuChat {
         }
     }
 
-    public void processarMensagem(String msg) {
+    public void processarMensagem(String msg) throws YormException {
         switch (estadoAtual) {
             case ESTADO_ADICIONAR_TAREFA:
                 adicionarTarefa(msg);
@@ -94,10 +95,10 @@ public class TarefasChat extends MeuChat {
         }
     }
 
-    private void adicionarTarefa(String msg) {
+    private void adicionarTarefa(String msg) throws YormException {
         if (!msg.equals("0")) {
-            tarefas.add(msg);
-//            Tarefa tarefa = new Tarefa(0, msg);
+            Tarefa tarefa = new Tarefa(0, msg);
+            chatbotService.saveObj(tarefa);
             resposta = MENSAGEM_ADICAO_TAREFA_SUCESSO;
         } else {
             resposta = MENSAGEM_OPERACAO_CANCELADA;
@@ -105,23 +106,24 @@ public class TarefasChat extends MeuChat {
         estadoAtual = ESTADO_INICIAL;
     }
 
-    private String listarTarefas() {
-        if (tarefas.isEmpty()) {
+    private String listarTarefas() throws YormException {
+        if (chatbotService.getAll().isEmpty()) {
             return MENSAGEM_SEM_TAREFAS_CADASTRADAS;
         } else {
             StringBuilder listaDeTarefas = new StringBuilder();
-            for (int i = 0; i < tarefas.size(); i++) {
-                listaDeTarefas.append((i + 1)).append(" - ").append(tarefas.get(i)).append("<br>");
+            for (Tarefa trf : chatbotService.getAll()) {
+                listaDeTarefas.append(trf.id()).append(" - ").append(trf.descricao()).append("<br>");
             }
             return listaDeTarefas.toString();
         }
     }
 
-    private void removerTarefa(String msg) {
+    private void removerTarefa(String msg) throws YormException {
         try {
-            int indice = Integer.parseInt(msg) - 1;
-            if (indice >= 0 && indice < tarefas.size()) {
-                tarefas.remove(indice);
+            int indice = Integer.parseInt(msg);
+            List<Tarefa> tarefas = chatbotService.getAll();
+            if (indice > 0 && indice <= tarefas.size()) {
+                chatbotService.deleteObj(indice);
                 resposta = MENSAGEM_REMOCAO_TAREFA_SUCESSO;
             } else {
                 resposta = msg.equals("0") ? MENSAGEM_OPERACAO_CANCELADA : MENSAGEM_TAREFA_NAO_ENCONTRADA;
