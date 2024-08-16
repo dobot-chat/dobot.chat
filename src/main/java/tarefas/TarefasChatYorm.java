@@ -26,7 +26,7 @@ public class TarefasChatYorm extends MeuChat {
 
     @Override
     protected void processarMensagem(Contexto contexto) throws YormException {
-        String msg = contexto.getMensagem();
+        String msg = contexto.getMensagemUsuario();
         estadoAtual = contexto.getEstado();
         System.out.println("Recebendo mensagem: " + msg);
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
     <head>
         <title>Chatbot</title>
         <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/chat.css}" />
@@ -16,11 +16,11 @@
     <body>
         <div class="chatbox">
             <div th:each="mensagem : ${mensagens}">
-                <div th:if="${mensagem.msgUsuario()}" class="message user">
-                    <p th:utext="${mensagem.msgUsuario()}"></p>
+                <div th:if="${mensagem.autor().name() == 'USUARIO'}" class="message user">
+                    <p th:utext="${mensagem.conteudo()}"></p>
                 </div>
-                <div th:if="${mensagem.msgBot()}" class="message bot">
-                    <p th:utext="${mensagem.msgBot()}"></p>
+                <div th:if="${mensagem.autor().name() == 'BOT'}" class="message bot">
+                    <p th:utext="${mensagem.conteudo()}"></p>
                 </div>
             </div>
         </div>

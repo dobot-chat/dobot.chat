@@ -1,16 +1,15 @@
 package tarefas;
 
-import com.mychat2.annotations.Chatbot;
 import com.mychat2.domain.Contexto;
 import com.mychat2.domain.MeuChat;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 //@Chatbot
 public class TarefasChat extends MeuChat {
 
-    private final List<String> tarefas = new ArrayList<>();
+    private final List<String> tarefas = new LinkedList<>();
     private String estadoAtual;
     private String resposta = "";
 
@@ -31,7 +30,7 @@ public class TarefasChat extends MeuChat {
 
     @Override
     protected void processarMensagem(Contexto contexto) {
-        String msg = contexto.getMensagem();
+        String msg = contexto.getMensagemUsuario();
         estadoAtual = contexto.getEstado();
         System.out.println("Recebendo mensagem: " + msg);
 

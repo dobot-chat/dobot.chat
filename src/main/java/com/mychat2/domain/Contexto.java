@@ -2,17 +2,17 @@ package com.mychat2.domain;
 
 public class Contexto {
 
-    private final String mensagem;
+    private final String mensagemUsuario;
     private String estado;
     private String resposta;
 
-    public Contexto(String mensagem, String estado) {
-        this.mensagem = mensagem;
+    public Contexto(String mensagemUsuario, String estado) {
+        this.mensagemUsuario = mensagemUsuario;
         this.estado = estado;
     }
 
-    public String getMensagem() {
-        return mensagem;
+    public String getMensagemUsuario() {
+        return mensagemUsuario;
     }
 
     public String getEstado() {

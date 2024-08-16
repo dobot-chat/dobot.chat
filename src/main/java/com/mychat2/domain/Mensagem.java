@@ -1,4 +1,6 @@
 package com.mychat2.domain;
 
-public record Mensagem(String msgUsuario, String msgBot) {
+import com.mychat2.enums.Autor;
+
+public record Mensagem(Autor autor, String conteudo) {
 }

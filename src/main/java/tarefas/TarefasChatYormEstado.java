@@ -1,6 +1,5 @@
 package tarefas;
 
-import com.mychat2.annotations.Chatbot;
 import com.mychat2.domain.Contexto;
 import com.mychat2.domain.MeuChat;
 import com.mychat2.service.ChatbotService;
@@ -34,7 +33,7 @@ public class TarefasChatYormEstado extends MeuChat {
     }
 
     private void menuInicial(Contexto contexto) {
-        String msg = contexto.getMensagem();
+        String msg = contexto.getMensagemUsuario();
         System.out.println("Recebendo mensagem: " + msg);
 
         if (msg.matches("[0-3]")) {
@@ -46,7 +45,7 @@ public class TarefasChatYormEstado extends MeuChat {
 
     private void processarComando(Contexto contexto) {
         try {
-            switch (contexto.getMensagem()) {
+            switch (contexto.getMensagemUsuario()) {
                 case "0":
                     contexto.responder(MENSAGEM_BOAS_VINDAS, "inicial");
                     break;
@@ -74,7 +73,7 @@ public class TarefasChatYormEstado extends MeuChat {
 
     private void adicionarTarefa(Contexto contexto) {
         try {
-            String msg = contexto.getMensagem();
+            String msg = contexto.getMensagemUsuario();
             if (!msg.equals("0")) {
                 Tarefa tarefa = new Tarefa(0, msg);
                 chatbotService.saveObj(tarefa);
@@ -106,7 +105,7 @@ public class TarefasChatYormEstado extends MeuChat {
 
     private void removerTarefa(Contexto contexto) {
             try {
-                String msg = contexto.getMensagem();
+                String msg = contexto.getMensagemUsuario();
                 int idTarefa = Integer.parseInt(msg);
 
                 Tarefa tarefaParaRemover = chatbotService.getObjById(idTarefa);
