@@ -120,6 +120,28 @@ a:hover {
     background: #16a085;
 }
 
+/* Estilo da barra de rolagem */
+.chatbox ::-webkit-scrollbar {
+    width: 12px;
+}
+
+.chatbox ::-webkit-scrollbar-track {
+    background: #1a1a1a; /* Cor do fundo da barra de rolagem */
+    border-radius: 10px;
+}
+
+.chatbox ::-webkit-scrollbar-thumb {
+    background-color: #333; /* Cor da barra de rolagem */
+    border-radius: 10px;
+    border: 3px solid #1a1a1a; /* Espaço ao redor da barra de rolagem */
+}
+
+/* Estilo da barra de rolagem para navegadores que não suportam Webkit */
+.chatbox {
+    scrollbar-width: thin;
+    scrollbar-color: #333 #1a1a1a;
+}
+
 @media (max-width: 500px) {
     #chatForm, .chatbox {
         width: 100%;
