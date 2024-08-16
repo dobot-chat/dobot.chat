@@ -1,8 +1,7 @@
 package tarefas;
 
-
 import com.mychat2.annotations.Chatbot;
-import com.mychat2.domain.Mensagem;
+import com.mychat2.domain.Contexto;
 import com.mychat2.domain.MeuChat;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.List;
 public class TarefasChat extends MeuChat {
 
     private final List<String> tarefas = new ArrayList<>();
-    private String estadoAtual = ESTADO_INICIAL;
+    private String estadoAtual;
     private String resposta = "";
 
     private static final String MENSAGEM_BOAS_VINDAS = "Olá, eu sou o Gerenciador de Tarefas, em que posso ajudar? <br>1 - Adicionar tarefa <br>2 - Listar tarefas <br>3 - Remover tarefa";
@@ -31,23 +30,23 @@ public class TarefasChat extends MeuChat {
 
 
     @Override
-    protected String responderMensagem(String msg) {
+    protected void processarMensagem(Contexto contexto) {
+        String msg = contexto.getMensagem();
+        estadoAtual = contexto.getEstado();
         System.out.println("Recebendo mensagem: " + msg);
-
-        String msgTratada = msg == null ? "0" : msg;
 
         // Verifica o estado atual para decidir como processar a mensagem
         if (estadoAtual.equals(ESTADO_INICIAL)) {
-            if (msgTratada.matches("[0-3]")) {
-                processarComando(msgTratada);
+            if (msg.matches("[0-3]")) {
+                processarComando(msg);
             } else {
                 resposta = MENSAGEM_OPCAO_INVALIDA;
             }
         } else {
-            processarMensagem(msgTratada);
+            executarOperacao(msg);
         }
 
-        return resposta;
+        contexto.responder(resposta);
     }
 
     private void processarComando(String comando) {
@@ -77,7 +76,7 @@ public class TarefasChat extends MeuChat {
         }
     }
 
-    public void processarMensagem(String msg) {
+    public void executarOperacao(String msg) {
         switch (estadoAtual) {
             case ESTADO_ADICIONAR_TAREFA:
                 adicionarTarefa(msg);
@@ -85,24 +84,17 @@ public class TarefasChat extends MeuChat {
             case ESTADO_REMOVER_TAREFA:
                 removerTarefa(msg);
                 break;
-            case ESTADO_INICIAL:
-                // Não deve chegar aqui, pois já lidamos com isso em processarComando
-                break;
-            default:
-                resposta = MENSAGEM_OPCAO_INVALIDA;
-                estadoAtual = ESTADO_INICIAL;
-                break;
         }
     }
 
     private void adicionarTarefa(String msg) {
         if (!msg.equals("0")) {
             tarefas.add(msg);
-//            Tarefa tarefa = new Tarefa(0, msg);
             resposta = MENSAGEM_ADICAO_TAREFA_SUCESSO;
         } else {
             resposta = MENSAGEM_OPERACAO_CANCELADA;
         }
+
         estadoAtual = ESTADO_INICIAL;
     }
 
@@ -130,6 +122,7 @@ public class TarefasChat extends MeuChat {
         } catch (NumberFormatException e) {
             resposta = MENSAGEM_OPCAO_INVALIDA;
         }
+
         estadoAtual = ESTADO_INICIAL;
     }
 }

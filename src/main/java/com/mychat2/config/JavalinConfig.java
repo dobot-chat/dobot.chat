@@ -44,8 +44,8 @@ public class JavalinConfig {
             ChatbotController controller = new ChatbotController(meuChat);
 
             app.get("/", ctx -> ctx.render("/index.html", controller.processHomePage(ctx)));
-            app.get("/chatbot", ctx -> ctx.render("/chatbot.html"));
-            app.post("/chatbot", ctx -> ctx.render("/chatbot.html", controller.processChatbotPage(ctx)));
+            app.get("/chatbot", ctx -> ctx.render("/chatbot.html", controller.processGetChatbotPage()));
+            app.post("/chatbot", ctx -> ctx.render("/chatbot.html", controller.processPostChatbotPage(ctx)));
 
             logger.info("Aplicação inicializada com sucesso!");
         } catch (Exception e) {
