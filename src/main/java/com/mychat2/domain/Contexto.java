@@ -19,6 +19,10 @@ public class Contexto {
         return estado;
     }
 
+    public void mudarEstado(String estado) {
+        this.estado = estado;
+    }
+
     public void responder(String resposta) {
         this.resposta = resposta;
     }

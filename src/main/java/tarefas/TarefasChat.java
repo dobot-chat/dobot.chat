@@ -1,16 +1,17 @@
 package tarefas;
 
+import com.mychat2.annotations.Chatbot;
+import com.mychat2.annotations.ChatbotEstado;
 import com.mychat2.domain.Contexto;
-import com.mychat2.domain.MeuChat;
 
 import java.util.LinkedList;
 import java.util.List;
 
 //@Chatbot
-public class TarefasChat extends MeuChat {
+public class TarefasChat {
 
     private final List<String> tarefas = new LinkedList<>();
-    private String estadoAtual;
+    private String estadoAtual = "inicial";
     private String resposta = "";
 
     private static final String MENSAGEM_BOAS_VINDAS = "Olá, eu sou o Gerenciador de Tarefas, em que posso ajudar? <br>1 - Adicionar tarefa <br>2 - Listar tarefas <br>3 - Remover tarefa";
@@ -28,10 +29,9 @@ public class TarefasChat extends MeuChat {
     private static final String ESTADO_REMOVER_TAREFA = "removerTarefa";
 
 
-    @Override
-    protected void processarMensagem(Contexto contexto) {
+    @ChatbotEstado("inicial")
+    public void processarMensagem(Contexto contexto) {
         String msg = contexto.getMensagemUsuario();
-        estadoAtual = contexto.getEstado();
         System.out.println("Recebendo mensagem: " + msg);
 
         // Verifica o estado atual para decidir como processar a mensagem

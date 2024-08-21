@@ -28,12 +28,14 @@ public class JavalinConfig {
                 config.fileRenderer(new JavalinThymeleaf(createThymeleafEngine()));
             }).start(8080);
 
-            MeuChat meuChat = BuscaAnotacoesUtil.buscarClasseChatbot();
-            if (meuChat == null) {
-                logger.error("Nenhuma classe extendendo de MeuChat e anotada com @ChatBot foi encontrada.");
+            Object chatbotImpl = BuscaAnotacoesUtil.buscarClasseChatbot();
+            if (chatbotImpl == null) {
+                logger.error("Nenhuma classe anotada com @Chatbot foi encontrada.");
                 return;
             }
-            logger.info("Instância de {} criada", meuChat.getClass().getSimpleName());
+            logger.info("Instância de {} criada", chatbotImpl.getClass().getSimpleName());
+
+            MeuChat meuChat = new MeuChat(chatbotImpl);
 
             app.before(ctx -> {
                 ctx.attribute("meuChat", meuChat);

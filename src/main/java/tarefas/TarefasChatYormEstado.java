@@ -1,14 +1,15 @@
 package tarefas;
 
+import com.mychat2.annotations.Chatbot;
+import com.mychat2.annotations.ChatbotEstado;
 import com.mychat2.domain.Contexto;
-import com.mychat2.domain.MeuChat;
 import com.mychat2.service.ChatbotService;
 import org.yorm.exception.YormException;
 
 import java.util.List;
 
-//@Chatbot
-public class TarefasChatYormEstado extends MeuChat {
+@Chatbot
+public class TarefasChatYormEstado {
 
     private static final ChatbotService<Tarefa> chatbotService = new ChatbotService<>(Tarefa.class);
 
@@ -22,24 +23,16 @@ public class TarefasChatYormEstado extends MeuChat {
     private static final String MENSAGEM_REMOCAO_TAREFA_SUCESSO = "Tarefa removida com sucesso! <br>Digite 0 se quiser ver as opções novamente.";
     private static final String MENSAGEM_TAREFA_NAO_ENCONTRADA = "Tarefa não encontrada! <br>Digite 0 se quiser ver as opções novamente.";
 
-    public TarefasChatYormEstado() {
-        configurarEstados();
-    }
 
-    private void configurarEstados() {
-        addEstado("inicial", this::menuInicial);
-        addEstado("adicionarTarefa", this::adicionarTarefa);
-        addEstado("removerTarefa", this::removerTarefa);
-    }
-
-    private void menuInicial(Contexto contexto) {
+    @ChatbotEstado("inicial")
+    public void menuInicial(Contexto contexto) {
         String msg = contexto.getMensagemUsuario();
         System.out.println("Recebendo mensagem: " + msg);
 
         if (msg.matches("[0-3]")) {
             processarComando(contexto);
         } else {
-            contexto.responder(MENSAGEM_BOAS_VINDAS);
+            contexto.responder(MENSAGEM_OPCAO_INVALIDA);
         }
     }
 
@@ -71,7 +64,8 @@ public class TarefasChatYormEstado extends MeuChat {
         }
     }
 
-    private void adicionarTarefa(Contexto contexto) {
+    @ChatbotEstado("adicionarTarefa")
+    public void adicionarTarefa(Contexto contexto) {
         try {
             String msg = contexto.getMensagemUsuario();
             if (!msg.equals("0")) {
@@ -103,7 +97,8 @@ public class TarefasChatYormEstado extends MeuChat {
         }
     }
 
-    private void removerTarefa(Contexto contexto) {
+    @ChatbotEstado("removerTarefa")
+    public void removerTarefa(Contexto contexto) {
             try {
                 String msg = contexto.getMensagemUsuario();
                 int idTarefa = Integer.parseInt(msg);
@@ -123,9 +118,5 @@ public class TarefasChatYormEstado extends MeuChat {
             } catch (YormException e) {
                 throw new RuntimeException(e);
             }
-    }
-
-    @Override
-    protected void processarMensagem(Contexto contexto) throws YormException {
     }
 }

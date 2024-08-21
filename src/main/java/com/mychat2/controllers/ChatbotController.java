@@ -3,7 +3,6 @@ package com.mychat2.controllers;
 import com.mychat2.domain.Contexto;
 import com.mychat2.domain.MeuChat;
 import io.javalin.http.Context;
-import org.yorm.exception.YormException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +22,7 @@ public class ChatbotController {
         return model;
     }
 
-    public Map<String, Object> processPostChatbotPage(Context ctx) throws YormException {
+    public Map<String, Object> processPostChatbotPage(Context ctx) {
         String estadoAtual = ctx.sessionAttribute("estadoChatbot");
         if (estadoAtual == null) {
             estadoAtual = "inicial";
@@ -33,7 +32,7 @@ public class ChatbotController {
 
         meuChat.receberMensagem(new Contexto(entrada, estadoAtual));
 
-        ctx.sessionAttribute("estadoChatbot", meuChat.getEstadoAtual());
+        ctx.sessionAttribute("estadoChatbot", meuChat.getEstado());
 
         Map<String, Object> model = new HashMap<>();
         model.put("mensagens", meuChat.getMensagens());
@@ -46,9 +45,10 @@ public class ChatbotController {
         MeuChat meuChat = ctx.attribute("meuChat");
 
         if (meuChat != null) {
-            String nomeChat = meuChat.getClass().getSimpleName();
+            String nomeChat = meuChat.getChatbot().getClass().getSimpleName();
             model.put("nomeChat", nomeChat);
         }
+
         return model;
     }
 }

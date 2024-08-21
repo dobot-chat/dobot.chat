@@ -1,16 +1,16 @@
 package tarefas;
 
 import com.mychat2.annotations.Chatbot;
+import com.mychat2.annotations.ChatbotEstado;
 import com.mychat2.domain.Contexto;
-import com.mychat2.domain.MeuChat;
 import com.mychat2.service.ChatbotService;
 import org.yorm.exception.YormException;
 
-@Chatbot
-public class TarefasChatYorm extends MeuChat {
+//@Chatbot
+public class TarefasChatYorm  {
 
     private static final ChatbotService<Tarefa> chatbotService = new ChatbotService<>(Tarefa.class);
-    private String estadoAtual;
+    private String estadoAtual = "inicial";
     private String resposta = "";
 
     private static final String MENSAGEM_BOAS_VINDAS = "Olá, eu sou o Gerenciador de Tarefas, em que posso ajudar? <br>1 - Adicionar tarefa <br>2 - Listar tarefas <br>3 - Remover tarefa";
@@ -23,11 +23,9 @@ public class TarefasChatYorm extends MeuChat {
     private static final String MENSAGEM_REMOCAO_TAREFA_SUCESSO = "Tarefa removida com sucesso! <br>Digite 0 se quiser ver as opções novamente.";
     private static final String MENSAGEM_TAREFA_NAO_ENCONTRADA = "Tarefa não encontrada! <br>Digite 0 se quiser ver as opções novamente.";
 
-
-    @Override
-    protected void processarMensagem(Contexto contexto) throws YormException {
+    @ChatbotEstado("inicial")
+    public void processarMensagem(Contexto contexto) throws YormException {
         String msg = contexto.getMensagemUsuario();
-        estadoAtual = contexto.getEstado();
         System.out.println("Recebendo mensagem: " + msg);
 
         // Verifica o estado atual para decidir como processar a mensagem
@@ -41,7 +39,7 @@ public class TarefasChatYorm extends MeuChat {
             executarOperacao(msg);
         }
 
-        contexto.responder(resposta, estadoAtual);
+        contexto.responder(resposta);
     }
 
     private void processarComando(String comando) throws YormException {

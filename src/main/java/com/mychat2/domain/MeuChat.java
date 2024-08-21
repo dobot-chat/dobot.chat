@@ -1,7 +1,9 @@
 package com.mychat2.domain;
 
 import com.mychat2.enums.Autor;
-import org.yorm.exception.YormException;
+import com.mychat2.util.BuscaAnotacoesUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,21 +11,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public abstract class MeuChat {
+public final class MeuChat {
+
+    private static final Logger logger = LoggerFactory.getLogger(MeuChat.class);
 
     private final List<Mensagem> mensagens = new LinkedList<>();
-    private final Map<String, Consumer<Contexto>> estados = new HashMap<>();
+    private Map<String, Consumer<Contexto>> estados = new HashMap<>();
     private String msgUsuario;
     private String respostaBot;
     private String estado;
+    private final Object chatbot;
 
-    public final void receberMensagem(Contexto contexto) throws YormException {
+    public MeuChat(Object chatbot) {
+        this.chatbot = chatbot;
+        mapearEstados();
+    }
+
+    public void receberMensagem(Contexto contexto) {
         msgUsuario = contexto.getMensagemUsuario();
 
         if (estados.containsKey(contexto.getEstado())) {
             estados.get(contexto.getEstado()).accept(contexto);
         } else {
-            processarMensagem(contexto);
+            logger.error("Estado não encontrado: {}", contexto.getEstado());
         }
 
         respostaBot = contexto.getResposta();
@@ -41,17 +51,21 @@ public abstract class MeuChat {
         }
     }
 
-    protected abstract void processarMensagem(Contexto contexto) throws YormException;
+    public void mapearEstados() {
+        this.estados = BuscaAnotacoesUtil.mapearEstados(this.chatbot);
+
+        if (this.estados.isEmpty()) {
+            logger.warn("Nenhum mapeamento de estado foi encontrado!");
+        } else {
+            logger.info("Mapeamento de estados encontrados: {}", this.estados.keySet());
+        }
+    }
 
     public List<Mensagem> getMensagens() {
         return mensagens;
     }
 
-    protected void addEstado(String key, Consumer<Contexto> action) {
-        estados.put(key, action);
-    }
-
-    public String getEstadoAtual() {
+    public String getEstado() {
         return estado;
     }
 
@@ -61,5 +75,9 @@ public abstract class MeuChat {
 
     public String getRespostaBot() {
         return respostaBot;
+    }
+
+    public Object getChatbot() {
+        return chatbot;
     }
 }
