@@ -42,7 +42,6 @@ public class ChatbotController {
 
     public Map<String, Object> processHomePage(Context ctx) {
         Map<String, Object> model = new HashMap<>();
-        MeuChat meuChat = ctx.attribute("meuChat");
 
         if (meuChat != null) {
             String nomeChat = meuChat.getChatbot().getClass().getSimpleName();

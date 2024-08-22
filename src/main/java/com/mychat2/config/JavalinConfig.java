@@ -38,7 +38,6 @@ public class JavalinConfig {
             MeuChat meuChat = new MeuChat(chatbotImpl);
 
             app.before(ctx -> {
-                ctx.attribute("meuChat", meuChat);
                 ctx.res().setCharacterEncoding(StandardCharsets.UTF_8.name());
                 ctx.res().setContentType("text/html; charset=UTF-8");
             });
