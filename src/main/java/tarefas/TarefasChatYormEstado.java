@@ -24,7 +24,7 @@ public class TarefasChatYormEstado {
     private static final String MENSAGEM_TAREFA_NAO_ENCONTRADA = "Tarefa não encontrada! <br>Digite 0 se quiser ver as opções novamente.";
 
 
-    @ChatbotEstado("inicial")
+    @ChatbotEstado
     public void menuInicial(Contexto contexto) {
         String msg = contexto.getMensagemUsuario();
         System.out.println("Recebendo mensagem: " + msg);

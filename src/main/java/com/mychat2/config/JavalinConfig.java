@@ -2,6 +2,7 @@ package com.mychat2.config;
 
 import com.mychat2.controllers.ChatbotController;
 import com.mychat2.domain.MeuChat;
+import com.mychat2.exception.ChatbotException;
 import com.mychat2.util.BuscaAnotacoesUtil;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
@@ -30,10 +31,9 @@ public class JavalinConfig {
 
             Object chatbotImpl = BuscaAnotacoesUtil.buscarClasseChatbot();
             if (chatbotImpl == null) {
-                logger.error("Nenhuma classe anotada com @Chatbot foi encontrada.");
-                return;
+                throw new ChatbotException("Nenhuma classe anotada com @Chatbot foi encontrada.");
             }
-            logger.info("Instância de {} criada", chatbotImpl.getClass().getSimpleName());
+            logger.info("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
 
             MeuChat meuChat = new MeuChat(chatbotImpl);
 

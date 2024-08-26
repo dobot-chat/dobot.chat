@@ -1,6 +1,7 @@
 package com.mychat2.domain;
 
 import com.mychat2.enums.Autor;
+import com.mychat2.exception.ChatbotException;
 import com.mychat2.util.BuscaAnotacoesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +31,11 @@ public final class MeuChat {
     public void receberMensagem(Contexto contexto) {
         msgUsuario = contexto.getMensagemUsuario();
 
-        if (estados.containsKey(contexto.getEstado())) {
-            estados.get(contexto.getEstado()).accept(contexto);
-        } else {
-            logger.error("Estado não encontrado: {}", contexto.getEstado());
+        if (!estados.containsKey(contexto.getEstado())) {
+            throw new ChatbotException("Estado '" + contexto.getEstado() + "' não encontrado.");
         }
+
+        estados.get(contexto.getEstado()).accept(contexto);
 
         respostaBot = contexto.getResposta();
         estado = contexto.getEstado();
@@ -52,13 +53,15 @@ public final class MeuChat {
     }
 
     public void mapearEstados() {
+        logger.info("Iniciando mapeamento dos estados para {}.", chatbot.getClass().getSimpleName());
         this.estados = BuscaAnotacoesUtil.mapearEstados(this.chatbot);
 
         if (this.estados.isEmpty()) {
-            logger.warn("Nenhum mapeamento de estado foi encontrado!");
-        } else {
-            logger.info("Mapeamento de estados encontrados: {}", this.estados.keySet());
+            throw new ChatbotException("Nenhum estado mapeado para " + chatbot.getClass().getSimpleName());
         }
+
+        logger.info("Mapeamento dos estados concluído com sucesso.");
+        logger.info("Mapeamento de estados encontrados: {}", this.estados.keySet());
     }
 
     public List<Mensagem> getMensagens() {
