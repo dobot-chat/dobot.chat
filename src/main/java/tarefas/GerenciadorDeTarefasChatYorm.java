@@ -1,5 +1,6 @@
 package tarefas;
 
+import com.mychat2.anotacoes.Chatbot;
 import com.mychat2.anotacoes.EstadoChat;
 import com.mychat2.dominio.Contexto;
 import com.mychat2.servico.ChatbotServico;
@@ -22,7 +23,7 @@ public class GerenciadorDeTarefasChatYorm {
     private static final String MENSAGEM_REMOCAO_TAREFA_SUCESSO = "Tarefa removida com sucesso! <br>Digite 0 se quiser ver as opções novamente.";
     private static final String MENSAGEM_TAREFA_NAO_ENCONTRADA = "Tarefa não encontrada! <br>Digite 0 se quiser ver as opções novamente.";
 
-    @EstadoChat("inicial")
+    @EstadoChat(estado = "inicial", inicial = true)
     public void processarMensagem(Contexto contexto) throws YormException {
         String msg = contexto.getMensagemUsuario();
         System.out.println("Recebendo mensagem: " + msg);

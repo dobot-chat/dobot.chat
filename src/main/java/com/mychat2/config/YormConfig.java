@@ -41,7 +41,7 @@ public class YormConfig {
                 logger.info("Tabelas criadas com sucesso! Classes mapeadas: {}", Arrays.toString(entidades.toArray()));
             }
         } catch (SQLException e) {
-            logger.error("Erro na criação de tabelas no banco: {}", e.getMessage());
+            logger.error("Erro na criação de tabelas no banco: ", e);
         }
     }
 

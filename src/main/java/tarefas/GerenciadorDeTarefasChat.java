@@ -1,5 +1,6 @@
 package tarefas;
 
+import com.mychat2.anotacoes.Chatbot;
 import com.mychat2.anotacoes.EstadoChat;
 import com.mychat2.dominio.Contexto;
 
@@ -28,7 +29,7 @@ public class GerenciadorDeTarefasChat {
     private static final String ESTADO_REMOVER_TAREFA = "removerTarefa";
 
 
-    @EstadoChat("inicial")
+    @EstadoChat(estado = "inicial", inicial = true)
     public void processarMensagem(Contexto contexto) {
         String msg = contexto.getMensagemUsuario();
         System.out.println("Recebendo mensagem: " + msg);

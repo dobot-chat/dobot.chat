@@ -23,16 +23,11 @@ public class ChatbotControlador {
     }
 
     public Map<String, Object> processarPostPaginaChat(Context ctx) {
-        String estadoAtual = ctx.sessionAttribute("estadoChatbot");
-        if (estadoAtual == null) {
-            estadoAtual = "inicial";
-        }
+        String estadoAtual = myChat.getEstadoAtual();
 
         String msgUsuario = ctx.formParam("msgUsuario");
 
         myChat.receberMensagem(new Contexto(msgUsuario, estadoAtual));
-
-        ctx.sessionAttribute("estadoChatbot", myChat.getEstadoAtual());
 
         Map<String, Object> model = new HashMap<>();
         model.put("mensagens", myChat.getMensagens());

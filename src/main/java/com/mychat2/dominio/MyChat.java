@@ -26,6 +26,8 @@ public final class MyChat {
     public MyChat(Object chatbot) {
         this.chatbot = chatbot;
         mapearEstados();
+        this.estadoAtual = AnotacoesUtil.obterEstadoInicial(chatbot);
+        logger.info("Estado inicial: {}", this.estadoAtual);
     }
 
     public void receberMensagem(Contexto contexto) {
@@ -52,7 +54,7 @@ public final class MyChat {
         }
     }
 
-    public void mapearEstados() {
+    private void mapearEstados() {
         logger.info("Iniciando mapeamento dos estados para {}.", chatbot.getClass().getSimpleName());
         this.estados = AnotacoesUtil.mapearEstados(this.chatbot);
 

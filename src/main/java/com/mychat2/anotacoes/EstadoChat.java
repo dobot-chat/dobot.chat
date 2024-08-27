@@ -8,5 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface EstadoChat {
-    String value() default "inicial";
+
+    String estado() default "";
+    boolean inicial() default false;
 }

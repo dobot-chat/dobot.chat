@@ -24,7 +24,7 @@ public class GerenciadorDeTarefasChatYormEstado {
     private static final String MENSAGEM_TAREFA_NAO_ENCONTRADA = "Tarefa não encontrada! <br>Digite 0 se quiser ver as opções novamente.";
 
 
-    @EstadoChat
+    @EstadoChat(inicial = true)
     public void menuInicial(Contexto contexto) {
         String msg = contexto.getMensagemUsuario();
         System.out.println("Recebendo mensagem: " + msg);
@@ -40,23 +40,23 @@ public class GerenciadorDeTarefasChatYormEstado {
         try {
             switch (contexto.getMensagemUsuario()) {
                 case "0":
-                    contexto.responder(MENSAGEM_BOAS_VINDAS, "inicial");
+                    contexto.responder(MENSAGEM_BOAS_VINDAS, "menuInicial");
                     break;
                 case "1":
                     contexto.responder(MENSAGEM_ADICIONAR_TAREFA, "adicionarTarefa");
                     break;
                 case "2":
-                    contexto.responder(listarTarefas(), "inicial");
+                    contexto.responder(listarTarefas(), "menuInicial");
                     break;
                 case "3":
                     if (CHATBOT_SERVICO.buscarTodos().isEmpty()) {
-                        contexto.responder(MENSAGEM_SEM_TAREFAS_CADASTRADAS, "inicial");
+                        contexto.responder(MENSAGEM_SEM_TAREFAS_CADASTRADAS, "menuInicial");
                     } else {
                         contexto.responder(listarTarefas() + "<br>" + MENSAGEM_REMOVER_TAREFA, "removerTarefa");
                     }
                     break;
                 default:
-                    contexto.responder(MENSAGEM_OPCAO_INVALIDA, "inicial");
+                    contexto.responder(MENSAGEM_OPCAO_INVALIDA, "menuInicial");
                     break;
             }
         } catch (YormException e) {
@@ -64,16 +64,16 @@ public class GerenciadorDeTarefasChatYormEstado {
         }
     }
 
-    @EstadoChat("adicionarTarefa")
+    @EstadoChat(estado = "adicionarTarefa")
     public void adicionarTarefa(Contexto contexto) {
         try {
             String msg = contexto.getMensagemUsuario();
             if (!msg.equals("0")) {
                 Tarefa tarefa = new Tarefa(0, msg);
                 CHATBOT_SERVICO.salvar(tarefa);
-                contexto.responder(MENSAGEM_ADICAO_TAREFA_SUCESSO, "inicial");
+                contexto.responder(MENSAGEM_ADICAO_TAREFA_SUCESSO, "menuInicial");
             } else {
-                contexto.responder(MENSAGEM_OPERACAO_CANCELADA, "inicial");
+                contexto.responder(MENSAGEM_OPERACAO_CANCELADA, "menuInicial");
             }
         } catch (YormException e) {
             throw new RuntimeException(e);
@@ -97,7 +97,7 @@ public class GerenciadorDeTarefasChatYormEstado {
         }
     }
 
-    @EstadoChat("removerTarefa")
+    @EstadoChat(estado = "removerTarefa")
     public void removerTarefa(Contexto contexto) {
             try {
                 String msg = contexto.getMensagemUsuario();
@@ -107,14 +107,14 @@ public class GerenciadorDeTarefasChatYormEstado {
 
                 if (tarefaParaRemover != null) {
                     CHATBOT_SERVICO.deletarPorId(idTarefa);
-                    contexto.responder(MENSAGEM_REMOCAO_TAREFA_SUCESSO, "inicial");
+                    contexto.responder(MENSAGEM_REMOCAO_TAREFA_SUCESSO, "menuInicial");
                 }  else if (msg.equals("0")) {
-                    contexto.responder(MENSAGEM_OPERACAO_CANCELADA, "inicial");
+                    contexto.responder(MENSAGEM_OPERACAO_CANCELADA, "menuInicial");
                 } else {
-                    contexto.responder(MENSAGEM_TAREFA_NAO_ENCONTRADA, "inicial");
+                    contexto.responder(MENSAGEM_TAREFA_NAO_ENCONTRADA, "menuInicial");
                 }
             } catch (NumberFormatException e) {
-                contexto.responder(MENSAGEM_OPCAO_INVALIDA, "inicial");
+                contexto.responder(MENSAGEM_OPCAO_INVALIDA, "menuInicial");
             } catch (YormException e) {
                 throw new RuntimeException(e);
             }

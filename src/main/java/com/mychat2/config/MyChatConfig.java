@@ -15,9 +15,9 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import java.nio.charset.StandardCharsets;
 
-public class JavalinConfig {
+public class MyChatConfig {
 
-    private static final Logger logger = LoggerFactory.getLogger(JavalinConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(MyChatConfig.class);
 
     public static void start() {
         try {
@@ -50,7 +50,7 @@ public class JavalinConfig {
 
             logger.info("Aplicação inicializada com sucesso!");
         } catch (Exception e) {
-            logger.error("Erro durante a inicialização da aplicação! {}", e.getMessage());
+            logger.error("Erro durante a inicialização da aplicação!", e);
         }
     }
 

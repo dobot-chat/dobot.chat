@@ -40,14 +40,14 @@ public class AnotacoesUtil {
 
     public static Map<String, Consumer<Contexto>> mapearEstados(Object chatbotImpl) {
         Map<String, Consumer<Contexto>> estadosMap = new HashMap<>();
-        Class<?> clazz = chatbotImpl.getClass();
 
-        for (Method metodo : clazz.getDeclaredMethods()) {
+        for (Method metodo : chatbotImpl.getClass().getDeclaredMethods()) {
             if (metodo.isAnnotationPresent(EstadoChat.class)) {
-                EstadoChat estado = metodo.getAnnotation(EstadoChat.class);
+                EstadoChat estadoChat = metodo.getAnnotation(EstadoChat.class);
+                String estado = estadoChat.estado().isBlank() ? metodo.getName() : estadoChat.estado();
                 validarMetodo(metodo, estado, estadosMap);
 
-                estadosMap.put(estado.value().toLowerCase(), obj -> {
+                estadosMap.put(estado.toLowerCase(), obj -> {
                     try {
                         metodo.invoke(chatbotImpl, obj);
                     } catch (IllegalAccessException | InvocationTargetException e) {
@@ -60,17 +60,33 @@ public class AnotacoesUtil {
         return estadosMap;
     }
 
-    private static void validarMetodo(Method method, EstadoChat estado, Map<String, Consumer<Contexto>> estadosMap) {
+    public static String obterEstadoInicial(Object chatbotImpl) {
+        String estadoInicial = null;
+        for (Method method : chatbotImpl.getClass().getDeclaredMethods()) {
+            if (method.isAnnotationPresent(EstadoChat.class)) {
+                EstadoChat estadoChat = method.getAnnotation(EstadoChat.class);
+                if (estadoChat.inicial()) {
+                    if (estadoInicial != null) {
+                        throw new ChatbotExcecao("Mais de um estado inicial definido!");
+                    }
+                    estadoInicial = estadoChat.estado().isEmpty() ? method.getName() : estadoChat.estado();
+                }
+            }
+        }
+
+        if (estadoInicial != null) {
+            return estadoInicial.toLowerCase();
+        }
+        throw new ChatbotExcecao("Nenhum estado inicial definido!");
+    }
+
+    private static void validarMetodo(Method method, String estado, Map<String, Consumer<Contexto>> estadosMap) {
         if (method.getParameterCount() != 1 || !method.getParameterTypes()[0].getName().equals(Contexto.class.getName())) {
             throw new ChatbotExcecao("O método '" + method.getName() + "' da classe " + method.getDeclaringClass().getName() + " está anotado com " + EstadoChat.class.getName() + " e deve conter um único parâmetro, que precisa ser do tipo " + Contexto.class.getName() + "!");
         }
 
-        if (estado.value().isBlank()) {
-            throw new ChatbotExcecao("O método '" + method.getName() + "' da classe " + method.getDeclaringClass().getName() + " está anotado com " + EstadoChat.class.getName() + ", mas o valor da anotação não pode ser vazio!");
-        }
-
-        if (estadosMap.containsKey(estado.value().toLowerCase())) {
-            throw new ChatbotExcecao("O estado '" + estado.value() + "' não pode ser mapeado para mais de um método!");
+        if (estadosMap.containsKey(estado.toLowerCase())) {
+            throw new ChatbotExcecao("O estado '" + estado.toLowerCase() + "' não pode ser mapeado para mais de um método!");
         }
     }
 }
