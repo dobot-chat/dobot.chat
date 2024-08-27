@@ -4,6 +4,6 @@
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources/WEB-INF/templates" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/WEB-INF/templates/chatbot.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/WEB-INF/templates/chat.html" charset="UTF-8" />
   </component>
 </project>

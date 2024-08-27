@@ -9,23 +9,23 @@
                 const chatbox = document.querySelector(".chatbox")
                 chatbox.scrollTop = chatbox.scrollHeight;
 
-                document.getElementById("userInput").focus();
+                document.getElementById("msgUsuario").focus();
             };
         </script>
     </head>
     <body>
         <div class="chatbox">
             <div th:each="mensagem : ${mensagens}">
-                <div th:if="${mensagem.autor().name() == 'USUARIO'}" class="message user">
+                <div th:if="${mensagem.autor().name() == 'USUARIO'}" class="mensagem usuario">
                     <p th:utext="${mensagem.conteudo()}"></p>
                 </div>
-                <div th:if="${mensagem.autor().name() == 'BOT'}" class="message bot">
+                <div th:if="${mensagem.autor().name() == 'BOT'}" class="mensagem bot">
                     <p th:utext="${mensagem.conteudo()}"></p>
                 </div>
             </div>
         </div>
         <form id="chatForm" method="post" th:action="@{/chatbot}">
-            <input type="text" id="userInput" name="userInput" placeholder="Escreva uma mensagem" required/>
+            <input type="text" id="msgUsuario" name="msgUsuario" placeholder="Escreva uma mensagem" required/>
             <button type="submit">&#x27A4;</button>
         </form>
     </body>

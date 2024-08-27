@@ -1,10 +1,10 @@
-package com.mychat2.util;
+package com.mychat2.utils;
 
-import com.mychat2.annotations.Chatbot;
-import com.mychat2.annotations.ChatbotEstado;
-import com.mychat2.annotations.Entidade;
-import com.mychat2.domain.Contexto;
-import com.mychat2.exception.ChatbotException;
+import com.mychat2.anotacoes.Chatbot;
+import com.mychat2.anotacoes.EstadoChat;
+import com.mychat2.anotacoes.Entidade;
+import com.mychat2.dominio.Contexto;
+import com.mychat2.exception.ChatbotExcecao;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class BuscaAnotacoesUtil {
+public class AnotacoesUtil {
 
     public static List<Class<?>> buscarEntidades() {
         List<Class<?>> entidades;
@@ -42,14 +42,14 @@ public class BuscaAnotacoesUtil {
         Map<String, Consumer<Contexto>> estadosMap = new HashMap<>();
         Class<?> clazz = chatbotImpl.getClass();
 
-        for (Method method : clazz.getDeclaredMethods()) {
-            if (method.isAnnotationPresent(ChatbotEstado.class)) {
-                ChatbotEstado estado = method.getAnnotation(ChatbotEstado.class);
-                validarMetodo(method, estado, estadosMap); // Passa o map e a annotation para a validação
+        for (Method metodo : clazz.getDeclaredMethods()) {
+            if (metodo.isAnnotationPresent(EstadoChat.class)) {
+                EstadoChat estado = metodo.getAnnotation(EstadoChat.class);
+                validarMetodo(metodo, estado, estadosMap);
 
                 estadosMap.put(estado.value().toLowerCase(), obj -> {
                     try {
-                        method.invoke(chatbotImpl, obj);
+                        metodo.invoke(chatbotImpl, obj);
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         throw new RuntimeException(e);
                     }
@@ -60,17 +60,17 @@ public class BuscaAnotacoesUtil {
         return estadosMap;
     }
 
-    private static void validarMetodo(Method method, ChatbotEstado estado, Map<String, Consumer<Contexto>> estadosMap) {
+    private static void validarMetodo(Method method, EstadoChat estado, Map<String, Consumer<Contexto>> estadosMap) {
         if (method.getParameterCount() != 1 || !method.getParameterTypes()[0].getName().equals(Contexto.class.getName())) {
-            throw new ChatbotException("O método '" + method.getName() + "' da classe " + method.getDeclaringClass().getName() + "está anotado com @ChatbotEstado e deve conter um único parâmetro, que precisa ser do tipo Contexto!");
+            throw new ChatbotExcecao("O método '" + method.getName() + "' da classe " + method.getDeclaringClass().getName() + " está anotado com " + EstadoChat.class.getName() + " e deve conter um único parâmetro, que precisa ser do tipo " + Contexto.class.getName() + "!");
         }
 
         if (estado.value().isBlank()) {
-            throw new ChatbotException("O método '" + method.getName() + "' da classe " + method.getDeclaringClass().getName() + "está anotado com @ChatbotEstado, mas o valor da anotação não pode ser vazio!");
+            throw new ChatbotExcecao("O método '" + method.getName() + "' da classe " + method.getDeclaringClass().getName() + " está anotado com " + EstadoChat.class.getName() + ", mas o valor da anotação não pode ser vazio!");
         }
 
         if (estadosMap.containsKey(estado.value().toLowerCase())) {
-            throw new ChatbotException("O estado '" + estado.value() + "' não pode ser mapeado para mais de um método!");
+            throw new ChatbotExcecao("O estado '" + estado.value() + "' não pode ser mapeado para mais de um método!");
         }
     }
 }

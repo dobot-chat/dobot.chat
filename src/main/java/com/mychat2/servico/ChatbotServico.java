@@ -1,4 +1,4 @@
-package com.mychat2.service;
+package com.mychat2.servico;
 
 import com.mychat2.config.YormConfig;
 import org.yorm.Yorm;
@@ -6,34 +6,34 @@ import org.yorm.exception.YormException;
 
 import java.util.List;
 
-public class ChatbotService<T extends Record> {
+public class ChatbotServico<T extends Record> {
 
     private final Yorm yorm;
     private final Class<T> obj;
 
-    public ChatbotService(Class<T> obj) {
+    public ChatbotServico(Class<T> obj) {
         this.yorm = YormConfig.getYorm();
         this.obj = obj;
     }
 
-    public void saveObj(T obj) throws YormException {
+    public void salvar(T obj) throws YormException {
         yorm.save(obj);
     }
 
-    public void insertObjList(List<T> obj) throws YormException {
+    public void salvarLista(List<T> obj) throws YormException {
         yorm.insert(obj);
     }
 
-    public List<T> getAll() throws YormException {
+    public List<T> buscarTodos() throws YormException {
         return yorm.find(obj);
     }
 
-    public T getObjById(int id) throws YormException {
+    public T buscarPorId(int id) throws YormException {
         return yorm.find(obj, id);
     }
 
-    public void deleteObj(int id) throws YormException {
-        T objeto = getObjById(id);
+    public void deletarPorId(int id) throws YormException {
+        T objeto = buscarPorId(id);
         if (objeto != null) {
             yorm.delete(objeto.getClass(), id);
         }

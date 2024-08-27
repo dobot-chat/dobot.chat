@@ -1,16 +1,14 @@
 package tarefas;
 
-import com.mychat2.annotations.Chatbot;
-import com.mychat2.annotations.ChatbotEstado;
-import com.mychat2.domain.Contexto;
-
-import java.util.LinkedList;
-import java.util.List;
+import com.mychat2.anotacoes.EstadoChat;
+import com.mychat2.dominio.Contexto;
+import com.mychat2.servico.ChatbotServico;
+import org.yorm.exception.YormException;
 
 //@Chatbot
-public class TarefasChat {
+public class GerenciadorDeTarefasChatYorm {
 
-    private final List<String> tarefas = new LinkedList<>();
+    private static final ChatbotServico<Tarefa> CHATBOT_SERVICO = new ChatbotServico<>(Tarefa.class);
     private String estadoAtual = "inicial";
     private String resposta = "";
 
@@ -24,18 +22,12 @@ public class TarefasChat {
     private static final String MENSAGEM_REMOCAO_TAREFA_SUCESSO = "Tarefa removida com sucesso! <br>Digite 0 se quiser ver as opções novamente.";
     private static final String MENSAGEM_TAREFA_NAO_ENCONTRADA = "Tarefa não encontrada! <br>Digite 0 se quiser ver as opções novamente.";
 
-    private static final String ESTADO_INICIAL = "inicial";
-    private static final String ESTADO_ADICIONAR_TAREFA = "adicionarTarefa";
-    private static final String ESTADO_REMOVER_TAREFA = "removerTarefa";
-
-
-    @ChatbotEstado("inicial")
-    public void processarMensagem(Contexto contexto) {
+    @EstadoChat("inicial")
+    public void processarMensagem(Contexto contexto) throws YormException {
         String msg = contexto.getMensagemUsuario();
         System.out.println("Recebendo mensagem: " + msg);
 
-        // Verifica o estado atual para decidir como processar a mensagem
-        if (estadoAtual.equals(ESTADO_INICIAL)) {
+        if (estadoAtual.equals("inicial")) {
             if (msg.matches("[0-3]")) {
                 processarComando(msg);
             } else {
@@ -48,24 +40,24 @@ public class TarefasChat {
         contexto.responder(resposta);
     }
 
-    private void processarComando(String comando) {
+    private void processarComando(String comando) throws YormException {
         switch (comando) {
             case "0":
-                estadoAtual = ESTADO_INICIAL;
+                estadoAtual = "inicial";
                 resposta = MENSAGEM_BOAS_VINDAS;
                 break;
             case "1":
-                estadoAtual = ESTADO_ADICIONAR_TAREFA;
+                estadoAtual = "adicionarTarefa";
                 resposta = MENSAGEM_ADICIONAR_TAREFA;
                 break;
             case "2":
                 resposta = listarTarefas();
                 break;
             case "3":
-                if (tarefas.isEmpty()) {
+                if (CHATBOT_SERVICO.buscarTodos().isEmpty()) {
                     resposta = MENSAGEM_SEM_TAREFAS_CADASTRADAS;
                 } else {
-                    estadoAtual = ESTADO_REMOVER_TAREFA;
+                    estadoAtual = "removerTarefa";
                     resposta = listarTarefas() + "<br>" + MENSAGEM_REMOVER_TAREFA;
                 }
                 break;
@@ -75,45 +67,49 @@ public class TarefasChat {
         }
     }
 
-    public void executarOperacao(String msg) {
+    public void executarOperacao(String msg) throws YormException {
         switch (estadoAtual) {
-            case ESTADO_ADICIONAR_TAREFA:
+            case "adicionarTarefa":
                 adicionarTarefa(msg);
                 break;
-            case ESTADO_REMOVER_TAREFA:
+            case "removerTarefa":
                 removerTarefa(msg);
                 break;
         }
     }
 
-    private void adicionarTarefa(String msg) {
+    private void adicionarTarefa(String msg) throws YormException {
         if (!msg.equals("0")) {
-            tarefas.add(msg);
+            Tarefa tarefa = new Tarefa(0, msg);
+            CHATBOT_SERVICO.salvar(tarefa);
             resposta = MENSAGEM_ADICAO_TAREFA_SUCESSO;
         } else {
             resposta = MENSAGEM_OPERACAO_CANCELADA;
         }
 
-        estadoAtual = ESTADO_INICIAL;
+        estadoAtual = "inicial";
     }
 
-    private String listarTarefas() {
-        if (tarefas.isEmpty()) {
+    private String listarTarefas() throws YormException {
+        if (CHATBOT_SERVICO.buscarTodos().isEmpty()) {
             return MENSAGEM_SEM_TAREFAS_CADASTRADAS;
         } else {
             StringBuilder listaDeTarefas = new StringBuilder();
-            for (int i = 0; i < tarefas.size(); i++) {
-                listaDeTarefas.append((i + 1)).append(" - ").append(tarefas.get(i)).append("<br>");
+            for (Tarefa trf : CHATBOT_SERVICO.buscarTodos()) {
+                listaDeTarefas.append(trf.id()).append(" - ").append(trf.descricao()).append("<br>");
             }
             return listaDeTarefas.toString();
         }
     }
 
-    private void removerTarefa(String msg) {
+    private void removerTarefa(String msg) throws YormException {
         try {
-            int indice = Integer.parseInt(msg) - 1;
-            if (indice >= 0 && indice < tarefas.size()) {
-                tarefas.remove(indice);
+            int idTarefa = Integer.parseInt(msg);
+
+            Tarefa tarefaParaRemover = CHATBOT_SERVICO.buscarPorId(idTarefa);
+
+            if (tarefaParaRemover != null) {
+                CHATBOT_SERVICO.deletarPorId(idTarefa);
                 resposta = MENSAGEM_REMOCAO_TAREFA_SUCESSO;
             } else {
                 resposta = msg.equals("0") ? MENSAGEM_OPERACAO_CANCELADA : MENSAGEM_TAREFA_NAO_ENCONTRADA;
@@ -122,6 +118,6 @@ public class TarefasChat {
             resposta = MENSAGEM_OPCAO_INVALIDA;
         }
 
-        estadoAtual = ESTADO_INICIAL;
+        estadoAtual = "inicial";
     }
 }

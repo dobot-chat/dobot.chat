@@ -1,4 +1,4 @@
-package com.mychat2.util;
+package com.mychat2.utils;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
@@ -16,26 +16,26 @@ public class CriaTabelasUtil {
              Statement statement = connection.createStatement()) {
 
             for (Class<?> entidade : entidades) {
-                String tableName = entidade.getSimpleName().toLowerCase();
-                StringBuilder createTableSQL = new StringBuilder("CREATE TABLE IF NOT EXISTS " + tableName + " (");
+                String nomeTabela = entidade.getSimpleName().toLowerCase();
+                StringBuilder criaTableSQL = new StringBuilder("CREATE TABLE IF NOT EXISTS " + nomeTabela + " (");
 
                 Field[] fields = entidade.getDeclaredFields();
                 for (Field field : fields) {
                     if (field.getName().equalsIgnoreCase("id")) {
-                        createTableSQL.append(field.getName()).append(" INT PRIMARY KEY AUTO_INCREMENT, ");
+                        criaTableSQL.append(field.getName()).append(" INT PRIMARY KEY AUTO_INCREMENT, ");
                     } else {
-                        createTableSQL.append(field.getName()).append(" ").append(getSQLType(field.getType())).append(", ");
+                        criaTableSQL.append(field.getName()).append(" ").append(getSQLTipo(field.getType())).append(", ");
                     }
                 }
-                createTableSQL.setLength(createTableSQL.length() - 2);
-                createTableSQL.append(");");
+                criaTableSQL.setLength(criaTableSQL.length() - 2);
+                criaTableSQL.append(");");
 
-                statement.executeUpdate(createTableSQL.toString());
+                statement.executeUpdate(criaTableSQL.toString());
             }
         }
     }
 
-    private static String getSQLType(Class<?> type) {
+    private static String getSQLTipo(Class<?> type) {
         if (type == String.class) {
             return "VARCHAR(255)";
         } else if (type == int.class || type == Integer.class) {

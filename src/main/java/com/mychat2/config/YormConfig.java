@@ -1,7 +1,7 @@
 package com.mychat2.config;
 
-import com.mychat2.util.BuscaAnotacoesUtil;
-import com.mychat2.util.CriaTabelasUtil;
+import com.mychat2.utils.AnotacoesUtil;
+import com.mychat2.utils.CriaTabelasUtil;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public class YormConfig {
     }
 
     private static void criarTabelas(DataSource dataSource) {
-        List<Class<?>> entidades = BuscaAnotacoesUtil.buscarEntidades();
+        List<Class<?>> entidades = AnotacoesUtil.buscarEntidades();
 
         try {
             if (!entidades.isEmpty()) {

@@ -1,4 +1,4 @@
-package com.mychat2.domain;
+package com.mychat2.dominio;
 
 public class Contexto {
 

@@ -34,7 +34,7 @@ h1 {
     margin-bottom: 10px;
 }
 
-#userInput {
+#msgUsuario {
     flex: 1;
     padding: 10px;
     border: none;
@@ -71,7 +71,7 @@ button:hover {
     flex-direction: column;
 }
 
-.message {
+.mensagem {
     display: block;
     margin-bottom: 10px;
     padding: 10px;
@@ -81,7 +81,7 @@ button:hover {
     max-width: 60%;
 }
 
-.user {
+.usuario {
     background: #34495e;
     text-align: right;
     margin-left: auto;
@@ -94,11 +94,11 @@ button:hover {
     margin-left: 30px;
 }
 
-.message p {
+.mensagem p {
     margin: 0;
 }
 
-.user p {
+.usuario p {
     color: #ecf0f1;
 }
 
@@ -120,23 +120,21 @@ a:hover {
     background: #16a085;
 }
 
-/* Estilo da barra de rolagem */
 .chatbox ::-webkit-scrollbar {
     width: 12px;
 }
 
 .chatbox ::-webkit-scrollbar-track {
-    background: #1a1a1a; /* Cor do fundo da barra de rolagem */
+    background: #1a1a1a;
     border-radius: 10px;
 }
 
 .chatbox ::-webkit-scrollbar-thumb {
-    background-color: #333; /* Cor da barra de rolagem */
+    background-color: #333;
     border-radius: 10px;
-    border: 3px solid #1a1a1a; /* Espaço ao redor da barra de rolagem */
+    border: 3px solid #1a1a1a;
 }
 
-/* Estilo da barra de rolagem para navegadores que não suportam Webkit */
 .chatbox {
     scrollbar-width: thin;
     scrollbar-color: #333 #1a1a1a;
@@ -151,7 +149,7 @@ a:hover {
         padding: 5px;
     }
 
-    .user  {
+    .usuario  {
         margin-right: 5px;
     }
 

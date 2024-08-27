@@ -1,12 +1,11 @@
-package com.mychat2.annotations;
+package com.mychat2.anotacoes;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface ChatbotEstado {
-    String value() default "inicial";
+public @interface Entidade {
 }
