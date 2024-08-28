@@ -1,15 +1,14 @@
 package tarefas;
 
-import com.mychat2.anotacoes.Chatbot;
 import com.mychat2.anotacoes.EstadoChat;
 import com.mychat2.dominio.Contexto;
-import com.mychat2.servico.ChatbotServico;
+import com.mychat2.servico.MyChatServico;
 import org.yorm.exception.YormException;
 
 //@Chatbot
 public class GerenciadorDeTarefasChatYorm {
 
-    private static final ChatbotServico<Tarefa> CHATBOT_SERVICO = new ChatbotServico<>(Tarefa.class);
+    private static final MyChatServico<Tarefa> MYCHAT_SERVICO = new MyChatServico<>(Tarefa.class);
     private String estadoAtual = "inicial";
     private String resposta = "";
 
@@ -55,7 +54,7 @@ public class GerenciadorDeTarefasChatYorm {
                 resposta = listarTarefas();
                 break;
             case "3":
-                if (CHATBOT_SERVICO.buscarTodos().isEmpty()) {
+                if (MYCHAT_SERVICO.buscarTodos().isEmpty()) {
                     resposta = MENSAGEM_SEM_TAREFAS_CADASTRADAS;
                 } else {
                     estadoAtual = "removerTarefa";
@@ -82,7 +81,7 @@ public class GerenciadorDeTarefasChatYorm {
     private void adicionarTarefa(String msg) throws YormException {
         if (!msg.equals("0")) {
             Tarefa tarefa = new Tarefa(0, msg);
-            CHATBOT_SERVICO.salvar(tarefa);
+            MYCHAT_SERVICO.salvar(tarefa);
             resposta = MENSAGEM_ADICAO_TAREFA_SUCESSO;
         } else {
             resposta = MENSAGEM_OPERACAO_CANCELADA;
@@ -92,11 +91,11 @@ public class GerenciadorDeTarefasChatYorm {
     }
 
     private String listarTarefas() throws YormException {
-        if (CHATBOT_SERVICO.buscarTodos().isEmpty()) {
+        if (MYCHAT_SERVICO.buscarTodos().isEmpty()) {
             return MENSAGEM_SEM_TAREFAS_CADASTRADAS;
         } else {
             StringBuilder listaDeTarefas = new StringBuilder();
-            for (Tarefa trf : CHATBOT_SERVICO.buscarTodos()) {
+            for (Tarefa trf : MYCHAT_SERVICO.buscarTodos()) {
                 listaDeTarefas.append(trf.id()).append(" - ").append(trf.descricao()).append("<br>");
             }
             return listaDeTarefas.toString();
@@ -107,10 +106,10 @@ public class GerenciadorDeTarefasChatYorm {
         try {
             int idTarefa = Integer.parseInt(msg);
 
-            Tarefa tarefaParaRemover = CHATBOT_SERVICO.buscarPorId(idTarefa);
+            Tarefa tarefaParaRemover = MYCHAT_SERVICO.buscarPorId(idTarefa);
 
             if (tarefaParaRemover != null) {
-                CHATBOT_SERVICO.deletarPorId(idTarefa);
+                MYCHAT_SERVICO.deletarPorId(idTarefa);
                 resposta = MENSAGEM_REMOCAO_TAREFA_SUCESSO;
             } else {
                 resposta = msg.equals("0") ? MENSAGEM_OPERACAO_CANCELADA : MENSAGEM_TAREFA_NAO_ENCONTRADA;

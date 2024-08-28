@@ -7,11 +7,11 @@ import io.javalin.http.Context;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChatbotControlador {
+public class MyChatControlador {
 
     private final MyChat myChat;
 
-    public ChatbotControlador(MyChat myChat) {
+    public MyChatControlador(MyChat myChat) {
         this.myChat = myChat;
     }
 

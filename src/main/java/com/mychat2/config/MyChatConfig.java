@@ -1,8 +1,8 @@
 package com.mychat2.config;
 
-import com.mychat2.controlador.ChatbotControlador;
+import com.mychat2.controlador.MyChatControlador;
 import com.mychat2.dominio.MyChat;
-import com.mychat2.exception.ChatbotExcecao;
+import com.mychat2.exception.MyChatExcecao;
 import com.mychat2.utils.AnotacoesUtil;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
@@ -31,7 +31,7 @@ public class MyChatConfig {
 
             Object chatbotImpl = AnotacoesUtil.buscarClasseChatbot();
             if (chatbotImpl == null) {
-                throw new ChatbotExcecao("Nenhuma classe anotada com @Chatbot foi encontrada!");
+                throw new MyChatExcecao("Nenhuma classe anotada com @Chatbot foi encontrada!");
             }
             logger.info("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
 
@@ -42,7 +42,7 @@ public class MyChatConfig {
                 ctx.res().setContentType("text/html; charset=UTF-8");
             });
 
-            ChatbotControlador controlador = new ChatbotControlador(myChat);
+            MyChatControlador controlador = new MyChatControlador(myChat);
 
             app.get("/", ctx -> ctx.render("/home.html", controlador.processarPaginaHome()));
             app.get("/chatbot", ctx -> ctx.render("/chat.html", controlador.processarGetPaginaChat()));

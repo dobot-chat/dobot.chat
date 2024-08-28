@@ -1,7 +1,7 @@
 package com.mychat2.dominio;
 
 import com.mychat2.enums.Autor;
-import com.mychat2.exception.ChatbotExcecao;
+import com.mychat2.exception.MyChatExcecao;
 import com.mychat2.utils.AnotacoesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public final class MyChat {
         ultimaMensagemUsuario = contexto.getMensagemUsuario();
 
         if (!estados.containsKey(contexto.getEstado().toLowerCase())) {
-            throw new ChatbotExcecao("Estado '" + contexto.getEstado() + "' não encontrado!");
+            throw new MyChatExcecao("Estado '" + contexto.getEstado() + "' não encontrado!");
         }
 
         estados.get(contexto.getEstado().toLowerCase()).accept(contexto);
@@ -59,7 +59,7 @@ public final class MyChat {
         this.estados = AnotacoesUtil.mapearEstados(this.chatbot);
 
         if (this.estados.isEmpty()) {
-            throw new ChatbotExcecao("Nenhum estado mapeado para " + chatbot.getClass().getSimpleName() + "!");
+            throw new MyChatExcecao("Nenhum estado mapeado para " + chatbot.getClass().getSimpleName() + "!");
         }
 
         logger.info("Mapeamento dos estados concluído com sucesso.");

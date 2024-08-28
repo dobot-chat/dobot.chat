@@ -1,7 +1,7 @@
 package com.mychat2.utils;
 
 import com.mychat2.anotacoes.Id;
-import com.mychat2.exception.ChatbotExcecao;
+import com.mychat2.exception.MyChatExcecao;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
@@ -35,7 +35,7 @@ public class CriaTabelasUtil {
                 }
 
                 if (!idEncontrado) {
-                    throw new ChatbotExcecao("A entidade " + entidade.getName() + " deve ter um campo anotado com @Id.");
+                    throw new MyChatExcecao("A entidade " + entidade.getName() + " deve ter um campo anotado com @Id.");
                 }
 
                 criaTableSQL.setLength(criaTableSQL.length() - 2);
@@ -62,7 +62,7 @@ public class CriaTabelasUtil {
         } else if (tipo == LocalDate.class) {
             return "DATE";
         } else {
-            throw new ChatbotExcecao("O tipo de dado " + tipo.getName() + " não é suportado para operações de banco! ");
+            throw new MyChatExcecao("O tipo de dado " + tipo.getName() + " não é suportado para operações de banco! ");
         }
     }
 }

@@ -6,12 +6,12 @@ import org.yorm.exception.YormException;
 
 import java.util.List;
 
-public class ChatbotServico<T extends Record> {
+public class MyChatServico<T extends Record> {
 
     private final Yorm yorm;
     private final Class<T> obj;
 
-    public ChatbotServico(Class<T> obj) {
+    public MyChatServico(Class<T> obj) {
         this.yorm = YormConfig.getYorm();
         this.obj = obj;
     }
