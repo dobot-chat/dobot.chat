@@ -1,5 +1,6 @@
 package com.mychat2.utils;
 
+import com.mychat2.anotacoes.Id;
 import com.mychat2.exception.ChatbotExcecao;
 
 import javax.sql.DataSource;
@@ -22,13 +23,21 @@ public class CriaTabelasUtil {
                 StringBuilder criaTableSQL = new StringBuilder("CREATE TABLE IF NOT EXISTS " + nomeTabela + " (");
 
                 Field[] fields = entidade.getDeclaredFields();
+                boolean idEncontrado = false;
+
                 for (Field field : fields) {
-                    if (field.getName().equalsIgnoreCase("id")) {
+                    if (field.isAnnotationPresent(Id.class)) {
                         criaTableSQL.append(field.getName()).append(" ").append(getSQLTipo(field.getType())).append(" PRIMARY KEY AUTO_INCREMENT, ");
+                        idEncontrado = true;
                     } else {
                         criaTableSQL.append(field.getName()).append(" ").append(getSQLTipo(field.getType())).append(", ");
                     }
                 }
+
+                if (!idEncontrado) {
+                    throw new ChatbotExcecao("A entidade " + entidade.getName() + " deve ter um campo anotado com @Id.");
+                }
+
                 criaTableSQL.setLength(criaTableSQL.length() - 2);
                 criaTableSQL.append(");");
 
@@ -53,7 +62,7 @@ public class CriaTabelasUtil {
         } else if (tipo == LocalDate.class) {
             return "DATE";
         } else {
-            throw new ChatbotExcecao("Tipo de dado não suportado: " + tipo.getName());
+            throw new ChatbotExcecao("O tipo de dado " + tipo.getName() + " não é suportado para operações de banco! ");
         }
     }
 }

@@ -1,6 +1,7 @@
 package tarefas;
 
 import com.mychat2.anotacoes.Entidade;
+import com.mychat2.anotacoes.Id;
 
 @Entidade
-public record Tarefa(int id, String descricao) {}
+public record Tarefa(@Id int id, String descricao) {}

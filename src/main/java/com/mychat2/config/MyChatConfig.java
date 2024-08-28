@@ -50,7 +50,7 @@ public class MyChatConfig {
 
             logger.info("Aplicação inicializada com sucesso!");
         } catch (Exception e) {
-            logger.error("Erro durante a inicialização da aplicação!", e);
+            logger.error("Falha durante a inicialização da aplicação!", e);
         }
     }
 
