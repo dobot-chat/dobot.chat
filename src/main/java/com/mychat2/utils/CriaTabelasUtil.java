@@ -1,5 +1,7 @@
 package com.mychat2.utils;
 
+import com.mychat2.exception.ChatbotExcecao;
+
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -22,7 +24,7 @@ public class CriaTabelasUtil {
                 Field[] fields = entidade.getDeclaredFields();
                 for (Field field : fields) {
                     if (field.getName().equalsIgnoreCase("id")) {
-                        criaTableSQL.append(field.getName()).append(" INT PRIMARY KEY AUTO_INCREMENT, ");
+                        criaTableSQL.append(field.getName()).append(" ").append(getSQLTipo(field.getType())).append(" PRIMARY KEY AUTO_INCREMENT, ");
                     } else {
                         criaTableSQL.append(field.getName()).append(" ").append(getSQLTipo(field.getType())).append(", ");
                     }
@@ -35,23 +37,23 @@ public class CriaTabelasUtil {
         }
     }
 
-    private static String getSQLTipo(Class<?> type) {
-        if (type == String.class) {
+    private static String getSQLTipo(Class<?> tipo) {
+        if (tipo == String.class) {
             return "VARCHAR(255)";
-        } else if (type == int.class || type == Integer.class) {
+        } else if (tipo == int.class || tipo == Integer.class) {
             return "INT";
-        } else if (type == long.class || type == Long.class) {
+        } else if (tipo == long.class || tipo == Long.class) {
             return "BIGINT";
-        } else if (type == boolean.class || type == Boolean.class) {
+        } else if (tipo == boolean.class || tipo == Boolean.class) {
             return "BOOLEAN";
-        } else if (type == double.class || type == Double.class) {
+        } else if (tipo == double.class || tipo == Double.class) {
             return "DOUBLE";
-        } else if (type == LocalDateTime.class) {
+        } else if (tipo == LocalDateTime.class) {
             return "TIMESTAMP";
-        } else if (type == LocalDate.class) {
+        } else if (tipo == LocalDate.class) {
             return "DATE";
         } else {
-            throw new IllegalArgumentException("Tipo de dado não suportado: " + type.getName());
+            throw new ChatbotExcecao("Tipo de dado não suportado: " + tipo.getName());
         }
     }
 }
