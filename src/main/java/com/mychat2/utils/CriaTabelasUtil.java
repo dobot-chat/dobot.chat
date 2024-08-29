@@ -35,7 +35,7 @@ public class CriaTabelasUtil {
                 }
 
                 if (!idEncontrado) {
-                    throw new MyChatExcecao("A entidade " + entidade.getName() + " deve ter um campo anotado com @Id.");
+                    throw new MyChatExcecao("A entidade " + entidade.getName() + " deve ter um campo anotado com " + Id.class.getName() + "!");
                 }
 
                 criaTableSQL.setLength(criaTableSQL.length() - 2);

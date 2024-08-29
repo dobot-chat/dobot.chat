@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.yorm.Yorm;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class YormConfig {
                 CriaTabelasUtil.criarTabelas(dataSource, entidades);
                 logger.info("Tabelas criadas com sucesso! Classes mapeadas: {}", Arrays.toString(entidades.toArray()));
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.error("Falha na criação de tabelas no banco!", e);
         }
     }
