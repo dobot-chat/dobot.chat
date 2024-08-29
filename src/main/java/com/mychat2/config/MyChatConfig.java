@@ -1,5 +1,6 @@
 package com.mychat2.config;
 
+import com.mychat2.anotacoes.Chatbot;
 import com.mychat2.controlador.MyChatControlador;
 import com.mychat2.dominio.MyChat;
 import com.mychat2.exception.MyChatExcecao;
@@ -31,7 +32,7 @@ public class MyChatConfig {
 
             Object chatbotImpl = AnotacoesUtil.buscarClasseChatbot();
             if (chatbotImpl == null) {
-                throw new MyChatExcecao("Nenhuma classe anotada com @Chatbot foi encontrada!");
+                throw new MyChatExcecao("Nenhuma classe anotada com " + Chatbot.class.getName() + " foi encontrada!");
             }
             logger.info("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
 
