@@ -4,11 +4,13 @@ import com.mychat2.utils.AnotacoesUtil;
 import com.mychat2.utils.CriaTabelasUtil;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yorm.Yorm;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,6 +20,13 @@ public class YormConfig {
     private static final Yorm yorm;
 
     static {
+        try {
+            Server.createWebServer().start();
+            logger.info("Banco de dados H2 iniciado com sucesso.");
+        } catch (SQLException e) {
+            logger.error("Falha ao iniciar o banco de dados H2!", e);
+        }
+
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:h2:mem:chatbotdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
         config.setUsername("sa");
