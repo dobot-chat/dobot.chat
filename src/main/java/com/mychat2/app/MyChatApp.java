@@ -20,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 public class MyChatApp {
 
     private static final Logger logger = LoggerFactory.getLogger(MyChatApp.class);
+    private static String mensagemInicial;
 
     public static void start() {
         start(8080, 8082);
@@ -43,7 +44,7 @@ public class MyChatApp {
             }
             logger.info("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
 
-            MyChat myChat = new MyChat(chatbotImpl);
+            MyChat myChat = new MyChat(chatbotImpl, mensagemInicial);
 
             app.before(ctx -> {
                 ctx.res().setCharacterEncoding(StandardCharsets.UTF_8.name());
@@ -61,6 +62,14 @@ public class MyChatApp {
             logger.error("Falha durante a inicialização da aplicação!", e);
             System.exit(1);
         }
+    }
+
+    public static void setMensagemInicial(String mensagemInicial) {
+        MyChatApp.mensagemInicial = mensagemInicial;
+    }
+
+    public static String getMensagemInicial() {
+        return mensagemInicial;
     }
 
     private static TemplateEngine createThymeleafEngine() {

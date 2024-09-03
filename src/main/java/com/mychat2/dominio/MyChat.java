@@ -23,10 +23,11 @@ public final class MyChat {
     private String estadoAtual;
     private final Object chatbot;
 
-    public MyChat(Object chatbot) {
+    public MyChat(Object chatbot, String mensagemInicial) {
         this.chatbot = chatbot;
         mapearEstados();
         this.estadoAtual = AnotacoesUtil.obterEstadoInicial(chatbot);
+        adicionarMensagemInicial(mensagemInicial);
         logger.info("Estado inicial: {}", this.estadoAtual);
     }
 
@@ -43,6 +44,12 @@ public final class MyChat {
         estadoAtual = contexto.getEstado();
 
         adicionarMensagens(contexto);
+    }
+
+    private void adicionarMensagemInicial(String mensagemInicial) {
+        if (mensagemInicial != null){
+            mensagens.add(new Mensagem(Autor.BOT, mensagemInicial));
+        }
     }
 
     private void adicionarMensagens(Contexto contexto) {
