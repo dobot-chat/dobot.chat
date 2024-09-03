@@ -8,7 +8,7 @@
     <artifactId>MyChat2</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>mychat2</name>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -92,7 +92,7 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
+                <artifactId>maven-jar-plugin</artifactId>
                 <version>3.4.0</version>
             </plugin>
         </plugins>

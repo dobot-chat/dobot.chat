@@ -1,7 +1,7 @@
 package com.mychat2.dominio;
 
 import com.mychat2.enums.Autor;
-import com.mychat2.exception.MyChatExcecao;
+import com.mychat2.excecao.MyChatExcecao;
 import com.mychat2.utils.AnotacoesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

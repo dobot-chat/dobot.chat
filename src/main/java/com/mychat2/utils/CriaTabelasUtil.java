@@ -1,7 +1,7 @@
 package com.mychat2.utils;
 
 import com.mychat2.anotacoes.Id;
-import com.mychat2.exception.MyChatExcecao;
+import com.mychat2.excecao.MyChatExcecao;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
@@ -62,7 +62,7 @@ public class CriaTabelasUtil {
         } else if (tipo == LocalDate.class) {
             return "DATE";
         } else {
-            throw new MyChatExcecao("O tipo de dado " + tipo.getName() + " não é suportado para operações de banco! ");
+            throw new MyChatExcecao("O tipo de dado " + tipo.getName() + " não é suportado para operações de banco no MyChat! ");
         }
     }
 }

@@ -25,6 +25,7 @@ public class YormConfig {
             logger.info("Banco de dados H2 iniciado com sucesso.");
         } catch (SQLException e) {
             logger.error("Falha ao iniciar o banco de dados H2!", e);
+            System.exit(1);
         }
 
         HikariConfig config = new HikariConfig();
@@ -50,6 +51,7 @@ public class YormConfig {
             }
         } catch (Exception e) {
             logger.error("Falha na criação de tabelas no banco!", e);
+            System.exit(1);
         }
     }
 

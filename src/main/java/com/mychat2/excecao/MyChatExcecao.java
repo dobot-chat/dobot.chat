@@ -1,4 +1,4 @@
-package com.mychat2.exception;
+package com.mychat2.excecao;
 
 public class MyChatExcecao extends RuntimeException {
 

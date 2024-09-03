@@ -4,7 +4,7 @@ import com.mychat2.anotacoes.Chatbot;
 import com.mychat2.anotacoes.EstadoChat;
 import com.mychat2.anotacoes.Entidade;
 import com.mychat2.dominio.Contexto;
-import com.mychat2.exception.MyChatExcecao;
+import com.mychat2.excecao.MyChatExcecao;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 
