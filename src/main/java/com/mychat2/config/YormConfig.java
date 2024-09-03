@@ -17,11 +17,11 @@ import java.util.List;
 public class YormConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(YormConfig.class);
-    private static final Yorm yorm;
+    private static Yorm yorm;
 
-    static {
+    public static void start(int portaH2) {
         try {
-            Server.createWebServer().start();
+            Server.createWebServer("-webPort", String.valueOf(portaH2)).start();
             logger.info("Banco de dados H2 iniciado com sucesso.");
         } catch (SQLException e) {
             logger.error("Falha ao iniciar o banco de dados H2!", e);

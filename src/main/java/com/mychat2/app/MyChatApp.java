@@ -1,6 +1,7 @@
 package com.mychat2.app;
 
 import com.mychat2.anotacoes.Chatbot;
+import com.mychat2.config.YormConfig;
 import com.mychat2.controlador.MyChatControlador;
 import com.mychat2.dominio.MyChat;
 import com.mychat2.excecao.MyChatExcecao;
@@ -21,6 +22,10 @@ public class MyChatApp {
     private static final Logger logger = LoggerFactory.getLogger(MyChatApp.class);
 
     public static void start() {
+        start(8080, 8082);
+    }
+
+    public static void start(int portaMyChat, int portaH2) {
         try {
             Javalin app = Javalin.create(config -> {
                 config.staticFiles.add(staticFileConfig -> {
@@ -28,7 +33,9 @@ public class MyChatApp {
                     staticFileConfig.location = Location.CLASSPATH;
                 });
                 config.fileRenderer(new JavalinThymeleaf(createThymeleafEngine()));
-            }).start(8080);
+            }).start(portaMyChat);
+
+            YormConfig.start(portaH2);
 
             Object chatbotImpl = AnotacoesUtil.buscarClasseChatbot();
             if (chatbotImpl == null) {
