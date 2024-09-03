@@ -42,7 +42,7 @@ public class YormConfig {
     }
 
     private static void criarTabelas(DataSource dataSource) {
-        List<Class<?>> entidades = AnotacoesUtil.buscarEntidades();
+        List<Class<Record>> entidades = AnotacoesUtil.buscarEntidades();
 
         try {
             if (!entidades.isEmpty()) {

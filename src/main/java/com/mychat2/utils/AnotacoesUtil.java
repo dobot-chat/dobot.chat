@@ -1,8 +1,8 @@
 package com.mychat2.utils;
 
 import com.mychat2.anotacoes.Chatbot;
-import com.mychat2.anotacoes.EstadoChat;
 import com.mychat2.anotacoes.Entidade;
+import com.mychat2.anotacoes.EstadoChat;
 import com.mychat2.dominio.Contexto;
 import com.mychat2.excecao.MyChatExcecao;
 import io.github.classgraph.ClassGraph;
@@ -18,11 +18,15 @@ import java.util.function.Consumer;
 
 public class AnotacoesUtil {
 
-    public static List<Class<?>> buscarEntidades() {
-        List<Class<?>> entidades;
+    public static List<Class<Record>> buscarEntidades() {
+        List<Class<Record>> entidades = new ArrayList<>();
 
         try (ScanResult scanResult = new ClassGraph().enableAnnotationInfo().scan()) {
-            entidades = new ArrayList<>(scanResult.getClassesWithAnnotation(Entidade.class).getRecords().loadClasses());
+            for (Class<?> classe : scanResult.getClassesWithAnnotation(Entidade.class).getRecords().loadClasses()) {
+                @SuppressWarnings("unchecked")
+                Class<Record> entidade = (Class<Record>) classe;
+                entidades.add(entidade);
+            }
         }
 
         return entidades;
@@ -30,8 +34,8 @@ public class AnotacoesUtil {
 
     public static Object buscarClasseChatbot() throws Exception {
         try (ScanResult scanResult = new ClassGraph().enableAnnotationInfo().scan()) {
-            for (Class<?> clazz : scanResult.getClassesWithAnnotation(Chatbot.class).loadClasses()) {
-                return clazz.getDeclaredConstructor().newInstance();
+            for (Class<?> classe : scanResult.getClassesWithAnnotation(Chatbot.class).loadClasses()) {
+                return classe.getDeclaredConstructor().newInstance();
             }
         }
 

@@ -14,11 +14,11 @@ import java.util.List;
 
 public class CriaTabelasUtil {
 
-    public static void criarTabelas(DataSource dataSource, List<Class<?>> entidades) throws SQLException {
+    public static void criarTabelas(DataSource dataSource, List<Class<Record>> entidades) throws SQLException {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
 
-            for (Class<?> entidade : entidades) {
+            for (Class<Record> entidade : entidades) {
                 String nomeTabela = entidade.getSimpleName().toLowerCase();
                 StringBuilder criaTableSQL = new StringBuilder("CREATE TABLE IF NOT EXISTS " + nomeTabela + " (");
 
