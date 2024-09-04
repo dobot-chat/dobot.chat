@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+    <head>
+        <style th:fragment="estilo">
+            :root {
+                --cor-fundo-pagina: [[${tema.corFundoPagina}]];
+                --cor-texto-titulo: [[${tema.corTextoTitulo}]];
+                --cor-fundo-chat: [[${tema.corFundoChat}]];
+                --cor-texto-chat: [[${tema.corTextoChat}]];
+                --cor-fundo-mensagem-usuario: [[${tema.corFundoMensagemUsuario}]];
+                --cor-fundo-mensagem-bot: [[${tema.corFundoMensagemBot}]];
+            }
+        </style>
+    </head>
+</html>

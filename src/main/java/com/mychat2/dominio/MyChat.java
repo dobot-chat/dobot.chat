@@ -12,23 +12,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public final class MyChat {
+public class MyChat {
 
     private static final Logger logger = LoggerFactory.getLogger(MyChat.class);
 
     private final List<Mensagem> mensagens = new LinkedList<>();
     private Map<String, Consumer<Contexto>> estados = new HashMap<>();
+    private MyChatTema myChatTema;
     private String ultimaMensagemUsuario;
-    private String ultimaMensagemChatbot;
+    private String ultimaMensagemBot;
     private String estadoAtual;
     private final Object chatbot;
 
-    public MyChat(Object chatbot, String mensagemInicial) {
+    public MyChat(Object chatbot, String mensagemInicial, MyChatTema myChatTema) {
         this.chatbot = chatbot;
         mapearEstados();
         this.estadoAtual = AnotacoesUtil.obterEstadoInicial(chatbot);
-        adicionarMensagemInicial(mensagemInicial);
         logger.info("Estado inicial: {}", this.estadoAtual);
+        adicionarMensagemInicial(mensagemInicial);
+        this.myChatTema = myChatTema;
     }
 
     public void receberMensagem(Contexto contexto) {
@@ -40,7 +42,7 @@ public final class MyChat {
 
         estados.get(contexto.getEstado().toLowerCase()).accept(contexto);
 
-        ultimaMensagemChatbot = contexto.getResposta() != null ? contexto.getResposta() : ultimaMensagemChatbot;
+        ultimaMensagemBot = contexto.getResposta() != null ? contexto.getResposta() : ultimaMensagemBot;
         estadoAtual = contexto.getEstado();
 
         adicionarMensagens(contexto);
@@ -85,11 +87,19 @@ public final class MyChat {
         return ultimaMensagemUsuario;
     }
 
-    public String getUltimaMensagemChatbot() {
-        return ultimaMensagemChatbot;
+    public String getUltimaMensagemBot() {
+        return ultimaMensagemBot;
     }
 
     public Object getChatbot() {
         return chatbot;
+    }
+
+    public MyChatTema getMyChatTema() {
+        return myChatTema;
+    }
+
+    public void setMyChatTema(MyChatTema myChatTema) {
+        this.myChatTema = myChatTema;
     }
 }

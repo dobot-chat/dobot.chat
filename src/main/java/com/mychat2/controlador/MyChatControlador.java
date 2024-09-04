@@ -22,6 +22,7 @@ public class MyChatControlador {
     public Map<String, Object> processarGetPaginaChat() {
         Map<String, Object> model = new HashMap<>();
         model.put("mensagens", myChat.getMensagens());
+        model.put("tema", myChat.getMyChatTema());
 
         return model;
     }
@@ -35,6 +36,7 @@ public class MyChatControlador {
 
         Map<String, Object> model = new HashMap<>();
         model.put("mensagens", myChat.getMensagens());
+        model.put("tema", myChat.getMyChatTema());
 
         return model;
     }
@@ -42,10 +44,9 @@ public class MyChatControlador {
     public Map<String, Object> processarPaginaHome() {
         Map<String, Object> model = new HashMap<>();
 
-        if (myChat != null) {
-            String nomeChat = myChat.getChatbot().getClass().getSimpleName();
-            model.put("nomeChat", nomeChat);
-        }
+        String nomeChat = myChat.getChatbot().getClass().getSimpleName();
+        model.put("tema", myChat.getMyChatTema());
+        model.put("nomeChat", nomeChat);
 
         return model;
     }

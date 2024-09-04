@@ -4,6 +4,7 @@ import com.mychat2.anotacoes.Chatbot;
 import com.mychat2.config.YormConfig;
 import com.mychat2.controlador.MyChatControlador;
 import com.mychat2.dominio.MyChat;
+import com.mychat2.dominio.MyChatTema;
 import com.mychat2.excecao.MyChatExcecao;
 import com.mychat2.utils.AnotacoesUtil;
 import io.javalin.Javalin;
@@ -21,6 +22,7 @@ public class MyChatApp {
 
     private static final Logger logger = LoggerFactory.getLogger(MyChatApp.class);
     private static String mensagemInicial;
+    private static MyChatTema myChatTema = criarTemaPadrao();
 
     public static void start() {
         start(8080, 8082);
@@ -33,18 +35,18 @@ public class MyChatApp {
                     staticFileConfig.directory = "/WEB-INF/publico";
                     staticFileConfig.location = Location.CLASSPATH;
                 });
-                config.fileRenderer(new JavalinThymeleaf(createThymeleafEngine()));
+                config.fileRenderer(new JavalinThymeleaf(criarThymeleafEngine()));
             }).start(portaMyChat);
 
             YormConfig.start(portaH2);
 
             Object chatbotImpl = AnotacoesUtil.buscarClasseChatbot();
             if (chatbotImpl == null) {
-                throw new MyChatExcecao("Nenhuma classe anotada com " + Chatbot.class.getName() + " foi encontrada!");
+                throw new MyChatExcecao("Nenhuma classe anotada com @" + Chatbot.class.getSimpleName() + " foi encontrada!");
             }
             logger.info("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
 
-            MyChat myChat = new MyChat(chatbotImpl, mensagemInicial);
+            MyChat myChat = new MyChat(chatbotImpl, mensagemInicial, myChatTema);
 
             app.before(ctx -> {
                 ctx.res().setCharacterEncoding(StandardCharsets.UTF_8.name());
@@ -64,15 +66,19 @@ public class MyChatApp {
         }
     }
 
-    public static void setMensagemInicial(String mensagemInicial) {
-        MyChatApp.mensagemInicial = mensagemInicial;
+    private static MyChatTema criarTemaPadrao() {
+        MyChatTema tema = new MyChatTema();
+        tema.setCorFundoPagina("#0d0d0d");
+        tema.setCorTextoTitulo("#1abc9c");
+        tema.setCorFundoChat("#222");
+        tema.setCorTextoChat("#ffffff");
+        tema.setCorFundoMensagemUsuario("#34495e");
+        tema.setCorFundoMensagemBot("#1abc9c");
+
+        return tema;
     }
 
-    public static String getMensagemInicial() {
-        return mensagemInicial;
-    }
-
-    private static TemplateEngine createThymeleafEngine() {
+    private static TemplateEngine criarThymeleafEngine() {
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
         return templateEngine;
@@ -85,5 +91,21 @@ public class MyChatApp {
         templateResolver.setTemplateMode("HTML");
         templateResolver.setCharacterEncoding("UTF-8");
         return templateResolver;
+    }
+
+    public static void setMensagemInicial(String mensagemInicial) {
+        MyChatApp.mensagemInicial = mensagemInicial;
+    }
+
+    public static String getMensagemInicial() {
+        return mensagemInicial;
+    }
+
+    public static MyChatTema getMyChatTema() {
+        return myChatTema;
+    }
+
+    public static void setMyChatTema(MyChatTema myChatTema) {
+        MyChatApp.myChatTema = myChatTema;
     }
 }

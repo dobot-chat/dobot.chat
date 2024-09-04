@@ -5,7 +5,7 @@ html {
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #0d0d0d;
+    background: var(--cor-fundo-pagina);
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -20,8 +20,8 @@ body {
 h1 {
     font-size: 4rem;
     margin-bottom: 50px;
-    color: #1abc9c;
-    border: 5px solid #1abc9c;
+    color: var(--cor-texto-titulo);
+    border: 5px solid var(--cor-texto-titulo);
     padding: 20px;
     border-radius: 20px;
 }
@@ -39,8 +39,8 @@ h1 {
     padding: 10px;
     border: none;
     border-radius: 20px 0 0 20px;
-    background: #2c3e50;
-    color: #ecf0f1;
+    background: var(--cor-fundo-chat);
+    color: var(--cor-texto-chat);
 }
 
 button {
@@ -63,7 +63,7 @@ button:hover {
     max-width: 700px;
     height: calc(100vh - 60px);
     padding: 10px;
-    background: #222;
+    background: var(--cor-fundo-chat);
     border-radius: 10px;
     overflow-y: auto;
     margin-bottom: 10px;
@@ -82,42 +82,36 @@ button:hover {
 }
 
 .usuario {
-    background: #34495e;
+    background: var(--cor-fundo-mensagem-usuario);
     text-align: right;
     margin-left: auto;
     margin-right: 30px;
 }
 
 .bot {
-    background: #1abc9c;
+    background: var(--cor-fundo-mensagem-bot);
     text-align: left;
     margin-left: 30px;
 }
 
 .mensagem p {
     margin: 0;
-}
-
-.usuario p {
-    color: #ecf0f1;
-}
-
-.bot p {
-    color: #fff;
+    color: var(--cor-texto-chat);
 }
 
 a {
     font-size: 2rem;
     padding: 10px 20px;
-    background: #1abc9c;
-    color: #fff;
+    color: var(--cor-texto-titulo);
     text-decoration: none;
+    border-bottom: 5px solid var(--cor-texto-titulo);
     border-radius: 20px;
-    transition: background 0.3s;
+    transition: background 0.3s, opacity 0.3s;
+    opacity: 1;
 }
 
 a:hover {
-    background: #16a085;
+    opacity: 0.5;
 }
 
 .chatbox ::-webkit-scrollbar {
