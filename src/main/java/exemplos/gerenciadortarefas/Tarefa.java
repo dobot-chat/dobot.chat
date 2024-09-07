@@ -1,4 +1,4 @@
-package tarefas;
+package exemplos.gerenciadortarefas;
 
 import com.mychat2.anotacoes.Entidade;
 import com.mychat2.anotacoes.Id;
