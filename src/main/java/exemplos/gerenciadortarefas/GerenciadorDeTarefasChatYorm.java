@@ -1,11 +1,12 @@
 package exemplos.gerenciadortarefas;
 
 import com.mychat2.anotacoes.EstadoChat;
+import com.mychat2.anotacoes.MyChat;
 import com.mychat2.dominio.Contexto;
 import com.mychat2.servico.MyChatServico;
 import org.yorm.exception.YormException;
 
-//@Chatbot
+//@MyChat
 public class GerenciadorDeTarefasChatYorm {
 
     private static final MyChatServico<Tarefa> MYCHAT_SERVICO = new MyChatServico<>(Tarefa.class);

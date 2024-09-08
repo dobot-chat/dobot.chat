@@ -1,13 +1,13 @@
 package exemplos.gerenciadortarefas;
 
-import com.mychat2.anotacoes.Chatbot;
+import com.mychat2.anotacoes.MyChat;
 import com.mychat2.anotacoes.EstadoChat;
 import com.mychat2.dominio.Contexto;
 import org.yorm.exception.YormException;
 
 import java.util.List;
 
-@Chatbot
+@MyChat
 public class GerenciadorDeTarefasChatYormEstado {
 
     private static final String MENSAGEM_BOAS_VINDAS = "Olá, eu sou o Gerenciador de Tarefas. Em que posso ajudar? <br>1 - Adicionar tarefa <br>2 - Listar tarefas <br>3 - Remover tarefa";

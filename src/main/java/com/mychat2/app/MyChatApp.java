@@ -1,9 +1,8 @@
 package com.mychat2.app;
 
-import com.mychat2.anotacoes.Chatbot;
+import com.mychat2.anotacoes.MyChat;
 import com.mychat2.config.YormConfig;
 import com.mychat2.controlador.MyChatControlador;
-import com.mychat2.dominio.MyChat;
 import com.mychat2.dominio.MyChatTema;
 import com.mychat2.excecao.MyChatExcecao;
 import com.mychat2.utils.AnotacoesUtil;
@@ -42,11 +41,11 @@ public class MyChatApp {
 
             Object chatbotImpl = AnotacoesUtil.buscarClasseChatbot();
             if (chatbotImpl == null) {
-                throw new MyChatExcecao("Nenhuma classe anotada com @" + Chatbot.class.getSimpleName() + " foi encontrada!");
+                throw new MyChatExcecao("Nenhuma classe anotada com @" + MyChat.class.getSimpleName() + " foi encontrada!");
             }
             logger.info("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
 
-            MyChat myChat = new MyChat(chatbotImpl, mensagemInicial, myChatTema);
+            com.mychat2.dominio.MyChat myChat = new com.mychat2.dominio.MyChat(chatbotImpl, mensagemInicial, myChatTema);
 
             app.before(ctx -> {
                 ctx.res().setCharacterEncoding(StandardCharsets.UTF_8.name());

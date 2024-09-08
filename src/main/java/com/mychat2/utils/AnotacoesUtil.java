@@ -1,6 +1,6 @@
 package com.mychat2.utils;
 
-import com.mychat2.anotacoes.Chatbot;
+import com.mychat2.anotacoes.MyChat;
 import com.mychat2.anotacoes.Entidade;
 import com.mychat2.anotacoes.EstadoChat;
 import com.mychat2.dominio.Contexto;
@@ -34,7 +34,7 @@ public class AnotacoesUtil {
 
     public static Object buscarClasseChatbot() throws Exception {
         try (ScanResult scanResult = new ClassGraph().enableAnnotationInfo().scan()) {
-            for (Class<?> classe : scanResult.getClassesWithAnnotation(Chatbot.class).loadClasses()) {
+            for (Class<?> classe : scanResult.getClassesWithAnnotation(MyChat.class).loadClasses()) {
                 return classe.getDeclaredConstructor().newInstance();
             }
         }

@@ -1,6 +1,6 @@
 package exemplos.agendaconsultas;
 
-import com.mychat2.anotacoes.Chatbot;
+import com.mychat2.anotacoes.MyChat;
 import com.mychat2.anotacoes.EstadoChat;
 import com.mychat2.dominio.Contexto;
 import org.yorm.exception.YormException;
@@ -11,7 +11,7 @@ import java.time.format.DateTimeParseException;
 import java.util.LinkedList;
 import java.util.List;
 
-@Chatbot
+@MyChat
 public class AgendaConsultasChat {
 
     private ConsultaBuilder consultaBuilder;
