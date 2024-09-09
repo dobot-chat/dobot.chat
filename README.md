@@ -1,18 +1,16 @@
-# MyChat V2 - Plataforma para Desenvolvimento de Chatbots
-MyChat V2 é uma plataforma que facilita a criação de chatbots customizados para diferentes finalidades. Com suporte a gerenciamento de estados, persistência de dados e personalização de interface, você pode rapidamente implementar um chatbot funcional e integrá-lo à sua aplicação.
-
+# MyChat V2 - Framework para Desenvolvimento de Chatbots
+O MyChat é um framework que facilita a criação de chatbots customizados para diferentes finalidades. Ele oferece um sistema de estados para gerenciar o fluxo de conversas e suporte para personalização visual e persistência de dados, quando necessário.
 ## Requisitos
 - Java 17 ou superior
 
 ## Dependências
 O MyChat2 depende de poucas bibliotecas, focando na simplicidade e funcionalidade. Abaixo estão as principais dependências utilizadas no projeto:
 
-- YORM: Biblioteca ORM para persistência de dados.
+- Yorm: Biblioteca ORM para persistência de dados.
 - Javalin: Framework leve para construção de aplicações web RESTful e integração do frontend do chatbot.
 - Thymeleaf: Motor de templates utilizado para renderizar as páginas HTML do chatbot.
 - H2 Database: Banco de dados em memória utilizado para persistência.
 - Slf4j2: Para o registro de logs no sistema.
-
 
 ## Início Rápido
 Para utilizar o MyChat2 em seu projeto, siga as instruções abaixo:
