@@ -1,5 +1,5 @@
-# MyChat V2 - Framework para Desenvolvimento de Chatbots
-O MyChat é um framework que facilita a criação de chatbots customizados para diferentes finalidades. Ele oferece um sistema de estados para gerenciar o fluxo de conversas e suporte para personalização visual e persistência de dados, quando necessário.
+# MyChat V2 - Ferramenta para Desenvolvimento de Chatbots
+O MyChat V2 é um ferramenta que facilita a criação de chatbots customizados para diferentes finalidades. Ele oferece um sistema de estados para gerenciar o fluxo de conversas e suporte para personalização visual e persistência de dados, quando necessário.
 ## Requisitos
 - Java 17 ou superior
 
