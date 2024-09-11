@@ -64,14 +64,14 @@ public class MyChat {
     }
 
     private void mapearEstados() {
-        logger.info("Iniciando mapeamento dos estados para {}.", chatbot.getClass().getSimpleName());
+        logger.debug("Iniciando mapeamento dos estados para {}.", chatbot.getClass().getSimpleName());
         this.estados = AnotacoesUtil.mapearEstados(this.chatbot);
 
         if (this.estados.isEmpty()) {
             throw new MyChatExcecao("Nenhum estado mapeado para " + chatbot.getClass().getSimpleName() + "!");
         }
 
-        logger.info("Mapeamento dos estados concluído com sucesso.");
+        logger.debug("Mapeamento dos estados concluído com sucesso.");
         logger.info("Mapeamento de estados encontrados: {}", this.estados.keySet());
     }
 

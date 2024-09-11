@@ -22,7 +22,7 @@ public class YormConfig {
     public static void start(int portaH2) {
         try {
             Server.createWebServer("-webPort", String.valueOf(portaH2)).start();
-            logger.info("Banco de dados H2 iniciado com sucesso.");
+            logger.debug("Banco de dados H2 iniciado com sucesso.");
         } catch (SQLException e) {
             logger.error("Falha ao iniciar o banco de dados H2!", e);
             System.exit(1);
