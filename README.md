@@ -1,5 +1,14 @@
 # DoBot.chat - Ferramenta para Desenvolvimento de Chatbots
 O DoBot.chat é um ferramenta que facilita a criação de chatbots customizados para diferentes finalidades. Ele oferece um sistema de estados para gerenciar o fluxo de conversas e suporte para personalização visual e persistência de dados, quando necessário.
+
+Este é um projeto coordenado pelo prof. Rodrigo Rebouças de Almeida (https://rodrigor.com), do Departamento de Ciências Exatas da Universidade Federal da Paraíba, Campus IV - Rio Tinto - PB, Brasil.
+
+## Equipe
+
+- Rodrigo Rebouças de Almeida (Coordenador do projeto)
+- Lucas da Silva Freitas (v2 do DoBot.chat)
+- Gabriel Ribeiro Dias (v1 do DoBot.chat)
+
 ## Requisitos
 - Java 17 ou superior
 
