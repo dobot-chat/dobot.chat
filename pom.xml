@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.lucasfreitas00</groupId>
-    <artifactId>MyChat2</artifactId>
+    <groupId>chat.dobot</groupId>
+    <artifactId>DoBot.chat</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>O MyChat V2 é uma aplicação que simplifica o desenvolvimento de chatbots.</description>
-    <url>https://github.com/meuchat-app/mychat-v2</url>
+    <description>O DoBot.chat é uma aplicação que simplifica o desenvolvimento de chatbots.</description>
+    <url>https://dobot.chat</url>
 
     <licenses>
         <license>
@@ -22,9 +22,18 @@
 
     <developers>
         <developer>
+            <name>Rodrigo Rebouças de Almeida</name>
+            <email>rodrigor@dcx.ufpb.br</email>
+        </developer>
+        <developer>
             <name>Lucas da Silva Freitas</name>
             <email>lucas.freitas@dcx.ufpb.br</email>
         </developer>
+        <developer>
+            <name>Gabriel Ribeiro Dias</name>
+            <email>gabriel.franca@dcx.ufpb.br</email>
+        </developer>
+
     </developers>
 
     <scm>
