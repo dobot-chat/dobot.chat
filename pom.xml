@@ -33,13 +33,12 @@
             <name>Gabriel Ribeiro Dias</name>
             <email>gabriel.franca@dcx.ufpb.br</email>
         </developer>
-
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/meuchat-app/mychat-v2.git</connection>
-        <developerConnection>scm:git:ssh://github.com/meuchat-app/mychat-v2.git</developerConnection>
-        <url>https://github.com/meuchat-app/mychat-v2/tree/main</url>
+        <connection>scm:git:git://github.com/dobot-chat/dobot.chat.git</connection>
+        <developerConnection>scm:git:ssh://github.com/dobot-chat/dobot.chat.git</developerConnection>
+        <url>https://github.com/dobot-chat/dobot.chat/tree/main</url>
     </scm>
 
     <properties>
