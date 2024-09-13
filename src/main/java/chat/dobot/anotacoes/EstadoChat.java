@@ -1,4 +1,4 @@
-package com.mychat2.anotacoes;
+package chat.dobot.anotacoes;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

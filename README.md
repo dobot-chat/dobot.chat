@@ -22,23 +22,23 @@ O DoBot depende de poucas bibliotecas, focando na simplicidade e funcionalidade.
 - Slf4j2: Para o registro de logs no sistema.
 
 ## Início Rápido
-Para utilizar o MyChat2 em seu projeto, siga as instruções abaixo:
+Para utilizar o DoBot em seu projeto, siga as instruções abaixo:
 
 ### Dependência Maven
 Adicione a seguinte dependência no seu arquivo pom.xml:
 ```xml
 <dependency>
-    <groupId>com.mychat2</groupId>
-    <artifactId>MyChat2</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>chat.dobot</groupId>
+    <artifactId>dobot.chat</artifactId>
+    <version>2.0.0</version>
 </dependency>
 ```
 ## Estrutura do Chatbot
-1. Anotação @MyChat
+1. Anotação @DoBot
 
-    Sua classe de chatbot deve ser anotada com @MyChat para indicar que ela será utilizada como um chatbot.
+    Sua classe de chatbot deve ser anotada com @DoBot para indicar que ela será utilizada como um chatbot.
     ```java
-    @MyChat
+    @DoBot
     public class MeuChatbot {
     // Implementação do chatbot
     }
@@ -68,39 +68,39 @@ Adicione a seguinte dependência no seu arquivo pom.xml:
 
 3. Anotações @Entidade e @Id (opcionais)
 
-   Você pode definir **records** persistentes com anotações @Entidade e @Id para mapear objetos Java para tabelas de banco de dados. Você pode utilizar uma instância de MyChatServico para realizar operações CRUD com suas entidades.
+   Você pode definir **records** persistentes com anotações @Entidade e @Id para mapear objetos Java para tabelas de banco de dados. Você pode utilizar uma instância de DoBotServico para realizar operações CRUD com suas entidades.
     ```java
     @Entidade
     public record Tarefa(@Id int id, String descricao) {}
     ```
 ## Configurando o Tema do Chatbot
-Você pode personalizar o tema do chatbot usando a classe MyChatTema. É possível configurar diversas cores para o fundo da página, chat, mensagens, e texto.
+Você pode personalizar o tema do chatbot usando a classe DoBotTema. É possível configurar diversas cores para o fundo da página, chat, mensagens, e texto.
 
 Exemplo de configuração do tema:
 ```java
-MyChatApp.getMyChatTema().setCorFundoPagina("#FFFFFF");
-MyChatApp.getMyChatTema().setCorFundoMensagemUsuario("#ADD8E6");
-MyChatApp.getMyChatTema().setCorFundoMensagemBot("#FFD700");
-MyChatApp.getMyChatTema().setCorTextoChat("#000000");
+DoBotApp.getDoBotTema().setCorFundoPagina("#FFFFFF");
+DoBotApp.getDoBotTema().setCorFundoMensagemUsuario("#ADD8E6");
+DoBotApp.getDoBotTema().setCorFundoMensagemBot("#FFD700");
+DoBotApp.getDoBotTema().setCorTextoChat("#000000");
 ```
 ## Configurando a Mensagem Inicial e as Portas
 Você pode configurar uma mensagem inicial para ser exibida quando o chatbot for acessado pela primeira vez. Defina essa mensagem antes de iniciar o chatbot:
 ```java
-MyChatApp.setMensagemInicial("Bem-vindo ao chatbot!");
+DoBotApp.setMensagemInicial("Bem-vindo ao chatbot!");
 ```
 Além disso, você pode alterar as portas nas quais a aplicação será executada. Por padrão, a aplicação roda na porta 8080 para o chatbot e na porta 8082 para o servidor H2. Se desejar, você pode customizar essas portas.
 ```java
-MyChatApp.start(9090, 9092); // Porta 9090 para o chatbot e 9092 para o H2
+DoBotApp.start(9090, 9092); // Porta 9090 para o chatbot e 9092 para o H2
 ```
 ## Exemplo de Main
 Aqui está um exemplo básico de como inicializar o chatbot:
 ```java
 public class Main {
     public static void main(String[] args) {
-        MyChatApp.setMensagemInicial("Chatbot inicializado com sucesso!");
-        MyChatApp.getMyChatTema().setCorFundoMensagemUsuario("blue");
-        MyChatApp.getMyChatTema().setCorFundoMensagemBot("red");
-        MyChatApp.start(8081, 8083); // Rodando o chatbot na porta 8081 e o H2 na 8083
+        DoBotApp.setMensagemInicial("Chatbot inicializado com sucesso!");
+        DoBotApp.getDoBotTema().setCorFundoMensagemUsuario("blue");
+        DoBotApp.getDoBotTema().setCorFundoMensagemBot("red");
+        DoBotApp.start(8081, 8083); // Rodando o chatbot na porta 8081 e o H2 na 8083
     }
 }
 ```

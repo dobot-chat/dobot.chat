@@ -1,7 +1,7 @@
-package com.mychat2.dominio;
+package chat.dobot.dominio;
 
-import com.mychat2.excecao.MyChatExcecao;
-import com.mychat2.servico.MyChatServico;
+import chat.dobot.excecao.DoBotExcecao;
+import chat.dobot.servico.DoBotServico;
 
 import java.util.Map;
 
@@ -10,9 +10,9 @@ public class Contexto {
     private final String mensagemUsuario;
     private String estado;
     private String resposta;
-    private final Map<String, MyChatServico<Record>> servicos;
+    private final Map<String, DoBotServico<Record>> servicos;
 
-    public Contexto(String mensagemUsuario, String estado, Map<String, MyChatServico<Record>> servicos) {
+    public Contexto(String mensagemUsuario, String estado, Map<String, DoBotServico<Record>> servicos) {
         this.mensagemUsuario = mensagemUsuario;
         this.estado = estado;
         this.servicos = servicos;
@@ -43,15 +43,15 @@ public class Contexto {
         return resposta;
     }
 
-    public <T extends Record> MyChatServico<T> getServico(Class<T> recordClass) {
-        MyChatServico<?> servico = servicos.get(recordClass.getSimpleName());
+    public <T extends Record> DoBotServico<T> getServico(Class<T> recordClass) {
+        DoBotServico<?> servico = servicos.get(recordClass.getSimpleName());
 
         if (servico == null) {
-            throw new MyChatExcecao("Serviço não encontrado para a classe " + recordClass.getSimpleName() + "!");
+            throw new DoBotExcecao("Serviço não encontrado para a classe " + recordClass.getSimpleName() + "!");
         }
 
         @SuppressWarnings("unchecked")
-        MyChatServico<T> servicoTipado = (MyChatServico<T>) servico;
+        DoBotServico<T> servicoTipado = (DoBotServico<T>) servico;
 
         return servicoTipado;
     }

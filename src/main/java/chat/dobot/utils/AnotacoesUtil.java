@@ -1,10 +1,10 @@
-package com.mychat2.utils;
+package chat.dobot.utils;
 
-import com.mychat2.anotacoes.MyChat;
-import com.mychat2.anotacoes.Entidade;
-import com.mychat2.anotacoes.EstadoChat;
-import com.mychat2.dominio.Contexto;
-import com.mychat2.excecao.MyChatExcecao;
+import chat.dobot.anotacoes.DoBot;
+import chat.dobot.anotacoes.Entidade;
+import chat.dobot.anotacoes.EstadoChat;
+import chat.dobot.dominio.Contexto;
+import chat.dobot.excecao.DoBotExcecao;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 
@@ -34,7 +34,7 @@ public class AnotacoesUtil {
 
     public static Object buscarClasseChatbot() throws Exception {
         try (ScanResult scanResult = new ClassGraph().enableAnnotationInfo().scan()) {
-            for (Class<?> classe : scanResult.getClassesWithAnnotation(MyChat.class).loadClasses()) {
+            for (Class<?> classe : scanResult.getClassesWithAnnotation(DoBot.class).loadClasses()) {
                 return classe.getDeclaredConstructor().newInstance();
             }
         }
@@ -71,7 +71,7 @@ public class AnotacoesUtil {
                 EstadoChat estadoChat = method.getAnnotation(EstadoChat.class);
                 if (estadoChat.inicial()) {
                     if (estadoInicial != null) {
-                        throw new MyChatExcecao("Mais de um estado inicial definido!");
+                        throw new DoBotExcecao("Mais de um estado inicial definido!");
                     }
                     estadoInicial = estadoChat.estado().isEmpty() ? method.getName() : estadoChat.estado();
                 }
@@ -81,16 +81,16 @@ public class AnotacoesUtil {
         if (estadoInicial != null) {
             return estadoInicial.toLowerCase();
         }
-        throw new MyChatExcecao("Nenhum estado inicial definido!");
+        throw new DoBotExcecao("Nenhum estado inicial definido!");
     }
 
     private static void validarMetodo(Method method, String estado, Map<String, Consumer<Contexto>> estadosMap) {
         if (method.getParameterCount() != 1 || !method.getParameterTypes()[0].getName().equals(Contexto.class.getName())) {
-            throw new MyChatExcecao("O método '" + method.getName() + "' da classe " + method.getDeclaringClass().getName() + " está anotado com " + EstadoChat.class.getName() + " e deve conter um único parâmetro, que precisa ser do tipo " + Contexto.class.getName() + "!");
+            throw new DoBotExcecao("O método '" + method.getName() + "' da classe " + method.getDeclaringClass().getName() + " está anotado com " + EstadoChat.class.getName() + " e deve conter um único parâmetro, que precisa ser do tipo " + Contexto.class.getName() + "!");
         }
 
         if (estadosMap.containsKey(estado.toLowerCase())) {
-            throw new MyChatExcecao("O estado '" + estado.toLowerCase() + "' não pode ser mapeado para mais de um método!");
+            throw new DoBotExcecao("O estado '" + estado.toLowerCase() + "' não pode ser mapeado para mais de um método!");
         }
     }
 }

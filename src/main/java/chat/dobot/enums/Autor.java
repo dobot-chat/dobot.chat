@@ -1,4 +1,4 @@
-package com.mychat2.enums;
+package chat.dobot.enums;
 
 public enum Autor {
     USUARIO,

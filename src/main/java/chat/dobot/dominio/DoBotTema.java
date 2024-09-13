@@ -1,6 +1,6 @@
-package com.mychat2.dominio;
+package chat.dobot.dominio;
 
-public class MyChatTema {
+public class DoBotTema {
 
     private String corFundoPagina;
     private String corTextoTitulo;
@@ -9,10 +9,10 @@ public class MyChatTema {
     private String corFundoMensagemUsuario;
     private String corFundoMensagemBot;
 
-    public MyChatTema() {
+    public DoBotTema() {
     }
 
-    public MyChatTema(String corFundoPagina, String corTextoTitulo, String corFundoChat, String corTextoChat, String corFundoMensagemUsuario, String corFundoMensagemBot) {
+    public DoBotTema(String corFundoPagina, String corTextoTitulo, String corFundoChat, String corTextoChat, String corFundoMensagemUsuario, String corFundoMensagemBot) {
         this.corFundoPagina = corFundoPagina;
         this.corTextoTitulo = corTextoTitulo;
         this.corFundoChat = corFundoChat;

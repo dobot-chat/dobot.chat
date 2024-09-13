@@ -1,11 +1,11 @@
-package com.mychat2.app;
+package chat.dobot.app;
 
-import com.mychat2.anotacoes.MyChat;
-import com.mychat2.config.YormConfig;
-import com.mychat2.controlador.MyChatControlador;
-import com.mychat2.dominio.MyChatTema;
-import com.mychat2.excecao.MyChatExcecao;
-import com.mychat2.utils.AnotacoesUtil;
+import chat.dobot.config.YormConfig;
+import chat.dobot.controlador.DoBotControlador;
+import chat.dobot.dominio.DoBot;
+import chat.dobot.dominio.DoBotTema;
+import chat.dobot.excecao.DoBotExcecao;
+import chat.dobot.utils.AnotacoesUtil;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.rendering.template.JavalinThymeleaf;
@@ -17,17 +17,17 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import java.nio.charset.StandardCharsets;
 
-public class MyChatApp {
+public class DoBotApp {
 
-    private static final Logger logger = LoggerFactory.getLogger(MyChatApp.class);
+    private static final Logger logger = LoggerFactory.getLogger(DoBotApp.class);
     private static String mensagemInicial;
-    private static MyChatTema myChatTema = criarTemaPadrao();
+    private static DoBotTema doBotTema = criarTemaPadrao();
 
     public static void start() {
         start(8080, 8082);
     }
 
-    public static void start(int portaMyChat, int portaH2) {
+    public static void start(int portaDoBot, int portaH2) {
         try {
             Javalin app = Javalin.create(config -> {
                 config.staticFiles.add(staticFileConfig -> {
@@ -35,24 +35,24 @@ public class MyChatApp {
                     staticFileConfig.location = Location.CLASSPATH;
                 });
                 config.fileRenderer(new JavalinThymeleaf(criarThymeleafEngine()));
-            }).start(portaMyChat);
+            }).start(portaDoBot);
 
             YormConfig.start(portaH2);
 
             Object chatbotImpl = AnotacoesUtil.buscarClasseChatbot();
             if (chatbotImpl == null) {
-                throw new MyChatExcecao("Nenhuma classe anotada com @" + MyChat.class.getSimpleName() + " foi encontrada!");
+                throw new DoBotExcecao("Nenhuma classe anotada com @" + DoBot.class.getSimpleName() + " foi encontrada!");
             }
             logger.info("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
 
-            com.mychat2.dominio.MyChat myChat = new com.mychat2.dominio.MyChat(chatbotImpl, mensagemInicial, myChatTema);
+            DoBot doBot = new DoBot(chatbotImpl, mensagemInicial, doBotTema);
 
             app.before(ctx -> {
                 ctx.res().setCharacterEncoding(StandardCharsets.UTF_8.name());
                 ctx.res().setContentType("text/html; charset=UTF-8");
             });
 
-            MyChatControlador controlador = new MyChatControlador(myChat);
+            DoBotControlador controlador = new DoBotControlador(doBot);
 
             app.get("/", ctx -> ctx.render("/home.html", controlador.processarPaginaHome()));
             app.get("/chatbot", ctx -> ctx.render("/chat.html", controlador.processarGetPaginaChat()));
@@ -65,8 +65,8 @@ public class MyChatApp {
         }
     }
 
-    private static MyChatTema criarTemaPadrao() {
-        MyChatTema tema = new MyChatTema();
+    private static DoBotTema criarTemaPadrao() {
+        DoBotTema tema = new DoBotTema();
         tema.setCorFundoPagina("#0d0d0d");
         tema.setCorTextoTitulo("#1abc9c");
         tema.setCorFundoChat("#222");
@@ -93,18 +93,18 @@ public class MyChatApp {
     }
 
     public static void setMensagemInicial(String mensagemInicial) {
-        MyChatApp.mensagemInicial = mensagemInicial;
+        DoBotApp.mensagemInicial = mensagemInicial;
     }
 
     public static String getMensagemInicial() {
         return mensagemInicial;
     }
 
-    public static MyChatTema getMyChatTema() {
-        return myChatTema;
+    public static DoBotTema getDoBotTema() {
+        return doBotTema;
     }
 
-    public static void setMyChatTema(MyChatTema myChatTema) {
-        MyChatApp.myChatTema = myChatTema;
+    public static void setDoBotTema(DoBotTema doBotTema) {
+        DoBotApp.doBotTema = doBotTema;
     }
 }

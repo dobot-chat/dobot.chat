@@ -1,7 +1,7 @@
-package com.mychat2.config;
+package chat.dobot.config;
 
-import com.mychat2.utils.AnotacoesUtil;
-import com.mychat2.utils.CriaTabelasUtil;
+import chat.dobot.utils.AnotacoesUtil;
+import chat.dobot.utils.CriaTabelasUtil;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.h2.tools.Server;

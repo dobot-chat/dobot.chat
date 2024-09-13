@@ -1,8 +1,8 @@
-package com.mychat2.dominio;
+package chat.dobot.dominio;
 
-import com.mychat2.enums.Autor;
-import com.mychat2.excecao.MyChatExcecao;
-import com.mychat2.utils.AnotacoesUtil;
+import chat.dobot.enums.Autor;
+import chat.dobot.excecao.DoBotExcecao;
+import chat.dobot.utils.AnotacoesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,32 +12,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class MyChat {
+public class DoBot {
 
-    private static final Logger logger = LoggerFactory.getLogger(MyChat.class);
+    private static final Logger logger = LoggerFactory.getLogger(DoBot.class);
 
     private final List<Mensagem> mensagens = new LinkedList<>();
     private Map<String, Consumer<Contexto>> estados = new HashMap<>();
-    private MyChatTema myChatTema;
+    private DoBotTema doBotTema;
     private String ultimaMensagemUsuario;
     private String ultimaMensagemBot;
     private String estadoAtual;
     private final Object chatbot;
 
-    public MyChat(Object chatbot, String mensagemInicial, MyChatTema myChatTema) {
+    public DoBot(Object chatbot, String mensagemInicial, DoBotTema doBotTema) {
         this.chatbot = chatbot;
         mapearEstados();
         this.estadoAtual = AnotacoesUtil.obterEstadoInicial(chatbot);
         logger.info("Estado inicial: {}", this.estadoAtual);
         adicionarMensagemInicial(mensagemInicial);
-        this.myChatTema = myChatTema;
+        this.doBotTema = doBotTema;
     }
 
     public void receberMensagem(Contexto contexto) {
         ultimaMensagemUsuario = contexto.getMensagemUsuario();
 
         if (!estados.containsKey(contexto.getEstado().toLowerCase())) {
-            throw new MyChatExcecao("Estado '" + contexto.getEstado() + "' não encontrado!");
+            throw new DoBotExcecao("Estado '" + contexto.getEstado() + "' não encontrado!");
         }
 
         estados.get(contexto.getEstado().toLowerCase()).accept(contexto);
@@ -68,7 +68,7 @@ public class MyChat {
         this.estados = AnotacoesUtil.mapearEstados(this.chatbot);
 
         if (this.estados.isEmpty()) {
-            throw new MyChatExcecao("Nenhum estado mapeado para " + chatbot.getClass().getSimpleName() + "!");
+            throw new DoBotExcecao("Nenhum estado mapeado para " + chatbot.getClass().getSimpleName() + "!");
         }
 
         logger.debug("Mapeamento dos estados concluído com sucesso.");
@@ -95,11 +95,11 @@ public class MyChat {
         return chatbot;
     }
 
-    public MyChatTema getMyChatTema() {
-        return myChatTema;
+    public DoBotTema getDoBotTema() {
+        return doBotTema;
     }
 
-    public void setMyChatTema(MyChatTema myChatTema) {
-        this.myChatTema = myChatTema;
+    public void setDoBotTema(DoBotTema doBotTema) {
+        this.doBotTema = doBotTema;
     }
 }

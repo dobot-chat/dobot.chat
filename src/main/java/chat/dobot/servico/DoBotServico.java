@@ -1,17 +1,17 @@
-package com.mychat2.servico;
+package chat.dobot.servico;
 
-import com.mychat2.config.YormConfig;
+import chat.dobot.config.YormConfig;
 import org.yorm.Yorm;
 import org.yorm.exception.YormException;
 
 import java.util.List;
 
-public class MyChatServico<T extends Record> {
+public class DoBotServico<T extends Record> {
 
     private final Yorm yorm;
     private final Class<T> obj;
 
-    public MyChatServico(Class<T> obj) {
+    public DoBotServico(Class<T> obj) {
         this.yorm = YormConfig.getYorm();
         this.obj = obj;
     }
