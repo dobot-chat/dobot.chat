@@ -29,8 +29,8 @@ Adicione a seguinte dependência no seu arquivo pom.xml:
 ```xml
 <dependency>
     <groupId>chat.dobot</groupId>
-    <artifactId>dobot.chat</artifactId>
-    <version>2.0.0</version>
+    <artifactId>DoBot.chat</artifactId>
+    <version>1.0.0</version>
 </dependency>
 ```
 ## Estrutura do Chatbot
