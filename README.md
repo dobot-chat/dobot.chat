@@ -104,3 +104,20 @@ public class Main {
     }
 }
 ```
+## Acessando o Banco de Dados H2
+O DoBot.chat utiliza o H2 como banco de dados em memória por padrão e ele pode ser acessado através do console web do H2 para inspecionar as tabelas e dados armazenados durante a execução da aplicação.
+1. Acessando o Console Web do H2
+
+   Após a aplicação estar rodando, você pode acessar o console do H2, que por padrão utiliza a porta 8082 (se você configurou o DoBot.chat para que o H2 utilize outra porta, então utilize essa porta no endereço). No seu navegador web acesse o seguinte endereço:
+    ```
+    http://localhost:8082
+    ```
+2. Conectando ao H2
+
+   No console web do H2, você precisará preencher algumas informações para se conectar ao banco de dados:
+
+   * JDBC URL: jdbc:h2:mem:dobotdb
+   * User Name: dobot
+   * Password: (deixe em branco)
+   
+    Após preencher essas informações, clique no botão "Connect" para acessar o banco de dados.

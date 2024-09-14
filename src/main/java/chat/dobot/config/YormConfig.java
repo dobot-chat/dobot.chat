@@ -29,8 +29,8 @@ public class YormConfig {
         }
 
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:h2:mem:chatbotdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
-        config.setUsername("sa");
+        config.setJdbcUrl("jdbc:h2:mem:dobotdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+        config.setUsername("dobot");
         config.setPassword("");
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
