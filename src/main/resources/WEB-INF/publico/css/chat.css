@@ -45,10 +45,10 @@ h1 {
 
 button {
     padding: 10px;
-    background: #1abc9c;
+    background: var(--cor-fundo-mensagem-usuario);
     border: none;
     border-radius: 0 20px 20px 0;
-    color: #fff;
+    color: var(--cor-texto-chat);
     cursor: pointer;
     transition: background 0.3s;
 }
