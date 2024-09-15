@@ -34,9 +34,7 @@ button {
     transition: background 0.3s;
 }
 
-button:hover {
-    background: #16a085;
-}
+
 
 .chatbox {
     width: 75%;
