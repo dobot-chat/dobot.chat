@@ -2,19 +2,46 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
     <head>
         <title>DoBot.chat</title>
+        <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+        <script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/chat.css}" />
         <style th:replace="~{fragmento-variaveis-tema :: estilo}"></style>
 
         <script>
             window.onload = function() {
-                const chatbox = document.querySelector(".chatbox")
+                const chatbox = document.querySelector(".chatbox");
                 chatbox.scrollTop = chatbox.scrollHeight;
 
                 document.getElementById("msgUsuario").focus();
             };
         </script>
     </head>
-    <body>
+    <body class="container-fluid  d-flex flex-column justify-content-center align-items-center vh-100" style="font-family: 'Poppins', sans-serif; background: var(--cor-fundo-pagina); color: var(--cor-texto-pagina); margin: 0; padding: 0 10px;">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light w-100">
+            <a class="navbar-brand" href="#">
+                <img src="/img/dobot-horizontal-500px.png" alt="DoBot" style="max-height: 50px;">
+            </a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#sobreModal">Sobre</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="modal fade" id="sobreModal" tabindex="-1" aria-labelledby="sobreModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="sobreModalLabel">Sobre</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Este é um projeto do Departamento de Ciências Exatas
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="chatbox">
             <div th:each="mensagem : ${mensagens}">
                 <div th:if="${mensagem.autor().name() == 'USUARIO'}" class="mensagem usuario">
