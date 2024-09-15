@@ -1,4 +1,4 @@
-package chat.dobot.example.helloworld;
+package chat.dobot.exemplos.helloworld;
 
 import chat.dobot.bot.DoBotChat;
 import chat.dobot.bot.annotations.DoBot;
