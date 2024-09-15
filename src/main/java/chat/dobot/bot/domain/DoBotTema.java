@@ -1,4 +1,4 @@
-package chat.dobot.dominio;
+package chat.dobot.bot.domain;
 
 public class DoBotTema {
 

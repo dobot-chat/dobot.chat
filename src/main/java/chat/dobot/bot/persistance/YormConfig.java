@@ -1,7 +1,7 @@
-package chat.dobot.config;
+package chat.dobot.bot.persistance;
 
-import chat.dobot.utils.AnotacoesUtil;
-import chat.dobot.utils.CriaTabelasUtil;
+import chat.dobot.bot.utils.AnnotationsUtil;
+import chat.dobot.bot.utils.CriaTabelasUtil;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.h2.tools.Server;
@@ -15,14 +15,21 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Classe de configuração do Yorm.
+ * Classe de configuração do (<a href="https://naynecoder.github.io/yorm/">Yorm</a>)
+ * para o banco de dados (<a href="https://www.h2database.com/">H2</a>).
+ * O Yorm é um framework de mapeamento objeto-relacional (ORM) que facilita a
+ * persistência de objetos Java em bancos de dados relacionais.
  */
 public class YormConfig {
 
-    private static final Logger logger = LoggerFactory.getLogger(YormConfig.class);
-    private static Yorm yorm;
+    private final Logger logger = LoggerFactory.getLogger(YormConfig.class);
+    private Yorm yorm;
 
-    public static void start(int portaH2) {
+    public YormConfig(int portaH2) {
+        start(portaH2);
+    }
+
+    private void start(int portaH2) {
         try {
             Server.createWebServer("-webPort", String.valueOf(portaH2)).start();
             logger.debug("Banco de dados H2 iniciado com sucesso.");
@@ -44,8 +51,8 @@ public class YormConfig {
         yorm = new Yorm(dataSource);
     }
 
-    private static void criarTabelas(DataSource dataSource) {
-        List<Class<Record>> entidades = AnotacoesUtil.buscarEntidades();
+    private void criarTabelas(DataSource dataSource) {
+        List<Class<Record>> entidades = AnnotationsUtil.buscarEntidades();
 
         try {
             if (!entidades.isEmpty()) {
@@ -58,7 +65,7 @@ public class YormConfig {
         }
     }
 
-    public static Yorm getYorm() {
+    public Yorm getYorm() {
         return yorm;
     }
 }

@@ -1,4 +1,4 @@
-package chat.dobot.app;
+package chat.dobot.bot;
 
 public class DoBotException extends RuntimeException {
 

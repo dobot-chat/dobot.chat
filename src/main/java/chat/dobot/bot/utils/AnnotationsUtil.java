@@ -1,10 +1,10 @@
-package chat.dobot.utils;
+package chat.dobot.bot.utils;
 
-import chat.dobot.anotacoes.DoBot;
-import chat.dobot.anotacoes.Entidade;
-import chat.dobot.anotacoes.EstadoChat;
-import chat.dobot.dominio.Contexto;
-import chat.dobot.app.DoBotException;
+import chat.dobot.bot.annotations.DoBot;
+import chat.dobot.bot.annotations.Entidade;
+import chat.dobot.bot.annotations.EstadoChat;
+import chat.dobot.bot.domain.Contexto;
+import chat.dobot.bot.DoBotException;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class AnotacoesUtil {
+public class AnnotationsUtil {
 
     public static List<Class<Record>> buscarEntidades() {
         List<Class<Record>> entidades = new ArrayList<>();
