@@ -4,6 +4,9 @@ on:
   push:
     tags:
       - '*-SNAPSHOT'  # Para snapshots
+      - 'v*'          # Para releases com prefixo "v" (por exemplo, v1.0.0)
+  release:
+    types: [published] # Dispara também quando houver releases publicados no GitHub
 
 jobs:
   deploy:

@@ -18,15 +18,23 @@ import java.nio.charset.StandardCharsets;
 
 public class DoBotApp {
 
-    private static final Logger logger = LoggerFactory.getLogger(DoBotApp.class);
-    private static String mensagemInicial;
-    private static DoBotTema tema = criarTemaPadrao();
+    private final Logger logger = LoggerFactory.getLogger(DoBotApp.class);
+    private String mensagemInicial;
+    private DoBotTema tema;
 
-    public static void start() {
+    private DoBotApp() {
+        this.tema = criarTemaPadrao();
+    }
+
+    public static DoBotApp novoBot() {
+        return new DoBotApp();
+    }
+
+    public void start() {
         start(8080, 8082);
     }
 
-    public static void start(int portaDoBot, int portaH2) {
+    public void start(int portaDoBot, int portaH2) {
         try {
             Javalin app = Javalin.create(config -> {
                 config.staticFiles.add(staticFileConfig -> {
@@ -64,7 +72,7 @@ public class DoBotApp {
         }
     }
 
-    private static DoBotTema criarTemaPadrao() {
+    private DoBotTema criarTemaPadrao() {
         DoBotTema tema = new DoBotTema();
         tema.setCorFundoPagina("#0d0d0d");
         tema.setCorTextoTitulo("#1abc9c");
@@ -76,13 +84,13 @@ public class DoBotApp {
         return tema;
     }
 
-    private static TemplateEngine criarThymeleafEngine() {
+    private TemplateEngine criarThymeleafEngine() {
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
         return templateEngine;
     }
 
-    private static ITemplateResolver templateResolver() {
+    private ITemplateResolver templateResolver() {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setPrefix("WEB-INF/templates/");
         templateResolver.setSuffix(".html");
@@ -91,11 +99,11 @@ public class DoBotApp {
         return templateResolver;
     }
 
-    public static void setMensagemInicial(String mensagemInicial) {
-        DoBotApp.mensagemInicial = mensagemInicial;
+    public void setMensagemInicial(String mensagemInicial) {
+        this.mensagemInicial = mensagemInicial;
     }
 
-    public static String getMensagemInicial() {
+    public String getMensagemInicial() {
         return mensagemInicial;
     }
 
@@ -104,9 +112,7 @@ public class DoBotApp {
      *
      * @return o tema do chatbot
      */
-    public static DoBotTema getTema() {
+    public DoBotTema getTema() {
         return tema;
     }
-
-
 }

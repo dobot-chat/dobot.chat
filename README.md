@@ -82,29 +82,33 @@ Você pode personalizar o tema do chatbot usando a classe DoBotTema. É possíve
 
 Exemplo de configuração do tema:
 ```java
-DoBotApp.tema().setCorFundoPagina("#FFFFFF");
-DoBotApp.tema().setCorFundoMensagemUsuario("#ADD8E6");
-DoBotApp.tema().setCorFundoMensagemBot("#FFD700");
-DoBotApp.tema().setCorTextoChat("#000000");
+
+DoBotApp meubot = DoBotApp.novoBot();
+meubot.tema().setCorFundoPagina("#FFFFFF");
+meubot.tema().setCorFundoMensagemUsuario("#ADD8E6");
+meubot.tema().setCorFundoMensagemBot("#FFD700");
+meubot.tema().setCorTextoChat("#000000");
 ```
 ## Configurando a Mensagem Inicial e as Portas
 Você pode configurar uma mensagem inicial para ser exibida quando o chatbot for acessado pela primeira vez. Defina essa mensagem antes de iniciar o chatbot:
 ```java
-DoBotApp.setMensagemInicial("Bem-vindo ao chatbot!");
+meubot.setMensagemInicial("Bem-vindo ao chatbot!");
 ```
 Além disso, você pode alterar as portas nas quais a aplicação será executada. Por padrão, a aplicação roda na porta 8080 para o chatbot e na porta 8082 para o servidor H2. Se desejar, você pode customizar essas portas.
 ```java
-DoBotApp.start(9090, 9092); // Porta 9090 para o chatbot e 9092 para o H2
+meubot.start(9090, 9092); // Porta 9090 para o chatbot e 9092 para o H2
 ```
 ## Exemplo de Main
 Aqui está um exemplo básico de como inicializar o chatbot:
 ```java
 public class Main {
     public static void main(String[] args) {
-        DoBotApp.setMensagemInicial("Chatbot inicializado com sucesso!");
-        DoBotApp.tema().setCorFundoMensagemUsuario("blue");
-        DoBotApp.tema().setCorFundoMensagemBot("red");
-        DoBotApp.start(8081, 8083); // Rodando o chatbot na porta 8081 e o H2 na 8083
+        DoBotApp meubot = DoBotApp.novoBot();
+        meubot.setMensagemInicial("Chatbot inicializado com sucesso!");
+        meubot.tema().setCorFundoMensagemUsuario("blue");
+        meubot.tema().setCorFundoMensagemBot("red");
+        meubot.start(8081, 8083); // Rodando o chatbot na porta 8081 e o H2 
+       na 8083
     }
 }
 ```
