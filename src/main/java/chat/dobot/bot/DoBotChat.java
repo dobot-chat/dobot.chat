@@ -83,12 +83,12 @@ public class DoBotChat {
 
     private DoBotTema criarTemaPadrao() {
         DoBotTema tema = new DoBotTema();
-        tema.setCorFundoPagina("#0d0d0d");
-        tema.setCorTextoTitulo("#1abc9c");
-        tema.setCorFundoChat("#222");
-        tema.setCorTextoChat("#ffffff");
-        tema.setCorFundoMensagemUsuario("#34495e");
-        tema.setCorFundoMensagemBot("#1abc9c");
+        tema.setCorFundoPagina("#ffffff");
+        tema.setCorTextoTitulo("#000000");
+        tema.setCorFundoChat("#D5D5D5");
+        tema.setCorTextoChat("#000000");
+        tema.setCorFundoMensagemUsuario("#FEB600");
+        tema.setCorFundoMensagemBot("#EE8134");
 
         return tema;
     }
