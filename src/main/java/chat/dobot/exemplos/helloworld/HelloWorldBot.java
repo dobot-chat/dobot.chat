@@ -5,7 +5,7 @@ import chat.dobot.bot.annotations.DoBot;
 import chat.dobot.bot.annotations.EstadoChat;
 import chat.dobot.bot.Contexto;
 
-@DoBot
+//@DoBot
 public class HelloWorldBot {
 
     public static void main(String[] args) {
@@ -14,7 +14,7 @@ public class HelloWorldBot {
         meubot.start();
     }
 
-    @EstadoChat(inicial = true)
+    //@EstadoChat(inicial = true)
     public void aloMundo(Contexto chat) {
         String msg = chat.getMensagemUsuario();
         chat.responder("Alô "+msg);
