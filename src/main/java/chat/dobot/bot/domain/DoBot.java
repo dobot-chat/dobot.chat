@@ -1,8 +1,9 @@
-package chat.dobot.dominio;
+package chat.dobot.bot.domain;
 
-import chat.dobot.app.Autor;
-import chat.dobot.app.DoBotException;
-import chat.dobot.utils.AnotacoesUtil;
+import chat.dobot.bot.Autor;
+import chat.dobot.bot.Contexto;
+import chat.dobot.bot.DoBotException;
+import chat.dobot.bot.utils.AnnotationsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +28,7 @@ public class DoBot {
     public DoBot(Object chatbot, String mensagemInicial, DoBotTema doBotTema) {
         this.chatbot = chatbot;
         mapearEstados();
-        this.estadoAtual = AnotacoesUtil.obterEstadoInicial(chatbot);
+        this.estadoAtual = AnnotationsUtil.obterEstadoInicial(chatbot);
         logger.info("Estado inicial: {}", this.estadoAtual);
         adicionarMensagemInicial(mensagemInicial);
         this.doBotTema = doBotTema;
@@ -65,7 +66,7 @@ public class DoBot {
 
     private void mapearEstados() {
         logger.debug("Iniciando mapeamento dos estados para {}.", chatbot.getClass().getSimpleName());
-        this.estados = AnotacoesUtil.mapearEstados(this.chatbot);
+        this.estados = AnnotationsUtil.mapearEstados(this.chatbot);
 
         if (this.estados.isEmpty()) {
             throw new DoBotException("Nenhum estado mapeado para " + chatbot.getClass().getSimpleName() + "!");

@@ -1,22 +1,20 @@
-package chat.dobot.controlador;
+package chat.dobot.bot.controller;
 
-import chat.dobot.dominio.Contexto;
-import chat.dobot.dominio.DoBot;
-import chat.dobot.servico.DoBotServico;
-import chat.dobot.utils.AnotacoesUtil;
+import chat.dobot.bot.DoBotKey;
+import chat.dobot.bot.Contexto;
+import chat.dobot.bot.domain.DoBot;
+import chat.dobot.bot.service.DoBotService;
 import io.javalin.http.Context;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class DoBotControlador {
+public class DoBotController {
 
     private final DoBot doBot;
-    private final Map<String, DoBotServico<Record>> servicos;
 
-    public DoBotControlador(DoBot doBot) {
+    public DoBotController(DoBot doBot) {
         this.doBot = doBot;
-        this.servicos = inicializarServicos();
     }
 
     public Map<String, Object> processarPaginaHome() {
@@ -37,6 +35,7 @@ public class DoBotControlador {
     }
 
     public Map<String, Object> processarPostPaginaChat(Context ctx) {
+        Map<String, DoBotService<Record>> servicos = ctx.appData(DoBotKey.SERVICE.key());
         String estadoAtual = doBot.getEstadoAtual();
 
         String msgUsuario = ctx.formParam("msgUsuario");
@@ -50,14 +49,4 @@ public class DoBotControlador {
         return model;
     }
 
-    private Map<String, DoBotServico<Record>> inicializarServicos() {
-        Map<String, DoBotServico<Record>> servicosMap = new HashMap<>();
-
-        AnotacoesUtil.buscarEntidades().forEach(entidade -> {
-            DoBotServico<Record> servico = new DoBotServico<>(entidade);
-            servicosMap.put(entidade.getSimpleName(), servico);
-        });
-
-        return servicosMap;
-    }
 }

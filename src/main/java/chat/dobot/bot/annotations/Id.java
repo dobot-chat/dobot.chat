@@ -1,14 +1,11 @@
-package chat.dobot.anotacoes;
+package chat.dobot.bot.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.METHOD)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface EstadoChat {
-
-    String estado() default "";
-    boolean inicial() default false;
+public @interface Id {
 }

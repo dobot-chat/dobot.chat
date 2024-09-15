@@ -1,10 +1,11 @@
-package chat.dobot.app;
+package chat.dobot.bot;
 
-import chat.dobot.config.YormConfig;
-import chat.dobot.controlador.DoBotControlador;
-import chat.dobot.dominio.DoBot;
-import chat.dobot.dominio.DoBotTema;
-import chat.dobot.utils.AnotacoesUtil;
+import chat.dobot.bot.persistance.YormConfig;
+import chat.dobot.bot.controller.DoBotController;
+import chat.dobot.bot.domain.DoBot;
+import chat.dobot.bot.domain.DoBotTema;
+import chat.dobot.bot.service.DoBotService;
+import chat.dobot.bot.utils.AnnotationsUtil;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.rendering.template.JavalinThymeleaf;
@@ -13,21 +14,24 @@ import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
+import org.yorm.Yorm;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
-public class DoBotApp {
+public class DoBotChat {
 
-    private final Logger logger = LoggerFactory.getLogger(DoBotApp.class);
+    private final Logger logger = LoggerFactory.getLogger(DoBotChat.class);
     private String mensagemInicial;
     private DoBotTema tema;
 
-    private DoBotApp() {
+    private DoBotChat() {
         this.tema = criarTemaPadrao();
     }
 
-    public static DoBotApp novoBot() {
-        return new DoBotApp();
+    public static DoBotChat novoBot() {
+        return new DoBotChat();
     }
 
     public void start() {
@@ -36,7 +40,13 @@ public class DoBotApp {
 
     public void start(int portaDoBot, int portaH2) {
         try {
+
+            YormConfig yormConfig = new YormConfig(portaH2);
+
             Javalin app = Javalin.create(config -> {
+                // Registra os serviços no contexto da aplicação
+                config.appData(DoBotKey.SERVICE.key(), inicializarServicos(yormConfig.getYorm()));
+
                 config.staticFiles.add(staticFileConfig -> {
                     staticFileConfig.directory = "/WEB-INF/publico";
                     staticFileConfig.location = Location.CLASSPATH;
@@ -44,9 +54,8 @@ public class DoBotApp {
                 config.fileRenderer(new JavalinThymeleaf(criarThymeleafEngine()));
             }).start(portaDoBot);
 
-            YormConfig.start(portaH2);
 
-            Object chatbotImpl = AnotacoesUtil.buscarClasseChatbot();
+            Object chatbotImpl = AnnotationsUtil.buscarClasseChatbot();
             if (chatbotImpl == null) {
                 throw new DoBotException("Nenhuma classe anotada com @" + DoBot.class.getSimpleName() + " foi encontrada!");
             }
@@ -59,7 +68,7 @@ public class DoBotApp {
                 ctx.res().setContentType("text/html; charset=UTF-8");
             });
 
-            DoBotControlador controlador = new DoBotControlador(doBot);
+            DoBotController controlador = new DoBotController(doBot);
 
             app.get("/", ctx -> ctx.render("/home.html", controlador.processarPaginaHome()));
             app.get("/chatbot", ctx -> ctx.render("/chat.html", controlador.processarGetPaginaChat()));
@@ -115,4 +124,16 @@ public class DoBotApp {
     public DoBotTema getTema() {
         return tema;
     }
+
+    private Map<String, DoBotService<Record>> inicializarServicos(Yorm yorm) {
+        Map<String, DoBotService<Record>> servicosMap = new HashMap<>();
+
+        AnnotationsUtil.buscarEntidades().forEach(entidade -> {
+            DoBotService<Record> servico = new DoBotService<>(entidade,yorm);
+            servicosMap.put(entidade.getSimpleName(), servico);
+        });
+
+        return servicosMap;
+    }
+
 }

@@ -1,4 +1,4 @@
-package chat.dobot.app;
+package chat.dobot.bot;
 
 public enum Autor {
     USUARIO,

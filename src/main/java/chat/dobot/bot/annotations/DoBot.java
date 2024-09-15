@@ -1,4 +1,4 @@
-package chat.dobot.anotacoes;
+package chat.dobot.bot.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Entidade {
+public @interface DoBot {
 }

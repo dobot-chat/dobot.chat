@@ -1,8 +1,8 @@
-package chat.dobot.utils;
+package chat.dobot.bot.utils;
 
-import chat.dobot.anotacoes.Id;
-import chat.dobot.dominio.DoBot;
-import chat.dobot.app.DoBotException;
+import chat.dobot.bot.annotations.Id;
+import chat.dobot.bot.domain.DoBot;
+import chat.dobot.bot.DoBotException;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
