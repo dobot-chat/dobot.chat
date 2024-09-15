@@ -4,7 +4,7 @@ import chat.dobot.anotacoes.DoBot;
 import chat.dobot.anotacoes.Entidade;
 import chat.dobot.anotacoes.EstadoChat;
 import chat.dobot.dominio.Contexto;
-import chat.dobot.excecao.DoBotExcecao;
+import chat.dobot.app.DoBotException;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 
@@ -71,7 +71,7 @@ public class AnotacoesUtil {
                 EstadoChat estadoChat = method.getAnnotation(EstadoChat.class);
                 if (estadoChat.inicial()) {
                     if (estadoInicial != null) {
-                        throw new DoBotExcecao("Mais de um estado inicial definido!");
+                        throw new DoBotException("Mais de um estado inicial definido!");
                     }
                     estadoInicial = estadoChat.estado().isEmpty() ? method.getName() : estadoChat.estado();
                 }
@@ -81,16 +81,16 @@ public class AnotacoesUtil {
         if (estadoInicial != null) {
             return estadoInicial.toLowerCase();
         }
-        throw new DoBotExcecao("Nenhum estado inicial definido!");
+        throw new DoBotException("Nenhum estado inicial definido!");
     }
 
     private static void validarMetodo(Method method, String estado, Map<String, Consumer<Contexto>> estadosMap) {
         if (method.getParameterCount() != 1 || !method.getParameterTypes()[0].getName().equals(Contexto.class.getName())) {
-            throw new DoBotExcecao("O método '" + method.getName() + "' da classe " + method.getDeclaringClass().getName() + " está anotado com " + EstadoChat.class.getName() + " e deve conter um único parâmetro, que precisa ser do tipo " + Contexto.class.getName() + "!");
+            throw new DoBotException("O método '" + method.getName() + "' da classe " + method.getDeclaringClass().getName() + " está anotado com " + EstadoChat.class.getName() + " e deve conter um único parâmetro, que precisa ser do tipo " + Contexto.class.getName() + "!");
         }
 
         if (estadosMap.containsKey(estado.toLowerCase())) {
-            throw new DoBotExcecao("O estado '" + estado.toLowerCase() + "' não pode ser mapeado para mais de um método!");
+            throw new DoBotException("O estado '" + estado.toLowerCase() + "' não pode ser mapeado para mais de um método!");
         }
     }
 }

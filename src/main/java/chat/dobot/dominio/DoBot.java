@@ -1,7 +1,7 @@
 package chat.dobot.dominio;
 
-import chat.dobot.enums.Autor;
-import chat.dobot.excecao.DoBotExcecao;
+import chat.dobot.app.Autor;
+import chat.dobot.app.DoBotException;
 import chat.dobot.utils.AnotacoesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class DoBot {
         ultimaMensagemUsuario = contexto.getMensagemUsuario();
 
         if (!estados.containsKey(contexto.getEstado().toLowerCase())) {
-            throw new DoBotExcecao("Estado '" + contexto.getEstado() + "' não encontrado!");
+            throw new DoBotException("Estado '" + contexto.getEstado() + "' não encontrado!");
         }
 
         estados.get(contexto.getEstado().toLowerCase()).accept(contexto);
@@ -68,7 +68,7 @@ public class DoBot {
         this.estados = AnotacoesUtil.mapearEstados(this.chatbot);
 
         if (this.estados.isEmpty()) {
-            throw new DoBotExcecao("Nenhum estado mapeado para " + chatbot.getClass().getSimpleName() + "!");
+            throw new DoBotException("Nenhum estado mapeado para " + chatbot.getClass().getSimpleName() + "!");
         }
 
         logger.debug("Mapeamento dos estados concluído com sucesso.");

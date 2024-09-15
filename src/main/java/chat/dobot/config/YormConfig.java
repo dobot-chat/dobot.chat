@@ -14,6 +14,9 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Classe de configuração do Yorm.
+ */
 public class YormConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(YormConfig.class);

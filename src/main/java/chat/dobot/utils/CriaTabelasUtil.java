@@ -2,7 +2,7 @@ package chat.dobot.utils;
 
 import chat.dobot.anotacoes.Id;
 import chat.dobot.dominio.DoBot;
-import chat.dobot.excecao.DoBotExcecao;
+import chat.dobot.app.DoBotException;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
@@ -36,7 +36,7 @@ public class CriaTabelasUtil {
                 }
 
                 if (!idEncontrado) {
-                    throw new DoBotExcecao("A entidade " + entidade.getName() + " deve ter um campo anotado com " + Id.class.getName() + "!");
+                    throw new DoBotException("A entidade " + entidade.getName() + " deve ter um campo anotado com " + Id.class.getName() + "!");
                 }
 
                 criaTableSQL.setLength(criaTableSQL.length() - 2);
@@ -63,7 +63,7 @@ public class CriaTabelasUtil {
         } else if (tipo == LocalDate.class) {
             return "DATE";
         } else {
-            throw new DoBotExcecao("O tipo de dado " + tipo.getName() + " não é suportado para operações de banco no " + DoBot.class.getSimpleName() + "!");
+            throw new DoBotException("O tipo de dado " + tipo.getName() + " não é suportado para operações de banco no " + DoBot.class.getSimpleName() + "!");
         }
     }
 }

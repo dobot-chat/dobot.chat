@@ -1,6 +1,6 @@
 package chat.dobot.dominio;
 
-import chat.dobot.excecao.DoBotExcecao;
+import chat.dobot.app.DoBotException;
 import chat.dobot.servico.DoBotServico;
 
 import java.util.Map;
@@ -47,7 +47,7 @@ public class Contexto {
         DoBotServico<?> servico = servicos.get(recordClass.getSimpleName());
 
         if (servico == null) {
-            throw new DoBotExcecao("Serviço não encontrado para a classe " + recordClass.getSimpleName() + "!");
+            throw new DoBotException("Serviço não encontrado para a classe " + recordClass.getSimpleName() + "!");
         }
 
         @SuppressWarnings("unchecked")

@@ -4,7 +4,6 @@ import chat.dobot.config.YormConfig;
 import chat.dobot.controlador.DoBotControlador;
 import chat.dobot.dominio.DoBot;
 import chat.dobot.dominio.DoBotTema;
-import chat.dobot.excecao.DoBotExcecao;
 import chat.dobot.utils.AnotacoesUtil;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
@@ -21,7 +20,7 @@ public class DoBotApp {
 
     private static final Logger logger = LoggerFactory.getLogger(DoBotApp.class);
     private static String mensagemInicial;
-    private static DoBotTema doBotTema = criarTemaPadrao();
+    private static DoBotTema tema = criarTemaPadrao();
 
     public static void start() {
         start(8080, 8082);
@@ -41,11 +40,11 @@ public class DoBotApp {
 
             Object chatbotImpl = AnotacoesUtil.buscarClasseChatbot();
             if (chatbotImpl == null) {
-                throw new DoBotExcecao("Nenhuma classe anotada com @" + DoBot.class.getSimpleName() + " foi encontrada!");
+                throw new DoBotException("Nenhuma classe anotada com @" + DoBot.class.getSimpleName() + " foi encontrada!");
             }
             logger.info("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
 
-            DoBot doBot = new DoBot(chatbotImpl, mensagemInicial, doBotTema);
+            DoBot doBot = new DoBot(chatbotImpl, mensagemInicial, tema);
 
             app.before(ctx -> {
                 ctx.res().setCharacterEncoding(StandardCharsets.UTF_8.name());
@@ -100,11 +99,14 @@ public class DoBotApp {
         return mensagemInicial;
     }
 
-    public static DoBotTema getDoBotTema() {
-        return doBotTema;
+    /**
+     * Retorna o tema do chatbot.
+     *
+     * @return o tema do chatbot
+     */
+    public static DoBotTema getTema() {
+        return tema;
     }
 
-    public static void setDoBotTema(DoBotTema doBotTema) {
-        DoBotApp.doBotTema = doBotTema;
-    }
+
 }

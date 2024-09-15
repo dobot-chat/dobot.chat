@@ -32,7 +32,7 @@ jobs:
           echo "<settings>
                   <servers>
                     <server>
-                      <id>projetos</id>  <!-- Certifique-se que o ID é igual ao pom.xml -->
+                      <id>projetos</id>  <!-- Certifique-se que o ID ï¿½ igual ao pom.xml -->
                       <username>${{ secrets.NEXUS_USERNAME }}</username>
                       <password>${{ secrets.NEXUS_PASSWORD }}</password>
                     </server>
@@ -40,4 +40,4 @@ jobs:
                 </settings>" > ~/.m2/settings.xml
 
       - name: Deploy Snapshot to Nexus
-        run: mvn clean deploy -P snapshot
+        run: mvn clean deploy -P projetos

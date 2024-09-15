@@ -1,5 +1,9 @@
 # DoBot.chat - Ferramenta para Desenvolvimento de Chatbots
-O DoBot.chat é um ferramenta que facilita a criação de chatbots customizados para diferentes finalidades. Ele oferece um sistema de estados para gerenciar o fluxo de conversas e suporte para personalização visual e persistência de dados, quando necessário.
+O DoBot.chat é uma ferramenta que facilita a criação de chatbots 
+customizados para diferentes finalidades, utilizando recursos básicos da 
+linguagem Java. O DoBotl.chat oferece um sistema de controle de estados para 
+gerenciar o fluxo de conversas e permite personalizar as cores visual e 
+persistência de dados, quando necessário.
 
 Este é um projeto coordenado pelo prof. Rodrigo Rebouças de Almeida (https://rodrigor.com), do Departamento de Ciências Exatas da Universidade Federal da Paraíba, Campus IV - Rio Tinto - PB, Brasil.
 
@@ -78,10 +82,10 @@ Você pode personalizar o tema do chatbot usando a classe DoBotTema. É possíve
 
 Exemplo de configuração do tema:
 ```java
-DoBotApp.getDoBotTema().setCorFundoPagina("#FFFFFF");
-DoBotApp.getDoBotTema().setCorFundoMensagemUsuario("#ADD8E6");
-DoBotApp.getDoBotTema().setCorFundoMensagemBot("#FFD700");
-DoBotApp.getDoBotTema().setCorTextoChat("#000000");
+DoBotApp.tema().setCorFundoPagina("#FFFFFF");
+DoBotApp.tema().setCorFundoMensagemUsuario("#ADD8E6");
+DoBotApp.tema().setCorFundoMensagemBot("#FFD700");
+DoBotApp.tema().setCorTextoChat("#000000");
 ```
 ## Configurando a Mensagem Inicial e as Portas
 Você pode configurar uma mensagem inicial para ser exibida quando o chatbot for acessado pela primeira vez. Defina essa mensagem antes de iniciar o chatbot:
@@ -98,8 +102,8 @@ Aqui está um exemplo básico de como inicializar o chatbot:
 public class Main {
     public static void main(String[] args) {
         DoBotApp.setMensagemInicial("Chatbot inicializado com sucesso!");
-        DoBotApp.getDoBotTema().setCorFundoMensagemUsuario("blue");
-        DoBotApp.getDoBotTema().setCorFundoMensagemBot("red");
+        DoBotApp.tema().setCorFundoMensagemUsuario("blue");
+        DoBotApp.tema().setCorFundoMensagemBot("red");
         DoBotApp.start(8081, 8083); // Rodando o chatbot na porta 8081 e o H2 na 8083
     }
 }
