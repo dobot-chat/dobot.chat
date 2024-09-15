@@ -6,7 +6,7 @@
 
     <groupId>chat.dobot.bot</groupId>
     <artifactId>DoBot.chat</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <distributionManagement>
@@ -18,7 +18,7 @@
         <snapshotRepository>
             <id>projetos</id>
             <name>Repositório de Snapshots</name>
-            <url>https://maven.vps.rodrigor.com/repository/snapshots/</url>
+            <url>https://maven.vps.rodrigor.com/repository/projetos/</url>
         </snapshotRepository>
     </distributionManagement>
 
