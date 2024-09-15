@@ -21,6 +21,40 @@
     <description>O DoBot.chat é uma aplicação que simplifica o desenvolvimento de chatbots.</description>
     <url>https://dobot.chat</url>
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>release</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>projetos</id>
+                    <url>https://maven.vps.rodrigor.com/repository/projetos/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>snapshot</id>
+            <activation>
+                <property>
+                    <name>snapshot</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>projetos-snapshots</id>
+                    <url>https://maven.vps.rodrigor.com/repository/snapshots/</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+
     <licenses>
         <license>
             <name>The Apache License, Version 2.0</name>
