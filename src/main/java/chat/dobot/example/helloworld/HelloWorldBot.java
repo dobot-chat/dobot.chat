@@ -3,7 +3,7 @@ package chat.dobot.example.helloworld;
 import chat.dobot.bot.DoBotChat;
 import chat.dobot.bot.annotations.DoBot;
 import chat.dobot.bot.annotations.EstadoChat;
-import chat.dobot.bot.domain.Contexto;
+import chat.dobot.bot.Contexto;
 
 @DoBot
 public class HelloWorldBot {

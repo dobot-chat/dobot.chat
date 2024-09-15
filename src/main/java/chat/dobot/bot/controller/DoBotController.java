@@ -1,7 +1,7 @@
 package chat.dobot.bot.controller;
 
 import chat.dobot.bot.DoBotKey;
-import chat.dobot.bot.domain.Contexto;
+import chat.dobot.bot.Contexto;
 import chat.dobot.bot.domain.DoBot;
 import chat.dobot.bot.service.DoBotService;
 import io.javalin.http.Context;

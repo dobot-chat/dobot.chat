@@ -3,7 +3,7 @@ package chat.dobot.bot.utils;
 import chat.dobot.bot.annotations.DoBot;
 import chat.dobot.bot.annotations.Entidade;
 import chat.dobot.bot.annotations.EstadoChat;
-import chat.dobot.bot.domain.Contexto;
+import chat.dobot.bot.Contexto;
 import chat.dobot.bot.DoBotException;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;

@@ -1,6 +1,5 @@
-package chat.dobot.bot.domain;
+package chat.dobot.bot;
 
-import chat.dobot.bot.DoBotException;
 import chat.dobot.bot.service.DoBotService;
 
 import java.util.Map;

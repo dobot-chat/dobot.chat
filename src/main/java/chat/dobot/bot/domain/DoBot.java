@@ -1,6 +1,7 @@
 package chat.dobot.bot.domain;
 
 import chat.dobot.bot.Autor;
+import chat.dobot.bot.Contexto;
 import chat.dobot.bot.DoBotException;
 import chat.dobot.bot.utils.AnnotationsUtil;
 import org.slf4j.Logger;
