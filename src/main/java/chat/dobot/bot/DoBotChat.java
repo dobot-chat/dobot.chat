@@ -62,7 +62,10 @@ public class DoBotChat {
 
             Object chatbotImpl = AnnotationsUtil.buscarClasseChatbot();
             if (chatbotImpl == null) {
-                throw new DoBotException("Nenhuma classe anotada com @" + DoBot.class.getSimpleName() + " foi encontrada!");
+                logger.debug("Nenhuma classe anotada com @" + DoBot.class.getSimpleName() + " foi encontrada!");
+                System.out.println("ERRO: Não foi possível inicializar o DoBot. \n");
+                System.out.println("Não encontrei nenhuma classe anotada com @" + DoBot.class.getSimpleName());
+                System.exit(1);
             }
             logger.debug("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
 
