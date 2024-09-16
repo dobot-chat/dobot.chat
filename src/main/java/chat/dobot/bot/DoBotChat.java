@@ -43,11 +43,12 @@ public class DoBotChat {
 
     public void start(int portaDoBot, int portaH2) {
         try {
-
+            //Imprime o logo do DoBot
             System.out.println(getdoBotAsciiArt());
             System.out.println("Versão: " + getApplicationVersion());
             YormConfig yormConfig = new YormConfig(portaH2);
 
+            // Inicializa o Javalin
             Javalin app = Javalin.create(config -> {
                 // Registra os serviços no contexto da aplicação
                 config.appData(DoBotKey.SERVICE.key(), inicializarServicos(yormConfig.getYorm()));
