@@ -22,6 +22,7 @@ import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class DoBotChat {
 
@@ -70,7 +71,7 @@ public class DoBotChat {
             }
             logger.debug("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
 
-            DoBot doBot = new DoBot(chatbotImpl, mensagemInicial, tema);
+            DoBot doBot = new DoBot(chatbotImpl, mapearEstados(chatbotImpl), mensagemInicial, tema);
 
             app.before(ctx -> {
                 ctx.res().setCharacterEncoding(StandardCharsets.UTF_8.name());
@@ -169,5 +170,16 @@ public class DoBotChat {
         }
     }
 
+    private Map<String, Consumer<Contexto>> mapearEstados(Object chatbot) {
+        logger.debug("Iniciando mapeamento dos estados para {}.", chatbot.getClass().getSimpleName());
+        Map<String, Consumer<Contexto>> estados = AnnotationsUtil.mapearEstados(chatbot);
 
+        if (estados.isEmpty()) {
+            throw new DoBotException("Nenhum estado mapeado para " + chatbot.getClass().getSimpleName() + "!");
+        }
+
+        logger.debug("Mapeamento dos estados concluído com sucesso.");
+        logger.debug("Mapeamento de estados encontrados: {}", estados.keySet());
+        return estados;
+    }
 }
