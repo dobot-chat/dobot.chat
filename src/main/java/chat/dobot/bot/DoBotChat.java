@@ -9,6 +9,8 @@ import chat.dobot.bot.utils.AnnotationsUtil;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.rendering.template.JavalinThymeleaf;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
@@ -16,6 +18,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.yorm.Yorm;
 
+import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,9 +43,12 @@ public class DoBotChat {
 
     public void start(int portaDoBot, int portaH2) {
         try {
-
+            //Imprime o logo do DoBot
+            System.out.println(getdoBotAsciiArt());
+            System.out.println("Versão: " + getApplicationVersion());
             YormConfig yormConfig = new YormConfig(portaH2);
 
+            // Inicializa o Javalin
             Javalin app = Javalin.create(config -> {
                 // Registra os serviços no contexto da aplicação
                 config.appData(DoBotKey.SERVICE.key(), inicializarServicos(yormConfig.getYorm()));
@@ -57,9 +63,12 @@ public class DoBotChat {
 
             Object chatbotImpl = AnnotationsUtil.buscarClasseChatbot();
             if (chatbotImpl == null) {
-                throw new DoBotException("Nenhuma classe anotada com @" + DoBot.class.getSimpleName() + " foi encontrada!");
+                logger.debug("Nenhuma classe anotada com @" + DoBot.class.getSimpleName() + " foi encontrada!");
+                System.out.println("ERRO: Não foi possível inicializar o DoBot. \n");
+                System.out.println("Não encontrei nenhuma classe anotada com @" + DoBot.class.getSimpleName());
+                System.exit(1);
             }
-            logger.info("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
+            logger.debug("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
 
             DoBot doBot = new DoBot(chatbotImpl, mensagemInicial, tema);
 
@@ -74,7 +83,8 @@ public class DoBotChat {
             app.get("/chatbot", ctx -> ctx.render("/chat.html", controlador.processarGetPaginaChat()));
             app.post("/chatbot", ctx -> ctx.render("/chat.html", controlador.processarPostPaginaChat(ctx)));
 
-            logger.info("Aplicação inicializada com sucesso!");
+            logger.debug("Aplicação inicializada com sucesso!");
+            System.out.println("Aplicação inicializada com sucesso!\nAcesse http://localhost:" + portaDoBot + " para acessar o chatbot.");
         } catch (Exception e) {
             logger.error("Falha durante a inicialização da aplicação!", e);
             System.exit(1);
@@ -135,5 +145,29 @@ public class DoBotChat {
 
         return servicosMap;
     }
+
+    private String getdoBotAsciiArt() {
+        StringBuffer asciiArt = new StringBuffer();
+
+        asciiArt.append("  ____        ____        _         _           _   \n");
+        asciiArt.append(" |  _ \\  ___ | __ )  ___ | |_   ___| |__   __ _| |_ \n");
+        asciiArt.append(" | | | |/ _ \\|  _ \\ / _ \\| __| / __| '_ \\ / _` | __|\n");
+        asciiArt.append(" | |_| | (_) | |_) | (_) | |_ | (__| | | | (_| | |_ \n");
+        asciiArt.append(" |____/ \\___/|____/ \\___/ \\__(_)___|_| |_|\\__,_|\\__|\n");
+
+        return asciiArt.toString();
+    }
+
+    private String getApplicationVersion() {
+        try {
+            MavenXpp3Reader reader = new MavenXpp3Reader();
+            Model model = reader.read(new FileReader("pom.xml"));
+            return model.getVersion();
+        } catch (Exception e) {
+            logger.error("Erro ao ler a versão do pom.xml", e);
+            return "desconhecida";
+        }
+    }
+
 
 }
