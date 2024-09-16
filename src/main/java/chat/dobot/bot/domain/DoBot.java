@@ -29,7 +29,7 @@ public class DoBot {
         this.chatbot = chatbot;
         mapearEstados();
         this.estadoAtual = AnnotationsUtil.obterEstadoInicial(chatbot);
-        logger.info("Estado inicial: {}", this.estadoAtual);
+        logger.debug("Estado inicial: {}", this.estadoAtual);
         adicionarMensagemInicial(mensagemInicial);
         this.doBotTema = doBotTema;
     }
@@ -73,7 +73,7 @@ public class DoBot {
         }
 
         logger.debug("Mapeamento dos estados concluído com sucesso.");
-        logger.info("Mapeamento de estados encontrados: {}", this.estados.keySet());
+        logger.debug("Mapeamento de estados encontrados: {}", this.estados.keySet());
     }
 
     public List<Mensagem> getMensagens() {
