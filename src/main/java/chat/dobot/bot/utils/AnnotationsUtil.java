@@ -84,6 +84,7 @@ public class AnnotationsUtil {
         throw new DoBotException("Nenhum estado inicial definido!");
     }
 
+    //TODO: implementar interface nossa com um método que possui Context como parâmetro
     private static void validarMetodo(Method method, String estado, Map<String, Consumer<Contexto>> estadosMap) {
         if (method.getParameterCount() != 1 || !method.getParameterTypes()[0].getName().equals(Contexto.class.getName())) {
             throw new DoBotException("O método '" + method.getName() + "' da classe " + method.getDeclaringClass().getName() + " está anotado com " + EstadoChat.class.getName() + " e deve conter um único parâmetro, que precisa ser do tipo " + Contexto.class.getName() + "!");

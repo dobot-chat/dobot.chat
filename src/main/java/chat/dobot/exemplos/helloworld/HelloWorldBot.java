@@ -11,7 +11,7 @@ public class HelloWorldBot {
     public static void main(String[] args) {
         DoBotChat meubot = DoBotChat.novoBot();
         meubot.setMensagemInicial("Olá! Eu sou o chatbot Alô Mundo! Escreva qualquer coisa e responderei com `Alô`.");
-        meubot.start();
+        meubot.start(8083,8084);
     }
 
     //@EstadoChat(inicial = true)
