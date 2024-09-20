@@ -1,4 +1,4 @@
-name: Publish Snapshot to Nexus
+name: Publish to Nexus
 
 on:
   push:
@@ -42,5 +42,23 @@ jobs:
                   </servers>
                 </settings>" > ~/.m2/settings.xml
 
-      - name: Deploy Snapshot to Nexus
-        run: mvn clean deploy -P projetos
+      - name: Check version type (Snapshot or Release)
+        id: version-check
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "Project version: $VERSION"
+          if [[ "$VERSION" == *-SNAPSHOT ]]; then
+            echo "::set-output name=is-snapshot::true"
+          else
+            echo "::set-output name=is-snapshot::false"
+          fi
+
+      - name: Deploy to Nexus
+        run: |
+          if [ "${{ steps.version-check.outputs.is-snapshot }}" == "true" ]; then
+            echo "Deploying Snapshot"
+            mvn clean deploy -P snapshot
+          else
+            echo "Deploying Release"
+            mvn clean deploy -P release
+          fi
