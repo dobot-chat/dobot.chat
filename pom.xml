@@ -6,7 +6,7 @@
 
     <groupId>chat.dobot.bot</groupId>
     <artifactId>DoBot.chat</artifactId>
-    <version>1.1.14</version>
+    <version>1.1.15</version>
     <packaging>jar</packaging>
 
     <distributionManagement>
@@ -106,14 +106,14 @@
         <dependency>
             <groupId>io.javalin</groupId>
             <artifactId>javalin</artifactId>
-            <version>6.2.0</version>
+            <version>1.1.15</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.javalin/javalin-rendering -->
         <dependency>
             <groupId>io.javalin</groupId>
             <artifactId>javalin-rendering</artifactId>
-            <version>6.2.0</version>
+            <version>1.1.15</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.github.classgraph/classgraph -->
@@ -127,14 +127,14 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j2-impl</artifactId>
-            <version>2.23.1</version>
+            <version>1.1.15</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.yorm/yorm -->
         <dependency>
             <groupId>org.yorm</groupId>
             <artifactId>yorm</artifactId>
-            <version>0.0.8</version>
+            <version>1.1.15</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
@@ -152,7 +152,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>5.1.0</version>
+            <version>1.1.15</version>
         </dependency>
     </dependencies>
 
@@ -161,7 +161,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.10.0</version>
+                <version>1.1.15</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -175,7 +175,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>1.1.15</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
