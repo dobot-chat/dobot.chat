@@ -48,10 +48,9 @@ jobs:
           echo "Tag name from GitHub: $TAG_NAME"
           
           # Atualiza a primeira ocorrência de <version> após <artifactId>
-          sed -i '/<artifactId>/,/<\/artifactId>/!b;n;/<version>/{s/<version>.*<\/version>/<version>'"$TAG_NAME"'<\/version>/;}' pom.xml
-
+          sed -i '/<artifactId>/,/<\/artifactId>/!b;n;/<version>/{s/<version>.*<\/version>/<version>'"$TAG_NAME"'<\/version>/;q;}' pom.xml
           
-          # Exibe o arquivo pom.xml para verificação
+          # Exibe o arquivo pom.xml para conferência
           echo " -------------  POM.XML 30 primeiras linhas: ------------"
           head -n 30 pom.xml
           
