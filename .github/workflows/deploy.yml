@@ -75,9 +75,9 @@ jobs:
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "Project version: $VERSION"
           if [[ "$VERSION" == *-SNAPSHOT ]]; then
-            echo "::set-output name=is-snapshot::true"
+            echo "is-snapshot=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=is-snapshot::false"
+            echo "is-snapshot=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Deploy to Nexus
