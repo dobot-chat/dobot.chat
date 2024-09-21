@@ -6,7 +6,7 @@
 
     <groupId>chat.dobot.bot</groupId>
     <artifactId>DoBot.chat</artifactId>
-    <version>1.1.8</version>
+    <version>1.1.14</version>
     <packaging>jar</packaging>
 
     <distributionManagement>
@@ -99,60 +99,60 @@
         <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf</artifactId>
-            <version>3.1.2.RELEASE</version>
+            <version>1.1.14</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.javalin/javalin -->
         <dependency>
             <groupId>io.javalin</groupId>
             <artifactId>javalin</artifactId>
-            <version>6.2.0</version>
+            <version>1.1.14</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.javalin/javalin-rendering -->
         <dependency>
             <groupId>io.javalin</groupId>
             <artifactId>javalin-rendering</artifactId>
-            <version>6.2.0</version>
+            <version>1.1.14</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.github.classgraph/classgraph -->
         <dependency>
             <groupId>io.github.classgraph</groupId>
             <artifactId>classgraph</artifactId>
-            <version>4.8.174</version>
+            <version>1.1.14</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j2-impl</artifactId>
-            <version>2.23.1</version>
+            <version>1.1.14</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.yorm/yorm -->
         <dependency>
             <groupId>org.yorm</groupId>
             <artifactId>yorm</artifactId>
-            <version>0.0.8</version>
+            <version>1.1.14</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>2.3.230</version>
+            <version>1.1.14</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model</artifactId>
-            <version>3.9.8</version>
+            <version>1.1.14</version>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>5.1.0</version>
+            <version>1.1.14</version>
         </dependency>
     </dependencies>
 
@@ -161,7 +161,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.10.0</version>
+                <version>1.1.14</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -175,7 +175,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>1.1.14</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
