@@ -91,9 +91,9 @@ jobs:
       - name: Deploy to Nexus
         run: |
           if [ "${{ steps.version-check.outputs.is-snapshot }}" == "true" ]; then
-            echo "Deploying Snapshot"
-            mvn clean deploy -P snapshot
+            echo "Deploying Snapshot without source and javadoc"
+            mvn clean deploy -P snapshot -Dsource.skip=true -Djavadoc.skip=true
           else
-            echo "Deploying Release"
-            mvn clean deploy -P release
+            echo "Deploying Release without source and javadoc"
+            mvn clean deploy -P release -Dsource.skip=true -Djavadoc.skip=true
           fi
