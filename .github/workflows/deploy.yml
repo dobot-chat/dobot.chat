@@ -41,21 +41,29 @@ jobs:
                   </servers>
                 </settings>" > ~/.m2/settings.xml
 
-      # Etapa: Obter a versão da tag do GitHub e atualizar o pom.xml
-      - name: Update POM version from GitHub tag
+      # Etapa: Verificar e atualizar o POM.xml se necessário
+      - name: Update POM version if necessary
         run: |
           TAG_NAME="${{ github.ref_name }}"  # Obtém a tag da referência
           echo "Tag name from GitHub: $TAG_NAME"
-          
-          # Atualiza a primeira ocorrência de <version> após <artifactId>
-          sed -i '0,/<version>/{s/<version>.*<\/version>/<version>'"$TAG_NAME"'<\/version>/}' pom.xml
-          
-          # Exibe o arquivo pom.xml para conferência
-          echo " -------------  POM.XML 30 primeiras linhas: ------------"
-          head -n 30 pom.xml
-          
-      # Etapa: Commit da alteração no pom.xml para ambos release e snapshot
-      - name: Commit updated POM version
+
+          # Obtém a versão atual do pom.xml
+          CURRENT_VERSION=$(xmllint --xpath "string(//project/version)" pom.xml)
+          echo "Current POM version: $CURRENT_VERSION"
+
+          # Verifica se a versão do POM já é igual à tag
+          if [ "$CURRENT_VERSION" != "$TAG_NAME" ]; then
+            echo "Updating POM version to $TAG_NAME"
+            sed -i '0,/<version>/{s/<version>.*<\/version>/<version>'"$TAG_NAME"'<\/version>/}' pom.xml
+            UPDATED=true
+          else
+            echo "POM version is already $TAG_NAME, no update necessary."
+            UPDATED=false
+          fi
+
+      # Etapa: Commit da alteração no pom.xml somente se foi atualizado
+      - name: Commit updated POM version if necessary
+        if: steps.Update_POM_version_if_necessary.outputs.UPDATED == 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
