@@ -48,9 +48,8 @@ jobs:
           sed -i "s/<version>.*<\/version>/<version>$TAG_NAME<\/version>/g" pom.xml
           
           # Exibe o arquivo pom.xml para verificação
-          echo " -------------  POM.XML ------------"
-          cat pom.xml
-          echo " -----------------------------------"
+          echo " -------------  POM.XML 30 primeiras linhas: ------------"
+          head 30 pom.xml
           
       # Etapa: Commit da alteração no pom.xml para ambos release e snapshot
       - name: Commit updated POM version
@@ -60,7 +59,7 @@ jobs:
           
           git add pom.xml
           git commit -m "Github Action: Atualiza versão do POM automaticamente: ${{ github.ref_name }}"
-          git push
+          git push origin HEAD:main
 
       - name: Check version type (Snapshot or Release)
         id: version-check
