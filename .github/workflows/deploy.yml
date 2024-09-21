@@ -47,8 +47,8 @@ jobs:
           TAG_NAME="${{ github.ref_name }}"  # Obtém a tag da referência
           echo "Tag name from GitHub: $TAG_NAME"
 
-          # Obtém a versão atual do pom.xml
-          CURRENT_VERSION=$(xmllint --xpath "string(//project/version)" pom.xml)
+          # Obtém a versão atual do pom.xml usando grep e sed
+          CURRENT_VERSION=$(grep -m 1 '<version>' pom.xml | sed 's/.*<version>\(.*\)<\/version>.*/\1/')
           echo "Current POM version: $CURRENT_VERSION"
 
           # Verifica se a versão do POM já é igual à tag
