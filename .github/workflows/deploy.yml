@@ -49,7 +49,7 @@ jobs:
           
           # Exibe o arquivo pom.xml para verificação
           echo " -------------  POM.XML 30 primeiras linhas: ------------"
-          head 30 pom.xml
+          head -n 30 pom.xml
           
       # Etapa: Commit da alteração no pom.xml para ambos release e snapshot
       - name: Commit updated POM version
