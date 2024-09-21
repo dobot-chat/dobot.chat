@@ -47,8 +47,9 @@ jobs:
           TAG_NAME="${{ github.ref_name }}"  # Obtém a tag da referência
           echo "Tag name from GitHub: $TAG_NAME"
           
-          # Atualiza a versão no pom.xml de acordo com a tag
-          sed -i "s/<version>.*<\/version>/<version>$TAG_NAME<\/version>/g" pom.xml
+          # Atualiza a primeira ocorrência de <version> após <artifactId>
+          sed -i '/<artifactId>/,/<\/artifactId>/!b;n;/<version>/{s/<version>.*<\/version>/<version>'"$TAG_NAME"'<\/version>/;}' pom.xml
+
           
           # Exibe o arquivo pom.xml para verificação
           echo " -------------  POM.XML 30 primeiras linhas: ------------"
