@@ -30,10 +30,10 @@ button {
     min-width: 375px;
     max-width: 700px;
     height: calc(100vh - 60px);
-    padding: 5px;
+    padding: 20px 5px 5px;
     background: var(--cor-fundo-chat);
     border-radius: 15px;
-    overflow-y: auto;
+    overflow-y: scroll;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
@@ -55,7 +55,7 @@ button {
     text-align: right;
     margin-left: auto;
     margin-right: 30px;
-    border-radius: 15px 15px 15px 5px; /* Deixa um canto com um raio menor */
+    border-radius: 15px 15px 15px 15px;
     position: relative;
 }
 
@@ -75,7 +75,7 @@ button {
     background: var(--cor-fundo-mensagem-bot);
     text-align: left;
     margin-left: 30px;
-    border-radius: 15px 15px 5px 15px; /* Deixa um canto com um raio menor */
+    border-radius: 15px 15px 15px 15px;
     position: relative;
 }
 
