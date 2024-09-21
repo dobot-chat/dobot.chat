@@ -96,7 +96,14 @@ button {
     color: var(--cor-texto-chat);
 }
 
+a {
+    text-decoration: none;
+    color: var(--bs-primary);
+}
+
 a:hover {
+    color: var(--bs-primary);
+    text-decoration: underline;
     opacity: 0.5;
 }
 
