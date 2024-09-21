@@ -1,4 +1,4 @@
-name: Publish to Nexus: maven.vps.rodrigor.com
+name: Publish to Nexus maven.vps.rodrigor.com
 
 on:
   push:
