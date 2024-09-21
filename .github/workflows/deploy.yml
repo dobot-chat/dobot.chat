@@ -4,6 +4,9 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -59,7 +62,12 @@ jobs:
           
           git add pom.xml
           git commit -m "Github Action: Atualiza versão do POM automaticamente: ${{ github.ref_name }}"
-          git push origin HEAD:main
+    
+          # Configura a URL remota com autenticação usando o GITHUB_TOKEN
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+    
+          # Empurre as mudanças de volta para a branch correta
+          git push origin HEAD:main  # Substitua 'main' pela sua branch principal, se necessário
 
       - name: Check version type (Snapshot or Release)
         id: version-check
