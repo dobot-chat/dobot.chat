@@ -7,3 +7,184 @@
     <groupId>chat.dobot.bot</groupId>
     <artifactId>DoBot.chat</artifactId>
     <version>1.1.16</version>
+    <packaging>jar</packaging>
+
+    <distributionManagement>
+        <repository>
+            <id>projetos</id>
+            <name>Repositório de Projetos</name>
+            <url>https://maven.vps.rodrigor.com/repository/projetos/</url>
+        </repository>
+        <snapshotRepository>
+            <id>projetos</id>
+            <name>Repositório de Snapshots</name>
+            <url>https://maven.vps.rodrigor.com/repository/projetos/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>O DoBot.chat é uma aplicação que simplifica o desenvolvimento de chatbots.</description>
+    <url>https://dobot.chat</url>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>release</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>projetos</id>
+                    <url>https://maven.vps.rodrigor.com/repository/projetos/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>snapshot</id>
+            <activation>
+                <property>
+                    <name>snapshot</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>projetos</id>
+                    <url>https://maven.vps.rodrigor.com/repository/projetos/</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Rodrigo Rebouças de Almeida</name>
+            <email>rodrigor@dcx.ufpb.br</email>
+        </developer>
+        <developer>
+            <name>Lucas da Silva Freitas</name>
+            <email>lucas.freitas@dcx.ufpb.br</email>
+        </developer>
+        <developer>
+            <name>Gabriel Ribeiro Dias</name>
+            <email>gabriel.franca@dcx.ufpb.br</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/dobot-chat/dobot.chat.git</connection>
+        <developerConnection>scm:git:ssh://github.com/dobot-chat/dobot.chat.git</developerConnection>
+        <url>https://github.com/dobot-chat/dobot.chat/tree/main</url>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+    </properties>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf -->
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>3.1.2.RELEASE</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.javalin/javalin -->
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin</artifactId>
+            <version>6.2.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.javalin/javalin-rendering -->
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin-rendering</artifactId>
+            <version>6.2.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.github.classgraph/classgraph -->
+        <dependency>
+            <groupId>io.github.classgraph</groupId>
+            <artifactId>classgraph</artifactId>
+            <version>4.8.174</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>2.23.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.yorm/yorm -->
+        <dependency>
+            <groupId>org.yorm</groupId>
+            <artifactId>yorm</artifactId>
+            <version>0.0.8</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.3.230</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model</artifactId>
+            <version>3.9.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>5.1.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.10.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
