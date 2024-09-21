@@ -1,12 +1,8 @@
 name: Publish to Nexus maven.vps.rodrigor.com
 
 on:
-  push:
-    tags:
-      - '*-SNAPSHOT'  # Para snapshots
-      - 'v*'          # Para releases com prefixo "v" (por exemplo, v1.0.0)
   release:
-    types: [published] # Dispara também quando houver releases publicados no GitHub
+    types: [published]
 
 jobs:
   deploy:
@@ -42,7 +38,7 @@ jobs:
                   </servers>
                 </settings>" > ~/.m2/settings.xml
 
-      # Nova etapa: Obter a versão da tag do GitHub e atualizar o pom.xml
+      # Etapa: Obter a versão da tag do GitHub e atualizar o pom.xml
       - name: Update POM version from GitHub tag
         run: |
           TAG_NAME="${{ github.ref_name }}"  # Obtém a tag da referência
@@ -52,17 +48,18 @@ jobs:
           sed -i "s/<version>.*<\/version>/<version>$TAG_NAME<\/version>/g" pom.xml
           
           # Exibe o arquivo pom.xml para verificação
+          echo " -------------  POM.XML ------------"
           cat pom.xml
+          echo " -----------------------------------"
           
-      # Nova etapa: Commit da alteração no pom.xml (somente em releases)
+      # Etapa: Commit da alteração no pom.xml para ambos release e snapshot
       - name: Commit updated POM version
-        if: startsWith(github.ref, 'refs/tags/v')  # Apenas em tags de release
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           git add pom.xml
-          git commit -m "Update POM version to ${{ github.ref_name }}"
+          git commit -m "Github Action: Atualiza versão do POM automaticamente: ${{ github.ref_name }}"
           git push
 
       - name: Check version type (Snapshot or Release)
