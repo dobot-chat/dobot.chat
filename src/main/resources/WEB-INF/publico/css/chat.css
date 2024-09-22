@@ -28,8 +28,13 @@ button {
     min-width: 375px;
     max-width: 700px;
     height: calc(100vh - 60px);
+    padding: 20px 5px 5px;
     background: var(--cor-fundo-chat);
     border-radius: 15px;
+    overflow-y: scroll;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .mensagem {
@@ -41,7 +46,11 @@ button {
 
 .usuario {
     background: var(--cor-fundo-mensagem-usuario);
-    border-radius: 15px 15px 15px 5px; /* Deixa um canto com um raio menor */
+    text-align: right;
+    margin-left: auto;
+    margin-right: 30px;
+    border-radius: 15px 15px 15px 15px;
+    position: relative;
 }
 
 .usuario::after {
@@ -57,7 +66,10 @@ button {
 
 .bot {
     background: var(--cor-fundo-mensagem-bot);
-    border-radius: 15px 15px 5px 15px; /* Deixa um canto com um raio menor */
+    text-align: left;
+    margin-left: 30px;
+    border-radius: 15px 15px 15px 15px;
+    position: relative;
 }
 
 .bot::after {
@@ -73,4 +85,53 @@ button {
 
 .mensagem p {
     color: var(--cor-texto-chat);
+}
+
+a {
+    text-decoration: none;
+    color: var(--bs-primary);
+}
+
+a:hover {
+    color: var(--bs-primary);
+    text-decoration: underline;
+    opacity: 0.5;
+}
+
+.chatbox ::-webkit-scrollbar {
+    width: 12px;
+}
+
+.chatbox ::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 10px;
+}
+
+.chatbox ::-webkit-scrollbar-thumb {
+    background-color: #333;
+    border-radius: 10px;
+    border: 3px solid #1a1a1a;
+}
+
+.chatbox {
+    scrollbar-width: thin;
+    scrollbar-color: #333 #1a1a1a;
+}
+
+@media (max-width: 500px) {
+    #chatForm, .chatbox {
+        width: 100%;
+    }
+
+    .chatbox {
+        padding: 5px;
+    }
+
+    .usuario {
+        margin-right: 5px;
+    }
+
+    .bot {
+        margin-left: 5px;
+    }
 }

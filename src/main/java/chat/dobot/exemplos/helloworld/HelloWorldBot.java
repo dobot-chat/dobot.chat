@@ -18,5 +18,13 @@ public class HelloWorldBot {
     public void aloMundo(Contexto chat) {
         String msg = chat.getMensagemUsuario();
         chat.responder("Alô "+msg);
+        chat.responder("Vou mostrar o menu na próxima mensagem.");
+        chat.mudarEstado("menu");
+    }
+
+    //@EstadoChat(estado = "menu")
+    public void menu(Contexto chat) {
+        chat.responder("Menu: \n1 - Alô Mundo\n2 - Sair");
+        chat.mudarEstado("opcao");
     }
 }
