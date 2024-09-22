@@ -2,13 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
     <head>
         <title>DoBot.chat</title>
-<link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+        <script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/chat.css}" />
+        <style th:replace="~{fragmento-variaveis-tema :: estilo}"></style>
     </head>
-    <body>
-   <img src="/img/dobot-600px.png" alt="DoBot" style="display: block; margin: 0 auto; max-width: 400px;" />
-<div style="text-align: center;">
-    <a th:href="@{/chatbot}" th:text="${nomeChat}" class="btn btn-outline-dark btn-lg"></a>
-</div>
+    <body class="text-center">
+        <div class="container">
+            <img src="/img/dobot-600px.png" alt="DoBot" class="img-fluid my-4" style="max-width: 400px;" />
+            <div>
+                <a th:href="@{/chatbot}" th:text="${nomeChat}" class="btn btn-warning btn-outline-dark btn-lg"></a>
+            </div>
+        </div>
     </body>
 </html>
