@@ -6,11 +6,12 @@ body {
 }
 
 #chatForm {
+    width: 75%;
     min-width: 375px;
     max-width: 700px;
 }
 
-#msgUsuario {
+input {
     border-radius: 20px 0 0 20px;
     background: var(--cor-fundo-chat);
     color: var(--cor-texto-chat);
@@ -25,19 +26,16 @@ button {
 }
 
 .chatbox {
+    width: 75%;
     min-width: 375px;
     max-width: 700px;
     height: calc(100vh - 60px);
-    padding: 20px 5px 5px;
     background: var(--cor-fundo-chat);
     border-radius: 15px;
-    overflow-y: scroll;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
 }
 
 .mensagem {
+    border-radius: 15px;
     max-width: 70%;
     width: fit-content;
     word-break: break-word;
@@ -46,11 +44,7 @@ button {
 
 .usuario {
     background: var(--cor-fundo-mensagem-usuario);
-    text-align: right;
-    margin-left: auto;
-    margin-right: 30px;
     border-radius: 15px 15px 15px 15px;
-    position: relative;
 }
 
 .usuario::after {
@@ -66,10 +60,7 @@ button {
 
 .bot {
     background: var(--cor-fundo-mensagem-bot);
-    text-align: left;
-    margin-left: 30px;
     border-radius: 15px 15px 15px 15px;
-    position: relative;
 }
 
 .bot::after {
@@ -116,22 +107,4 @@ a:hover {
 .chatbox {
     scrollbar-width: thin;
     scrollbar-color: #333 #1a1a1a;
-}
-
-@media (max-width: 500px) {
-    #chatForm, .chatbox {
-        width: 100%;
-    }
-
-    .chatbox {
-        padding: 5px;
-    }
-
-    .usuario {
-        margin-right: 5px;
-    }
-
-    .bot {
-        margin-left: 5px;
-    }
 }
