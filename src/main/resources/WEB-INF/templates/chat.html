@@ -1,77 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
-    <head>
-        <title>DoBot.chat</title>
-        <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-        <script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/chat.css}" />
-        <style th:replace="~{fragmento-variaveis-tema :: estilo}"></style>
+<head>
+    <title>DoBot.chat</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <style th:replace="~{fragmento-variaveis-tema :: estilo}"></style>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/chat.css}" />
 
-        <script>
-            window.onload = function() {
-                const chatbox = document.querySelector(".chatbox");
-                chatbox.scrollTop = chatbox.scrollHeight;
+    <script>
+        window.onload = function() {
+            const chatbox = document.querySelector(".chatbox");
+            chatbox.scrollTop = chatbox.scrollHeight;
 
-                document.getElementById("msgUsuario").focus();
-            };
-        </script>
-    </head>
-    <body class="container-fluid d-flex flex-column justify-content-center align-items-center vh-100">
-    <nav class="navbar navbar-expand-lg navbar w-100" style="background-color: var(--cor-barra-navegacao)">
-        <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{/}">
-                <img src="/img/dobot-horizontal-500px.png" alt="DoBot" style="max-height: 50px;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#sobreModal">Sobre</a>
-                    </li>
-                </ul>
-            </div>
+            document.getElementById("msgUsuario").focus();
+        };
+    </script>
+</head>
+<body class="container-fluid  d-flex flex-column justify-content-center align-items-center vh-100" style="font-family: 'Poppins', sans-serif; background: var(--cor-fundo-pagina); color: var(--cor-texto-titulo); margin: 0; padding: 0 10px;">
+<nav class="navbar navbar-expand-lg navbar-light bg-light w-100">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <img src="/img/dobot-h-800px-transp.png" alt="DoBot" style="max-height: 50px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link font-weight-bold" href="#" data-bs-toggle="modal" data-bs-target="#sobreModal">Sobre</a>
+                </li>
+            </ul>
         </div>
-    </nav>
-        <div class="modal fade" id="sobreModal" tabindex="-1" aria-labelledby="sobreModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="sobreModalLabel">Sobre</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>O DoBot.chat é uma ferramenta que simplifica a criação de chatbots personalizados para diversas finalidades, utilizando recursos básicos da linguagem Java. Ele oferece um sistema de controle de estados para gerenciar o fluxo das conversas e permite a personalização visual e a persistência de dados conforme necessário.</p>
+    </div>
+</nav>
 
-                        <p>Este é um projeto coordenado pelo prof. <a href="https://rodrigor.com">Rodrigo Rebouças de Almeida</a>, do Departamento de Ciências Exatas da Universidade Federal da Paraíba, Campus IV - Rio Tinto - PB, Brasil.</p>
+<!-- Incluir o modal a partir do fragmento -->
+<div th:replace="~{fragments/sobre :: sobreModal}"></div>
 
-                        <h4>Equipe</h4>
-                        <ul>
-                            <li>Rodrigo Rebouças de Almeida (Coordenador do projeto)</li>
-                            <li>Lucas da Silva Freitas (v2 do DoBot.chat)</li>
-                            <li>Gabriel Ribeiro Dias (v1 do DoBot.chat)</li>
-                        </ul>
-                        <p>Saiba mais em <a href="https://dobot.chat">https://dobot.chat</a></p>
-                    </div>
-                </div>
-            </div>
+<div class="chatbox">
+    <div th:each="mensagem : ${mensagens}">
+        <div th:if="${mensagem.autor().name() == 'USUARIO'}" class="mensagem usuario">
+            <p th:utext="${mensagem.conteudo()}"></p>
         </div>
-
-        <div class="chatbox border overflow-auto py-3 px-4 my-2">
-            <div th:each="mensagem : ${mensagens}">
-                <div th:if="${mensagem.autor().name() == 'USUARIO'}" class="mensagem usuario ms-auto rounded px-2 pb-0 pt-1 mb-1">
-                    <p th:utext="${mensagem.conteudo()}"></p>
-                </div>
-                <div th:if="${mensagem.autor().name() == 'BOT'}" class="mensagem bot me-auto rounded px-2 pb-0 pt-1 mb-1">
-                    <p th:utext="${mensagem.conteudo()}"></p>
-                </div>
-            </div>
+        <div th:if="${mensagem.autor().name() == 'BOT'}" class="mensagem bot">
+            <p th:utext="${mensagem.conteudo()}"></p>
         </div>
-
-        <form id="chatForm" method="post" th:action="@{/chatbot}" class="input-group mb-2">
-            <input type="text" id="msgUsuario" name="msgUsuario" class="form-control" placeholder="Escreva uma mensagem" required>
-            <button class="button" type="submit">&#x27A4;</button>
-        </form>
-    </body>
+    </div>
+</div>
+<form id="chatForm" method="post" th:action="@{/chatbot}">
+    <input type="text" id="msgUsuario" name="msgUsuario" placeholder="Escreva uma mensagem" required/>
+    <button type="submit">&#x27A4;</button>
+</form>
+</body>
 </html>

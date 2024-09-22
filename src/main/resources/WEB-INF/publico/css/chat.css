@@ -1,16 +1,15 @@
-body {
-    font-family: 'Poppins', 'sans-serif';
-    background: var(--cor-fundo-pagina);
-    margin: 0;
-    padding: 0;
-}
-
 #chatForm {
+    display: flex;
+    width: 75%;
     min-width: 375px;
     max-width: 700px;
+    margin-bottom: 30px;
 }
 
 #msgUsuario {
+    flex: 1;
+    padding: 10px;
+    border: none;
     border-radius: 20px 0 0 20px;
     background: var(--cor-fundo-chat);
     color: var(--cor-texto-chat);
@@ -22,26 +21,42 @@ button {
     border: none;
     border-radius: 0 20px 20px 0;
     color: var(--cor-texto-chat);
+    cursor: pointer;
+    transition: background 0.3s;
 }
 
 .chatbox {
+    width: 75%;
     min-width: 375px;
     max-width: 700px;
     height: calc(100vh - 60px);
+    padding: 20px 5px 5px;
     background: var(--cor-fundo-chat);
     border-radius: 15px;
+    overflow-y: scroll;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .mensagem {
-    max-width: 70%;
+    display: block;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 15px;
     width: fit-content;
     word-break: break-word;
-    position: relative;
+    max-width: 70%;
+    position: relative; /* Para usar pseudo-elementos */
 }
 
 .usuario {
     background: var(--cor-fundo-mensagem-usuario);
-    border-radius: 15px 15px 15px 5px; /* Deixa um canto com um raio menor */
+    text-align: right;
+    margin-left: auto;
+    margin-right: 30px;
+    border-radius: 15px 15px 15px 15px;
+    position: relative;
 }
 
 .usuario::after {
@@ -53,11 +68,15 @@ button {
     border: 10px solid transparent;
     border-left-color: var(--cor-fundo-mensagem-usuario); /* Cor da seta */
     border-right: 0;
+    margin-top: -5px;
 }
 
 .bot {
     background: var(--cor-fundo-mensagem-bot);
-    border-radius: 15px 15px 5px 15px; /* Deixa um canto com um raio menor */
+    text-align: left;
+    margin-left: 30px;
+    border-radius: 15px 15px 15px 15px;
+    position: relative;
 }
 
 .bot::after {
@@ -69,8 +88,59 @@ button {
     border: 10px solid transparent;
     border-right-color: var(--cor-fundo-mensagem-bot); /* Cor da seta */
     border-left: 0;
+    margin-top: -5px;
 }
 
 .mensagem p {
+    margin: 0;
     color: var(--cor-texto-chat);
+}
+
+a {
+    text-decoration: none;
+    color: var(--bs-primary);
+}
+
+a:hover {
+    color: var(--bs-primary);
+    text-decoration: underline;
+    opacity: 0.5;
+}
+
+.chatbox ::-webkit-scrollbar {
+    width: 12px;
+}
+
+.chatbox ::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 10px;
+}
+
+.chatbox ::-webkit-scrollbar-thumb {
+    background-color: #333;
+    border-radius: 10px;
+    border: 3px solid #1a1a1a;
+}
+
+.chatbox {
+    scrollbar-width: thin;
+    scrollbar-color: #333 #1a1a1a;
+}
+
+@media (max-width: 500px) {
+    #chatForm, .chatbox {
+        width: 100%;
+    }
+
+    .chatbox {
+        padding: 5px;
+    }
+
+    .usuario {
+        margin-right: 5px;
+    }
+
+    .bot {
+        margin-left: 5px;
+    }
 }
