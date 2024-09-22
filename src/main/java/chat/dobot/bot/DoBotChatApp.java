@@ -65,7 +65,7 @@ public class DoBotChatApp {
             }).start(portaDoBot);
 
 
-            //carregarDoBots
+            //TODO: carregarDoBots
             DoBot chatbotImpl = null;
             try {
                 chatbotImpl = AnnotationsUtil.buscarClasseChatbot();
@@ -77,8 +77,7 @@ public class DoBotChatApp {
             }
 
             chatbotImpl.setDoBotTema(tema);
-            chatbotImpl.setEstadoAtual("main");
-            chatbotImpl.adicionarMensagemInicial(mensagemInicial);
+            chatbotImpl.setMensagemInicial(mensagemInicial);
             logger.debug("ChatBot instanciado: {}.", chatbotImpl.getNome());
 
             app.before(ctx -> {
@@ -97,6 +96,7 @@ public class DoBotChatApp {
             System.out.println("Aplicação inicializada com sucesso!\nAcesse http://localhost:" + portaDoBot + " para acessar o chatbot.");
         } catch (Exception e) {
             logger.error("Falha durante a inicialização da aplicação!", e);
+            System.out.println("Erro: " + e.getMessage());
             System.exit(1);
         }
     }

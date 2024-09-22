@@ -1,6 +1,7 @@
 package chat.dobot.bot.utils;
 
 import chat.dobot.bot.BotStateMethod;
+import chat.dobot.bot.Contexto;
 import chat.dobot.bot.DoBotException;
 import chat.dobot.bot.annotations.DoBotChat;
 import chat.dobot.bot.annotations.Entidade;
@@ -8,6 +9,7 @@ import chat.dobot.bot.annotations.EstadoChat;
 import chat.dobot.bot.domain.DoBot;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -40,7 +42,6 @@ public class AnnotationsUtil {
      * @return a classe anotada com @DoBotChat
      */
     public static DoBot buscarClasseChatbot() {
-
         DoBot novoBot = null;
         try (ScanResult scanResult = new ClassGraph().enableAnnotationInfo().scan()) {
             for (Class<?> classe : scanResult.getClassesWithAnnotation(DoBotChat.class).loadClasses()) {
@@ -62,7 +63,7 @@ public class AnnotationsUtil {
                 }
             }
         } catch (Exception e) {
-            throw new DoBotException("Erro ao buscar a classe chatbot", e);
+            throw new DoBotException("Erro ao instanciar a classe chatbot", e);
         }
 
         //TODO: criar coleção, adicionar bovoBot e se a coleção for vazia, lançar exceção
@@ -75,6 +76,7 @@ public class AnnotationsUtil {
 
     /**
      * Mapeia os estados do chatbot.
+     * Os estados são mapeados a partir dos métodos anotados com @EstadoChat, na classe anotada com @DoBotChat.
      *
      * @param chatbotImpl objeto do usuario dev que contém a anotação @DoBotChat
      * @return um mapa com os estados do bot
@@ -84,23 +86,20 @@ public class AnnotationsUtil {
 
         for (Method metodo : chatbotImpl.getClass().getDeclaredMethods()) {
             if (metodo.isAnnotationPresent(EstadoChat.class)) {
-                EstadoChat estadoChat = metodo.getAnnotation(EstadoChat.class);
-                String estado;
 
-                if(estadoChat.inicial()){
-                    estado = "main";
-                }else {
-                    estado = estadoChat.estado().isBlank() ? metodo.getName() : estadoChat.estado();
-                }
-                if (estadosMap.containsKey(estado.toLowerCase())) {
-                    throw new DoBotException("O estado '" + estado.toLowerCase() + "' não pode ser mapeado para mais de um método!");
+                final String estado = getEstadoDoMetodo(metodo);
+                if (estadosMap.containsKey(estado)) {
+                    throw new DoBotException("Um mesmo estado não pode ser mapeado para mais de um método! Estado duplicado:" + estado);
                 }
 
-                estadosMap.put(estado.toLowerCase(), contexto -> {
+                conferirAssinaturaMetodo(metodo);
+
+                // Adiciona os métodos que implementam os estados do bot ao mapa de estados
+                estadosMap.put(estado, contexto -> {
                     try {
                         metodo.invoke(chatbotImpl, contexto);
                     } catch (IllegalAccessException | InvocationTargetException e) {
-                        throw new RuntimeException(e);
+                        throw new RuntimeException("Problema ao adicionar o método que implementa estado ao bot. Estado:"+estado,e);
                     }
                 });
             }
@@ -113,6 +112,40 @@ public class AnnotationsUtil {
         }
 
         return estadosMap;
+    }
+
+    /**
+     * Verifica se o método possui a assinatura correta.
+     * O método deve ter um parâmetro do tipo Contexto.
+     * @param metodo que implementa um estado do chatbot
+     */
+    private static void conferirAssinaturaMetodo(Method metodo) {
+        String contextoName = Contexto.class.getSimpleName();
+        if(metodo.getParameterCount() != 1){
+            throw new DoBotException("Método "+metodo.getName()+" deve ter um parâmetro do tipo "+contextoName);
+        }
+        if(!metodo.getParameterTypes()[0].getSimpleName().equals(contextoName)){
+            throw new DoBotException("Método "+metodo.getName()+" deve ter um parâmetro do tipo "+contextoName+"\nExemplo: public void "+metodo.getName()+"("+contextoName+" contexto)");
+        }
+    }
+
+    /**
+     * Recupera o nome do estado a partir da anotação do método
+     * @param metodo que contém anotação @EstadoChat
+     * @return o nome do estado
+     */
+    @NotNull
+    private static String getEstadoDoMetodo(Method metodo) {
+        EstadoChat estadoChat = metodo.getAnnotation(EstadoChat.class);
+
+        final String estado;
+        if(estadoChat.inicial()){
+            estado = DoBot.ESTADO_INICIAL;
+        }else {
+            estado = estadoChat.estado().isBlank() ? metodo.getName().toLowerCase() : estadoChat.estado().toLowerCase();
+        }
+
+        return estado;
     }
 
 }
