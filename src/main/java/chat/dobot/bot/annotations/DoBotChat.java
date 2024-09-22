@@ -7,8 +7,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DoBot {
+public @interface DoBotChat {
     String id();
     String nome() default "Meu bot (-_-)";
     String descricao() default "";
+
 }

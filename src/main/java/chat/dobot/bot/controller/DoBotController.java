@@ -21,7 +21,7 @@ public class DoBotController {
         Map<String, Object> model = new HashMap<>();
 
         model.put("tema", doBot.getDoBotTema());
-        model.put("nomeChat", doBot.getChatbot().getClass().getSimpleName());
+        model.put("nomeChat", doBot.getNome());
 
         return model;
     }

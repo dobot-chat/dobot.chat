@@ -1,5 +1,6 @@
 package chat.dobot.bot;
 
+import chat.dobot.bot.annotations.DoBotChat;
 import chat.dobot.bot.persistance.YormConfig;
 import chat.dobot.bot.controller.DoBotController;
 import chat.dobot.bot.domain.DoBot;
@@ -24,20 +25,20 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class DoBotChat {
+public class DoBotChatApp {
 
-    private final Logger logger = LoggerFactory.getLogger(DoBotChat.class);
+    private final Logger logger = LoggerFactory.getLogger(DoBotChatApp.class);
     private String mensagemInicial;
     private final DoBotTema tema;
     // TODO : lista dos bots
     private final Map<String, DoBot> bots = new LinkedHashMap<>();
 
-    private DoBotChat() {
+    private DoBotChatApp() {
         this.tema = criarTemaPadrao();
     }
 
-    public static DoBotChat novoBot() {
-        return new DoBotChat();
+    public static DoBotChatApp novoBot() {
+        return new DoBotChatApp();
     }
 
     public void start() {
@@ -46,7 +47,7 @@ public class DoBotChat {
 
     public void start(int portaDoBot, int portaH2) {
         try {
-            //Imprime o logo do DoBot
+            //Imprime o logo do DoBotChat
             System.out.println(getdoBotAsciiArt());
             System.out.println("Versão: " + getApplicationVersion());
             YormConfig yormConfig = new YormConfig(portaH2);
@@ -65,23 +66,28 @@ public class DoBotChat {
 
 
             //carregarDoBots
-            Object chatbotImpl = AnnotationsUtil.buscarClasseChatbot();
-            if (chatbotImpl == null) {
-                logger.debug("Nenhuma classe anotada com @" + DoBot.class.getSimpleName() + " foi encontrada!");
-                System.out.println("ERRO: Não foi possível inicializar o DoBot. \n");
-                System.out.println("Não encontrei nenhuma classe anotada com @" + DoBot.class.getSimpleName());
+            DoBot chatbotImpl = null;
+            try {
+                chatbotImpl = AnnotationsUtil.buscarClasseChatbot();
+            }catch (Exception e){
+                logger.error("Erro ao carregar os bots", e);
+                System.out.println("ERRO: Não foi possível inicializar o DoBotChat. \n");
+                System.out.println("Não encontrei nenhuma classe anotada com @DoBotChat");
                 System.exit(1);
             }
-            logger.debug("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
 
-            DoBot doBot = new DoBot(chatbotImpl, mapearEstados(chatbotImpl), mensagemInicial, tema);
+            chatbotImpl.setDoBotTema(tema);
+            chatbotImpl.setEstadoAtual("main");
+            chatbotImpl.adicionarMensagemInicial(mensagemInicial);
+            logger.debug("ChatBot instanciado: {}.", chatbotImpl.getNome());
 
             app.before(ctx -> {
                 ctx.res().setCharacterEncoding(StandardCharsets.UTF_8.name());
                 ctx.res().setContentType("text/html; charset=UTF-8");
             });
 
-            DoBotController controlador = new DoBotController(doBot);
+            // TODO : inicializar controlador com a lista de bots
+            DoBotController controlador = new DoBotController(chatbotImpl);
 
             app.get("/", ctx -> ctx.render("/home.html", controlador.processarPaginaHome()));
             app.get("/chatbot", ctx -> ctx.render("/chat.html", controlador.processarGetPaginaChat()));

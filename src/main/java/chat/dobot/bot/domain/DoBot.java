@@ -4,10 +4,12 @@ import chat.dobot.bot.Autor;
 import chat.dobot.bot.BotStateMethod;
 import chat.dobot.bot.Contexto;
 import chat.dobot.bot.DoBotException;
+import chat.dobot.bot.annotations.DoBotChat;
 import chat.dobot.bot.utils.AnnotationsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -17,20 +19,22 @@ public class DoBot {
     private static final Logger logger = LoggerFactory.getLogger(DoBot.class);
 
     private final List<Mensagem> mensagens = new LinkedList<>();
-    private final Map<String, BotStateMethod> estados;
+    private Map<String, BotStateMethod> estados;
     private DoBotTema doBotTema;
     private String ultimaMensagemUsuario;
     private String ultimaMensagemBot;
     private String estadoAtual;
-    private final Object chatbot;
 
-    public DoBot(Object chatbot, Map<String, BotStateMethod> estados, String mensagemInicial, DoBotTema doBotTema) {
-        this.chatbot = chatbot;
-        this.estados = estados;
-        this.estadoAtual = AnnotationsUtil.obterEstadoInicial(chatbot);
-        logger.debug("Estado inicial: {}", this.estadoAtual);
-        adicionarMensagemInicial(mensagemInicial);
-        this.doBotTema = doBotTema;
+    private final String id;
+    private final String nome;
+    private final String descricao;
+
+
+    public DoBot(String id, String nome, String descricao){
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        estados = new HashMap<>();
     }
 
     /**
@@ -47,12 +51,13 @@ public class DoBot {
         estados.get(contexto.getEstado()).execute(contexto);
 
         ultimaMensagemBot = contexto.getResposta() != null ? contexto.getResposta() : ultimaMensagemBot;
-        estadoAtual = contexto.getEstado();
+
+        this.setEstadoAtual(contexto.getEstado());
 
         adicionarMensagens(contexto);
     }
 
-    private void adicionarMensagemInicial(String mensagemInicial) {
+    public void adicionarMensagemInicial(String mensagemInicial) {
         if (mensagemInicial == null){
             throw new IllegalArgumentException("A mensagem inicial não pode ser nula!");
         }
@@ -73,6 +78,9 @@ public class DoBot {
     }
 
     public String getEstadoAtual() {
+        if(estadoAtual == null){
+            throw new IllegalStateException("O estado atual não foi definido! : null");
+        }
         return estadoAtual;
     }
 
@@ -84,10 +92,6 @@ public class DoBot {
         return ultimaMensagemBot;
     }
 
-    public Object getChatbot() {
-        return chatbot;
-    }
-
     public DoBotTema getDoBotTema() {
         return doBotTema;
     }
@@ -95,4 +99,31 @@ public class DoBot {
     public void setDoBotTema(DoBotTema doBotTema) {
         this.doBotTema = doBotTema;
     }
+
+    public void setEstados(Map<String, BotStateMethod> estados) {
+        if(!estados.containsKey("main")) {
+            throw new DoBotException("Nenhum estado inicial definido!");
+        }
+        this.estados = estados;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setEstadoAtual(String estado) {
+        if(estado == null){
+            throw new IllegalArgumentException("O estado atual não pode ser nulo!");
+        }
+        this.estadoAtual = estado.toLowerCase();
+    }
+
 }
