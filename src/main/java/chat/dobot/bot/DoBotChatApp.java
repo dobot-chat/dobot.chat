@@ -69,8 +69,10 @@ public class DoBotChatApp {
             DoBot chatbotImpl = null;
             try {
                 chatbotImpl = AnnotationsUtil.buscarClasseChatbot();
+                if(chatbotImpl == null)
+                    throw new Exception("Nenhuma classe anotada com @DoBotChat encontrada");
             }catch (Exception e){
-                logger.error("Erro ao carregar os bots", e);
+                logger.debug("Erro ao carregar os bots", e);
                 System.out.println("ERRO: Não foi possível inicializar o DoBotChat. \n");
                 System.out.println("Não encontrei nenhuma classe anotada com @DoBotChat");
                 System.exit(1);
