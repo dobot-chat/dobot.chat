@@ -70,11 +70,11 @@ public class DoBotChatApp {
             try {
                 chatbotImpl = AnnotationsUtil.buscarClasseChatbot();
                 if(chatbotImpl == null)
-                    throw new Exception("Nenhuma classe anotada com @DoBotChat encontrada");
+                    throw new Exception("Nenhuma classe anotada com @DoBotChat foi encontrada");
             }catch (Exception e){
                 logger.debug("Erro ao carregar os bots", e);
                 System.out.println("ERRO: Não foi possível inicializar o DoBotChat. \n");
-                System.out.println("Não encontrei nenhuma classe anotada com @DoBotChat");
+                System.out.println(e.getMessage());
                 System.exit(1);
             }
 
@@ -156,11 +156,13 @@ public class DoBotChatApp {
     }
 
     private String getdoBotAsciiArt() {
-        return "  ____        ____        _         _           _   \n" +
-                " |  _ \\  ___ | __ )  ___ | |_   ___| |__   __ _| |_ \n" +
-                " | | | |/ _ \\|  _ \\ / _ \\| __| / __| '_ \\ / _` | __|\n" +
-                " | |_| | (_) | |_) | (_) | |_ | (__| | | | (_| | |_ \n" +
-                " |____/ \\___/|____/ \\___/ \\__(_)___|_| |_|\\__,_|\\__|\n";
+        return """
+      ____        ____        _         _           _   
+     |  _ \\  ___ | __ )  ___ | |_   ___| |__   __ _| |_ 
+     | | | |/ _ \\|  _ \\ / _ \\| __| / __| '_ \\ / _` | __|
+     | |_| | (_) | |_) | (_) | |_ | (__| | | | (_| | |_ 
+     |____/ \\___/|____/ \\___/ \\__(_)___|_| |_|\\__,_|\\__|
+    """;
     }
 
     private String getApplicationVersion() {
@@ -174,17 +176,4 @@ public class DoBotChatApp {
         }
     }
 
-    //TODO: método nunca usado. Investigar
-    private Map<String, BotStateMethod> mapearEstados(Object chatbot) {
-        logger.debug("Iniciando mapeamento dos estados para {}.", chatbot.getClass().getSimpleName());
-        Map<String, BotStateMethod> estados = AnnotationsUtil.mapearEstados(chatbot);
-
-        if (estados.isEmpty()) {
-            throw new DoBotException("Nenhum estado mapeado para " + chatbot.getClass().getSimpleName() + "!");
-        }
-
-        logger.debug("Mapeamento dos estados concluído com sucesso.");
-        logger.debug("Mapeamento de estados encontrados: {}", estados.keySet());
-        return estados;
-    }
 }

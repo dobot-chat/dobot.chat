@@ -59,11 +59,11 @@ public class AnnotationsUtil {
                     }
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                          NoSuchMethodException e) {
-                    throw new DoBotException("Erro ao instanciar a classe chatbot: " + classe.getName(), e);
+                    throw new DoBotException("Erro ao instanciar a classe chatbot: " + classe.getName()+"\n"+e.getMessage(), e);
                 }
             }
         } catch (Exception e) {
-            throw new DoBotException("Erro ao instanciar a classe chatbot", e);
+            throw new DoBotException("Erro ao instanciar a classe chatbot:\n"+e.getMessage(), e);
         }
 
         //TODO: criar coleção, adicionar bovoBot e se a coleção for vazia, lançar exceção
