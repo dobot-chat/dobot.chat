@@ -106,15 +106,10 @@ public class DoBotChatApp {
     private DoBotTema criarTemaPadrao() {
         DoBotTema tema = new DoBotTema();
         tema.setCorFundoPagina("#ffffff");
-        tema.setCorBarraNavegacao("#A9A9A9");
         tema.setCorFundoChat("#D5D5D5");
         tema.setCorTextoChat("#000000");
         tema.setCorFundoMensagemUsuario("#FEB600");
         tema.setCorFundoMensagemBot("#EE8134");
-
-
-        //tema.setCorTextoTitulo("#000000");
-
 
         return tema;
     }
