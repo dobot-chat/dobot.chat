@@ -13,7 +13,7 @@ public class Contexto {
 
     public Contexto(String mensagemUsuario, String estado, Map<String, DoBotService<Record>> servicos) {
         this.mensagemUsuario = mensagemUsuario;
-        this.estado = estado;
+        this.estado = estado.toLowerCase();
         this.servicos = servicos;
     }
 

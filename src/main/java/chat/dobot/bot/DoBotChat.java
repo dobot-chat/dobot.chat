@@ -21,14 +21,16 @@ import org.yorm.Yorm;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class DoBotChat {
 
     private final Logger logger = LoggerFactory.getLogger(DoBotChat.class);
     private String mensagemInicial;
-    private DoBotTema tema;
+    private final DoBotTema tema;
+    // TODO : lista dos bots
+    private final Map<String, DoBot> bots = new LinkedHashMap<>();
 
     private DoBotChat() {
         this.tema = criarTemaPadrao();
@@ -62,6 +64,7 @@ public class DoBotChat {
             }).start(portaDoBot);
 
 
+            //carregarDoBots
             Object chatbotImpl = AnnotationsUtil.buscarClasseChatbot();
             if (chatbotImpl == null) {
                 logger.debug("Nenhuma classe anotada com @" + DoBot.class.getSimpleName() + " foi encontrada!");
@@ -148,15 +151,11 @@ public class DoBotChat {
     }
 
     private String getdoBotAsciiArt() {
-        StringBuffer asciiArt = new StringBuffer();
-
-        asciiArt.append("  ____        ____        _         _           _   \n");
-        asciiArt.append(" |  _ \\  ___ | __ )  ___ | |_   ___| |__   __ _| |_ \n");
-        asciiArt.append(" | | | |/ _ \\|  _ \\ / _ \\| __| / __| '_ \\ / _` | __|\n");
-        asciiArt.append(" | |_| | (_) | |_) | (_) | |_ | (__| | | | (_| | |_ \n");
-        asciiArt.append(" |____/ \\___/|____/ \\___/ \\__(_)___|_| |_|\\__,_|\\__|\n");
-
-        return asciiArt.toString();
+        return "  ____        ____        _         _           _   \n" +
+                " |  _ \\  ___ | __ )  ___ | |_   ___| |__   __ _| |_ \n" +
+                " | | | |/ _ \\|  _ \\ / _ \\| __| / __| '_ \\ / _` | __|\n" +
+                " | |_| | (_) | |_) | (_) | |_ | (__| | | | (_| | |_ \n" +
+                " |____/ \\___/|____/ \\___/ \\__(_)___|_| |_|\\__,_|\\__|\n";
     }
 
     private String getApplicationVersion() {
@@ -170,9 +169,9 @@ public class DoBotChat {
         }
     }
 
-    private Map<String, Consumer<Contexto>> mapearEstados(Object chatbot) {
+    private Map<String, BotStateMethod> mapearEstados(Object chatbot) {
         logger.debug("Iniciando mapeamento dos estados para {}.", chatbot.getClass().getSimpleName());
-        Map<String, Consumer<Contexto>> estados = AnnotationsUtil.mapearEstados(chatbot);
+        Map<String, BotStateMethod> estados = AnnotationsUtil.mapearEstados(chatbot);
 
         if (estados.isEmpty()) {
             throw new DoBotException("Nenhum estado mapeado para " + chatbot.getClass().getSimpleName() + "!");

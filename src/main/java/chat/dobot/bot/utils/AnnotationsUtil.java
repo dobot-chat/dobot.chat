@@ -1,10 +1,11 @@
 package chat.dobot.bot.utils;
 
+import chat.dobot.bot.BotStateMethod;
+import chat.dobot.bot.Contexto;
+import chat.dobot.bot.DoBotException;
 import chat.dobot.bot.annotations.DoBot;
 import chat.dobot.bot.annotations.Entidade;
 import chat.dobot.bot.annotations.EstadoChat;
-import chat.dobot.bot.Contexto;
-import chat.dobot.bot.DoBotException;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class AnnotationsUtil {
 
@@ -42,18 +42,27 @@ public class AnnotationsUtil {
         return null;
     }
 
-    public static Map<String, Consumer<Contexto>> mapearEstados(Object chatbotImpl) {
-        Map<String, Consumer<Contexto>> estadosMap = new HashMap<>();
+
+    /**
+     * Mapeia os estados do chatbot.
+     * @param chatbotImpl objeto do usuario dev que contém a anotação @DoBot
+     * @return um mapa com os estados do bot
+     */
+    public static Map<String, BotStateMethod> mapearEstados(Object chatbotImpl) {
+        Map<String, BotStateMethod> estadosMap = new HashMap<>();
 
         for (Method metodo : chatbotImpl.getClass().getDeclaredMethods()) {
             if (metodo.isAnnotationPresent(EstadoChat.class)) {
                 EstadoChat estadoChat = metodo.getAnnotation(EstadoChat.class);
                 String estado = estadoChat.estado().isBlank() ? metodo.getName() : estadoChat.estado();
-                validarMetodo(metodo, estado, estadosMap);
 
-                estadosMap.put(estado.toLowerCase(), obj -> {
+                if (estadosMap.containsKey(estado.toLowerCase())) {
+                    throw new DoBotException("O estado '" + estado.toLowerCase() + "' não pode ser mapeado para mais de um método!");
+                }
+
+                estadosMap.put(estado.toLowerCase(), contexto -> {
                     try {
-                        metodo.invoke(chatbotImpl, obj);
+                        metodo.invoke(chatbotImpl, contexto);
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         throw new RuntimeException(e);
                     }
@@ -84,14 +93,5 @@ public class AnnotationsUtil {
         throw new DoBotException("Nenhum estado inicial definido!");
     }
 
-    //TODO: implementar interface nossa com um método que possui Context como parâmetro
-    private static void validarMetodo(Method method, String estado, Map<String, Consumer<Contexto>> estadosMap) {
-        if (method.getParameterCount() != 1 || !method.getParameterTypes()[0].getName().equals(Contexto.class.getName())) {
-            throw new DoBotException("O método '" + method.getName() + "' da classe " + method.getDeclaringClass().getName() + " está anotado com " + EstadoChat.class.getName() + " e deve conter um único parâmetro, que precisa ser do tipo " + Contexto.class.getName() + "!");
-        }
 
-        if (estadosMap.containsKey(estado.toLowerCase())) {
-            throw new DoBotException("O estado '" + estado.toLowerCase() + "' não pode ser mapeado para mais de um método!");
-        }
-    }
 }

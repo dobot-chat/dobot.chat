@@ -1,6 +1,7 @@
 package chat.dobot.bot.domain;
 
 import chat.dobot.bot.Autor;
+import chat.dobot.bot.BotStateMethod;
 import chat.dobot.bot.Contexto;
 import chat.dobot.bot.DoBotException;
 import chat.dobot.bot.utils.AnnotationsUtil;
@@ -10,21 +11,20 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class DoBot {
 
     private static final Logger logger = LoggerFactory.getLogger(DoBot.class);
 
     private final List<Mensagem> mensagens = new LinkedList<>();
-    private Map<String, Consumer<Contexto>> estados;
+    private final Map<String, BotStateMethod> estados;
     private DoBotTema doBotTema;
     private String ultimaMensagemUsuario;
     private String ultimaMensagemBot;
     private String estadoAtual;
     private final Object chatbot;
 
-    public DoBot(Object chatbot, Map<String, Consumer<Contexto>> estados, String mensagemInicial, DoBotTema doBotTema) {
+    public DoBot(Object chatbot, Map<String, BotStateMethod> estados, String mensagemInicial, DoBotTema doBotTema) {
         this.chatbot = chatbot;
         this.estados = estados;
         this.estadoAtual = AnnotationsUtil.obterEstadoInicial(chatbot);
@@ -33,14 +33,18 @@ public class DoBot {
         this.doBotTema = doBotTema;
     }
 
+    /**
+     * Encaminha a mensagem do usuário através do chat, seleciona o estado e executa o estado correspondente.
+     * @param contexto contexto do chat
+     */
     public void receberMensagem(Contexto contexto) {
         ultimaMensagemUsuario = contexto.getMensagemUsuario();
 
-        if (!estados.containsKey(contexto.getEstado().toLowerCase())) {
+        if (!estados.containsKey(contexto.getEstado())) {
             throw new DoBotException("Estado '" + contexto.getEstado() + "' não encontrado!");
         }
 
-        estados.get(contexto.getEstado().toLowerCase()).accept(contexto);
+        estados.get(contexto.getEstado()).execute(contexto);
 
         ultimaMensagemBot = contexto.getResposta() != null ? contexto.getResposta() : ultimaMensagemBot;
         estadoAtual = contexto.getEstado();
@@ -49,9 +53,10 @@ public class DoBot {
     }
 
     private void adicionarMensagemInicial(String mensagemInicial) {
-        if (mensagemInicial != null){
-            mensagens.add(new Mensagem(Autor.BOT, mensagemInicial));
+        if (mensagemInicial == null){
+            throw new IllegalArgumentException("A mensagem inicial não pode ser nula!");
         }
+        mensagens.add(new Mensagem(Autor.BOT, mensagemInicial));
     }
 
     private void adicionarMensagens(Contexto contexto) {
