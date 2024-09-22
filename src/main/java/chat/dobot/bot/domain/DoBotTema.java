@@ -3,7 +3,7 @@ package chat.dobot.bot.domain;
 public class DoBotTema {
 
     private String corFundoPagina;
-    private String corTextoTitulo;
+    private String corBarraNavegacao;
     private String corFundoChat;
     private String corTextoChat;
     private String corFundoMensagemUsuario;
@@ -12,9 +12,9 @@ public class DoBotTema {
     public DoBotTema() {
     }
 
-    public DoBotTema(String corFundoPagina, String corTextoTitulo, String corFundoChat, String corTextoChat, String corFundoMensagemUsuario, String corFundoMensagemBot) {
+    public DoBotTema(String corFundoPagina, String corBarraNavegacao, String corFundoChat, String corTextoChat, String corFundoMensagemUsuario, String corFundoMensagemBot) {
         this.corFundoPagina = corFundoPagina;
-        this.corTextoTitulo = corTextoTitulo;
+        this.corBarraNavegacao = corBarraNavegacao;
         this.corFundoChat = corFundoChat;
         this.corTextoChat = corTextoChat;
         this.corFundoMensagemUsuario = corFundoMensagemUsuario;
@@ -29,12 +29,12 @@ public class DoBotTema {
         this.corFundoPagina = corFundoPagina;
     }
 
-    public String getCorTextoTitulo() {
-        return corTextoTitulo;
+    public String getCorBarraNavegacao() {
+        return corBarraNavegacao;
     }
 
-    public void setCorTextoTitulo(String corTextoTitulo) {
-        this.corTextoTitulo = corTextoTitulo;
+    public void setCorBarraNavegacao(String corBarraNavegacao) {
+        this.corBarraNavegacao = corBarraNavegacao;
     }
 
     public String getCorFundoChat() {

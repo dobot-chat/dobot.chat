@@ -1,15 +1,16 @@
+body {
+    font-family: 'Poppins', 'sans-serif';
+    background: var(--cor-fundo-pagina);
+    margin: 0;
+    padding: 0;
+}
+
 #chatForm {
-    display: flex;
-    width: 75%;
     min-width: 375px;
     max-width: 700px;
-    margin-bottom: 30px;
 }
 
 #msgUsuario {
-    flex: 1;
-    padding: 10px;
-    border: none;
     border-radius: 20px 0 0 20px;
     background: var(--cor-fundo-chat);
     color: var(--cor-texto-chat);
@@ -21,12 +22,9 @@ button {
     border: none;
     border-radius: 0 20px 20px 0;
     color: var(--cor-texto-chat);
-    cursor: pointer;
-    transition: background 0.3s;
 }
 
 .chatbox {
-    width: 75%;
     min-width: 375px;
     max-width: 700px;
     height: calc(100vh - 60px);
@@ -40,14 +38,10 @@ button {
 }
 
 .mensagem {
-    display: block;
-    margin-bottom: 15px;
-    padding: 15px;
-    border-radius: 15px;
+    max-width: 70%;
     width: fit-content;
     word-break: break-word;
-    max-width: 70%;
-    position: relative; /* Para usar pseudo-elementos */
+    position: relative;
 }
 
 .usuario {
@@ -68,7 +62,6 @@ button {
     border: 10px solid transparent;
     border-left-color: var(--cor-fundo-mensagem-usuario); /* Cor da seta */
     border-right: 0;
-    margin-top: -5px;
 }
 
 .bot {
@@ -88,14 +81,11 @@ button {
     border: 10px solid transparent;
     border-right-color: var(--cor-fundo-mensagem-bot); /* Cor da seta */
     border-left: 0;
-    margin-top: -5px;
 }
 
 .mensagem p {
-    margin: 0;
     color: var(--cor-texto-chat);
 }
-
 a {
     text-decoration: none;
     color: var(--bs-primary);
@@ -107,40 +97,3 @@ a:hover {
     opacity: 0.5;
 }
 
-.chatbox ::-webkit-scrollbar {
-    width: 12px;
-}
-
-.chatbox ::-webkit-scrollbar-track {
-    background: #1a1a1a;
-    border-radius: 10px;
-}
-
-.chatbox ::-webkit-scrollbar-thumb {
-    background-color: #333;
-    border-radius: 10px;
-    border: 3px solid #1a1a1a;
-}
-
-.chatbox {
-    scrollbar-width: thin;
-    scrollbar-color: #333 #1a1a1a;
-}
-
-@media (max-width: 500px) {
-    #chatForm, .chatbox {
-        width: 100%;
-    }
-
-    .chatbox {
-        padding: 5px;
-    }
-
-    .usuario {
-        margin-right: 5px;
-    }
-
-    .bot {
-        margin-left: 5px;
-    }
-}

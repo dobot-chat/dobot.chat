@@ -11,15 +11,16 @@
         window.onload = function() {
             const chatbox = document.querySelector(".chatbox");
             chatbox.scrollTop = chatbox.scrollHeight;
-
             document.getElementById("msgUsuario").focus();
         };
     </script>
 </head>
-<body class="container-fluid  d-flex flex-column justify-content-center align-items-center vh-100" style="font-family: 'Poppins', sans-serif; background: var(--cor-fundo-pagina); color: var(--cor-texto-titulo); margin: 0; padding: 0 10px;">
-<nav class="navbar navbar-expand-lg navbar-light bg-light w-100">
+
+      <body class="container-fluid d-flex flex-column justify-content-center align-items-center vh-100">
+    <nav class="navbar navbar-expand-lg navbar w-100" style="background-color: var(--cor-barra-navegacao)">
+
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" th:href="@{/}">
             <img src="/img/dobot-h-800px-transp.png" alt="DoBot" style="max-height: 50px;">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,9 +49,9 @@
         </div>
     </div>
 </div>
-<form id="chatForm" method="post" th:action="@{/chatbot}">
-    <input type="text" id="msgUsuario" name="msgUsuario" placeholder="Escreva uma mensagem" required/>
-    <button type="submit">&#x27A4;</button>
+<form id="chatForm" method="post" th:action="@{/chatbot}" class="input-group mb-2">
+    <input type="text" id="msgUsuario" name="msgUsuario" class="form-control" placeholder="Escreva uma mensagem" required/>
+    <button class="button" type="submit">&#x27A4;</button>
 </form>
 </body>
 </html>
