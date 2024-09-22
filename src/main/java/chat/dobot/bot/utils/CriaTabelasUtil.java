@@ -15,6 +15,11 @@ import java.util.List;
 
 public class CriaTabelasUtil {
 
+
+    //TODO : criar exceção específica para persistência: "DoBotPersistenciaException"
+
+
+
     public static void criarTabelas(DataSource dataSource, List<Class<Record>> entidades) throws SQLException {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {

@@ -1,5 +1,6 @@
 package chat.dobot.bot;
 
+
 import chat.dobot.bot.persistance.YormConfig;
 import chat.dobot.bot.controller.DoBotController;
 import chat.dobot.bot.domain.DoBot;
@@ -21,21 +22,23 @@ import org.yorm.Yorm;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
-public class DoBotChat {
+public class DoBotChatApp {
 
-    private final Logger logger = LoggerFactory.getLogger(DoBotChat.class);
+    private final Logger logger = LoggerFactory.getLogger(DoBotChatApp.class);
     private String mensagemInicial;
-    private DoBotTema tema;
+    private final DoBotTema tema;
+    // TODO : lista dos bots
+    private final Map<String, DoBot> bots = new LinkedHashMap<>();
 
-    private DoBotChat() {
+    private DoBotChatApp() {
         this.tema = criarTemaPadrao();
     }
 
-    public static DoBotChat novoBot() {
-        return new DoBotChat();
+    public static DoBotChatApp novoBot() {
+        return new DoBotChatApp();
     }
 
     public void start() {
@@ -44,7 +47,7 @@ public class DoBotChat {
 
     public void start(int portaDoBot, int portaH2) {
         try {
-            //Imprime o logo do DoBot
+            //Imprime o logo do DoBotChat
             System.out.println(getdoBotAsciiArt());
             System.out.println("Versão: " + getApplicationVersion());
             YormConfig yormConfig = new YormConfig(portaH2);
@@ -62,23 +65,30 @@ public class DoBotChat {
             }).start(portaDoBot);
 
 
-            Object chatbotImpl = AnnotationsUtil.buscarClasseChatbot();
-            if (chatbotImpl == null) {
-                logger.debug("Nenhuma classe anotada com @" + DoBot.class.getSimpleName() + " foi encontrada!");
-                System.out.println("ERRO: Não foi possível inicializar o DoBot. \n");
-                System.out.println("Não encontrei nenhuma classe anotada com @" + DoBot.class.getSimpleName());
+            //TODO: carregarDoBots
+            DoBot chatbotImpl = null;
+            try {
+                chatbotImpl = AnnotationsUtil.buscarClasseChatbot();
+                if(chatbotImpl == null)
+                    throw new Exception("Nenhuma classe anotada com @DoBotChat foi encontrada");
+            }catch (Exception e){
+                logger.debug("Erro ao carregar os bots", e);
+                System.out.println("ERRO: Não foi possível inicializar o DoBotChat. \n");
+                System.out.println(e.getMessage());
                 System.exit(1);
             }
-            logger.debug("Instância de {} criada.", chatbotImpl.getClass().getSimpleName());
 
-            DoBot doBot = new DoBot(chatbotImpl, mapearEstados(chatbotImpl), mensagemInicial, tema);
+            chatbotImpl.setDoBotTema(tema);
+            chatbotImpl.setMensagemInicial(mensagemInicial);
+            logger.debug("ChatBot instanciado: {}.", chatbotImpl.getNome());
 
             app.before(ctx -> {
                 ctx.res().setCharacterEncoding(StandardCharsets.UTF_8.name());
                 ctx.res().setContentType("text/html; charset=UTF-8");
             });
 
-            DoBotController controlador = new DoBotController(doBot);
+            // TODO : inicializar controlador com a lista de bots
+            DoBotController controlador = new DoBotController(chatbotImpl);
 
             app.get("/", ctx -> ctx.render("/home.html", controlador.processarPaginaHome()));
             app.get("/chatbot", ctx -> ctx.render("/chat.html", controlador.processarGetPaginaChat()));
@@ -88,6 +98,7 @@ public class DoBotChat {
             System.out.println("Aplicação inicializada com sucesso!\nAcesse http://localhost:" + portaDoBot + " para acessar o chatbot.");
         } catch (Exception e) {
             logger.error("Falha durante a inicialização da aplicação!", e);
+            System.out.println("Erro: " + e.getMessage());
             System.exit(1);
         }
     }
@@ -122,10 +133,8 @@ public class DoBotChat {
         this.mensagemInicial = mensagemInicial;
     }
 
-    public String getMensagemInicial() {
-        return mensagemInicial;
-    }
 
+    // TODO : método nunca usado. Investigar
     /**
      * Retorna o tema do chatbot.
      *
@@ -147,15 +156,13 @@ public class DoBotChat {
     }
 
     private String getdoBotAsciiArt() {
-        StringBuffer asciiArt = new StringBuffer();
-
-        asciiArt.append("  ____        ____        _         _           _   \n");
-        asciiArt.append(" |  _ \\  ___ | __ )  ___ | |_   ___| |__   __ _| |_ \n");
-        asciiArt.append(" | | | |/ _ \\|  _ \\ / _ \\| __| / __| '_ \\ / _` | __|\n");
-        asciiArt.append(" | |_| | (_) | |_) | (_) | |_ | (__| | | | (_| | |_ \n");
-        asciiArt.append(" |____/ \\___/|____/ \\___/ \\__(_)___|_| |_|\\__,_|\\__|\n");
-
-        return asciiArt.toString();
+        return """
+      ____        ____        _         _           _   
+     |  _ \\  ___ | __ )  ___ | |_   ___| |__   __ _| |_ 
+     | | | |/ _ \\|  _ \\ / _ \\| __| / __| '_ \\ / _` | __|
+     | |_| | (_) | |_) | (_) | |_ | (__| | | | (_| | |_ 
+     |____/ \\___/|____/ \\___/ \\__(_)___|_| |_|\\__,_|\\__|
+    """;
     }
 
     private String getApplicationVersion() {
@@ -169,16 +176,4 @@ public class DoBotChat {
         }
     }
 
-    private Map<String, Consumer<Contexto>> mapearEstados(Object chatbot) {
-        logger.debug("Iniciando mapeamento dos estados para {}.", chatbot.getClass().getSimpleName());
-        Map<String, Consumer<Contexto>> estados = AnnotationsUtil.mapearEstados(chatbot);
-
-        if (estados.isEmpty()) {
-            throw new DoBotException("Nenhum estado mapeado para " + chatbot.getClass().getSimpleName() + "!");
-        }
-
-        logger.debug("Mapeamento dos estados concluído com sucesso.");
-        logger.debug("Mapeamento de estados encontrados: {}", estados.keySet());
-        return estados;
-    }
 }
