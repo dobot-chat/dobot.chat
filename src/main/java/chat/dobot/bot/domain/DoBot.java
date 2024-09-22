@@ -4,8 +4,6 @@ import chat.dobot.bot.Autor;
 import chat.dobot.bot.BotStateMethod;
 import chat.dobot.bot.Contexto;
 import chat.dobot.bot.DoBotException;
-import chat.dobot.bot.annotations.DoBotChat;
-import chat.dobot.bot.utils.AnnotationsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

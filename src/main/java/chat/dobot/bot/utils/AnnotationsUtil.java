@@ -65,9 +65,10 @@ public class AnnotationsUtil {
             throw new DoBotException("Erro ao buscar a classe chatbot", e);
         }
 
-        if(novoBot == null){
-            throw new DoBotException("Nenhuma classe anotada com @DoBotChat foi encontrada");
-        }
+        //TODO: criar coleção, adicionar bovoBot e se a coleção for vazia, lançar exceção
+//        if(novoBot == null){
+//            throw new DoBotException("Nenhuma classe anotada com @DoBotChat foi encontrada");
+//        }
         return novoBot;
     }
 
@@ -113,26 +114,5 @@ public class AnnotationsUtil {
 
         return estadosMap;
     }
-
-    public static String obterEstadoInicial(Object chatbotImpl) {
-        String estadoInicial = null;
-        for (Method method : chatbotImpl.getClass().getDeclaredMethods()) {
-            if (method.isAnnotationPresent(EstadoChat.class)) {
-                EstadoChat estadoChat = method.getAnnotation(EstadoChat.class);
-                if (estadoChat.inicial()) {
-                    if (estadoInicial != null) {
-                        throw new DoBotException("Mais de um estado inicial definido!");
-                    }
-                    estadoInicial = estadoChat.estado().isEmpty() ? method.getName() : estadoChat.estado();
-                }
-            }
-        }
-
-        if (estadoInicial != null) {
-            return estadoInicial.toLowerCase();
-        }
-        throw new DoBotException("Nenhum estado inicial definido!");
-    }
-
 
 }

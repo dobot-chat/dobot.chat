@@ -1,6 +1,6 @@
 package chat.dobot.bot;
 
-import chat.dobot.bot.annotations.DoBotChat;
+
 import chat.dobot.bot.persistance.YormConfig;
 import chat.dobot.bot.controller.DoBotController;
 import chat.dobot.bot.domain.DoBot;
@@ -132,10 +132,8 @@ public class DoBotChatApp {
         this.mensagemInicial = mensagemInicial;
     }
 
-    public String getMensagemInicial() {
-        return mensagemInicial;
-    }
 
+    // TODO : método nunca usado. Investigar
     /**
      * Retorna o tema do chatbot.
      *
@@ -175,6 +173,7 @@ public class DoBotChatApp {
         }
     }
 
+    //TODO: método nunca usado. Investigar
     private Map<String, BotStateMethod> mapearEstados(Object chatbot) {
         logger.debug("Iniciando mapeamento dos estados para {}.", chatbot.getClass().getSimpleName());
         Map<String, BotStateMethod> estados = AnnotationsUtil.mapearEstados(chatbot);
