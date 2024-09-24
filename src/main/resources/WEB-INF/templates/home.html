@@ -10,8 +10,15 @@
     <body class="d-flex justify-content-center align-items-center bg-light vh-100">
         <div class="text-center">
             <img src="/img/dobot-v-800px-transp.png" alt="DoBot" class="img-fluid mb-4" style="max-width: 400px;" />
-            <p class="fw-bold">Escolha o bot:</p>
-            <a th:href="@{/chatbot}" th:text="${nomeChat}" class="btn btn-warning btn-outline-dark btn-lg"></a>
+            <p class="fw-bold"> </p>
+
+            <div class="input-group mb-3">
+                <select class="form-select" id="botSelect" required>
+                    <option value="" disabled selected>Selecione um bot...</option>
+                    <option th:each="bot : ${botNames}" th:value="${bot.key}" th:text="${bot.value}"></option>
+                </select>
+                <button class="btn btn-warning btn-outline-dark" type="button" onclick="acessarBot()">Acessar</button>
+            </div>
 
             <!-- Link para abrir o modal -->
             <p class="mt-3">
@@ -20,5 +27,14 @@
         </div>
         <!-- Modal: Sobre-->
         <div th:replace="~{fragments/sobre :: sobreModal}"></div>
+
+        <script>
+            function acessarBot() {
+                const botID = document.getElementById("botSelect").value;
+                if (botID) {
+                    window.location.href = `/chatbot/${botID}`;
+                }
+            }
+        </script>
     </body>
 </html>

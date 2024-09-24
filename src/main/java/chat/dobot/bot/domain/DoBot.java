@@ -1,9 +1,6 @@
 package chat.dobot.bot.domain;
 
-import chat.dobot.bot.Autor;
-import chat.dobot.bot.BotStateMethod;
-import chat.dobot.bot.Contexto;
-import chat.dobot.bot.DoBotException;
+import chat.dobot.bot.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +20,7 @@ public class DoBot {
     private final List<Mensagem> mensagens = new LinkedList<>();
     private Map<String, BotStateMethod> estados;
     public static final String ESTADO_INICIAL = "main";
-    private DoBotTema doBotTema;
+    private final DoBotConfig doBotConfig;
     private String ultimaMensagemUsuario;
     private String ultimaMensagemBot;
     private String estadoAtual;
@@ -37,6 +34,7 @@ public class DoBot {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
+        this.doBotConfig = new DoBotConfig();
         estados = new HashMap<>();
     }
 
@@ -45,7 +43,7 @@ public class DoBot {
      * Método principal do <a href="https://en.wikipedia.org/wiki/Front_controller">Front Controller</a>.
      * @param contexto contexto do chat
      */
-    public void receberMensagem(Contexto contexto) {
+    public void receberMensagem(Contexto contexto) throws EstadoInvalidoException {
         ultimaMensagemUsuario = contexto.getMensagemUsuario();
 
         if (!estados.containsKey(contexto.getEstado())) {
@@ -62,20 +60,8 @@ public class DoBot {
     }
 
     /**
-     * Define a mensagem inicial ao chat.
-     * Esta é a primeira mensagem exibida ao usuário.
-     * @param mensagemInicial mensagem inicial
-     */
-    public void setMensagemInicial(String mensagemInicial) {
-        if (mensagemInicial == null){
-            throw new IllegalArgumentException("A mensagem inicial não pode ser nula!");
-        }
-        mensagens.add(new Mensagem(Autor.BOT, mensagemInicial));
-    }
-
-    /**
      * Adiciona as mensagens ao chat.
-     * @param contexto
+     * @param contexto contexto do chat
      */
     private void adicionarMensagens(Contexto contexto) {
         if (contexto.getMensagemUsuario() != null) {
@@ -84,6 +70,10 @@ public class DoBot {
         if (contexto.getResposta() != null) {
             mensagens.add(new Mensagem(Autor.BOT, contexto.getResposta()));
         }
+    }
+
+    public void setMensagemInicial(String mensagemInicial){
+        this.mensagens.add(new Mensagem(Autor.BOT, mensagemInicial));
     }
 
     /**
@@ -101,6 +91,9 @@ public class DoBot {
     public void setEstadoAtual(String estado) {
         if(estado == null){
             throw new IllegalArgumentException("O estado atual não pode ser nulo!");
+        }
+        if(!estados.containsKey(estado)){
+            throw new EstadoInvalidoException("Estado atual: `"+this.estadoAtual+"`\nVocê está tentando atribuir um estado que não existe: mudarEstado(\""+estado+"\");\nOs estados existentes para o bot `"+this.id+"` são: "+this.getEstados());
         }
         this.estadoAtual = estado.toLowerCase();
     }
@@ -124,21 +117,17 @@ public class DoBot {
         return ultimaMensagemBot;
     }
 
+
+    // TODO: Refatorar para não chamar getDoBotTema() e sim getDoBotConfig().getTema()
     /**
      * Retorna o tema do chat.
      * @return tema do chat
      */
     public DoBotTema getDoBotTema() {
-        return doBotTema;
+        return this.doBotConfig.getTema();
     }
 
-    /**
-     * Define o tema do chat.
-     * @param doBotTema tema do chat
-     */
-    public void setDoBotTema(DoBotTema doBotTema) {
-        this.doBotTema = doBotTema;
-    }
+
 
     /**
      * Define os estados do chat.
@@ -176,4 +165,15 @@ public class DoBot {
     }
 
 
+    public DoBotConfig getConfig() {
+        return doBotConfig;
+    }
+
+    public List<String> getEstados() {
+       return new LinkedList<>(this.estados.keySet());
+    }
+
+    public void addMensagem(Autor autor, String msg) {
+        mensagens.add(new Mensagem(autor, msg));
+    }
 }

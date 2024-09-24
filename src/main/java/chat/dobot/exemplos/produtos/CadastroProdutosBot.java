@@ -1,23 +1,25 @@
-package chat.dobot.exemplos.helloworld;
+package chat.dobot.exemplos.produtos;
 
+
+import chat.dobot.bot.Contexto;
 import chat.dobot.bot.DoBotChatApp;
 import chat.dobot.bot.DoBotConfig;
 import chat.dobot.bot.annotations.Config;
 import chat.dobot.bot.annotations.DoBotChat;
 import chat.dobot.bot.annotations.EstadoChat;
-import chat.dobot.bot.Contexto;
 
-@DoBotChat(id = "hello", nome = "👋 Alô Mundo Bot", descricao = "Bot que responde com 'Alô' a qualquer mensagem")
-public class HelloWorldBot {
+@DoBotChat(id = "cadProdutos", nome = "Cadastro de Produtos", descricao = "Bot que Cadastra e lista produtos")
+public class CadastroProdutosBot {
 
     public static void main(String[] args) {
         DoBotChatApp meubot = DoBotChatApp.novoBot();
         meubot.start(8083,8084);
+
     }
 
     @Config
     public void config(DoBotConfig config){
-        config.setMensagemInicial("👋 Olá! Eu sou o chatbot Alô Mundo! Escreva qualquer coisa e responderei com `Alô`.");
+        config.setMensagemInicial("👋 Olá! Eu sou o chatbot De Cadastro de produtos!");
     }
 
     @EstadoChat(inicial = true)
@@ -33,4 +35,6 @@ public class HelloWorldBot {
         chat.responder("Menu: \n1 - Alô Mundo\n2 - Sair");
         chat.mudarEstado("opcao");
     }
+
+
 }
