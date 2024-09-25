@@ -36,8 +36,10 @@ import java.util.Map;
 public class DoBotChatApp {
 
 
-
+    private static final String PACOTE_EXEMPLOS = "chat.dobot";
     private final Logger logger = LoggerFactory.getLogger(DoBotChatApp.class);
+
+    private boolean carregarExemplos = false;
 
     private DoBotChatApp() {
     }
@@ -50,6 +52,10 @@ public class DoBotChatApp {
         start(8080, 8082);
     }
 
+
+    public void ativarExemplos() {
+        carregarExemplos = true;
+    }
 
     /**
      * Inicializa a aplicação DoBotChat.
@@ -145,8 +151,14 @@ public class DoBotChatApp {
     private Map<String, DoBot> carregarInstanciasChatbot() {
         Map<String, DoBot> bots = new LinkedHashMap<>();
         ConsoleUtil.printConsole("Carregando chatbots...");
+
         try (ScanResult scanResult = new ClassGraph().enableAnnotationInfo().scan()) {
             for (Class<?> classe : scanResult.getClassesWithAnnotation(DoBotChat.class).loadClasses()) {
+                if(classe.getName().startsWith(PACOTE_EXEMPLOS) && !carregarExemplos){
+                    continue;
+                }else{
+                    ConsoleUtil.printConsole("Carregando exemplo: "+classe.getName());
+                }
                 Object instancia = classe.getDeclaredConstructor().newInstance();
                 DoBotChat annotation = classe.getAnnotation(DoBotChat.class);
                 if (annotation != null) {
@@ -156,7 +168,7 @@ public class DoBotChatApp {
                     DoBot novoBot = new DoBot(id, nome, descricao);
                     ConsoleUtil.printConsole("\n💬⚙️ Carregando chatbot '" + nome + "'("+id+")...");
                     try{
-                    varrerMetodos(novoBot, instancia);
+                        varrerMetodos(novoBot, instancia);
                     }catch (DoBotException e){
                         ConsoleUtil.printWarning(e.getMessage());
                         ConsoleUtil.printConsole("💬❌ Chatbot  '" + nome + "'("+id+") não foi inicializado!");
