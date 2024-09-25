@@ -9,6 +9,7 @@ public class DoBotTema {
     private String corFundoMensagemBot;
 
     public DoBotTema() {
+        this("#ffffff", "#D5D5D5", "#000000", "#FEB600", "#EE8134");
     }
 
     public DoBotTema(String corFundoPagina, String corFundoChat, String corTextoChat, String corFundoMensagemUsuario, String corFundoMensagemBot) {

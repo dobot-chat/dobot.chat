@@ -1,12 +1,14 @@
 package chat.dobot.bot;
 
+import chat.dobot.bot.domain.DoBot;
 import chat.dobot.bot.service.DoBotService;
 import io.javalin.config.Key;
 
 import java.util.Map;
 
 public enum DoBotKey {
-    SERVICE(new Key<Map<String, DoBotService<Record>>>("service"));
+    SERVICE(new Key<Map<String, DoBotService<Record>>>("service")),
+    BOTS(new Key<Map<String, Map<String, DoBot>>>("bots")),;
 
     private final Key<?> k;
 
@@ -15,8 +17,6 @@ public enum DoBotKey {
     }
 
     public <T> Key<T> key() {
-        @SuppressWarnings("unchecked")
-        Key<T> typedKey = (Key<T>) this.k;
-        return typedKey;
+        return (Key<T>) this.k;
     }
 }
