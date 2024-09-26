@@ -195,7 +195,6 @@ public class DoBotChatApp {
      * O método de configuração é mapeado a partir do método anotado com @Config.
      *
      * @param chatbotImpl objeto do usuario dev que contém a anotação @DoBotChat
-     * @return um mapa com os estados do bot
      */
     private void varrerMetodos(DoBot bot, Object chatbotImpl) {
         Map<String, BotStateMethod> estadosMap = new HashMap<>();
