@@ -6,7 +6,7 @@
 
     <groupId>chat.dobot.bot</groupId>
     <artifactId>DoBot.chat</artifactId>
-    <version>1.0.0</version>
+    <version>${version}</version>
     <packaging>jar</packaging>
 
     <distributionManagement>
@@ -182,6 +182,29 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- Utilizado para ler o arquivo de versão do projeto que está no diretório resources. Este arquivo é atualizado
+                 através do Github Actions. Quando há um novo release no github, o Github Actions atualiza o arquivo VERSION-->
+                <!-- https://www.mojohaus.org/properties-maven-plugin/read-project-properties-mojo.html -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>${project.basedir}/src/main/resources/VERSION</file>
+                                <optional>true</optional>
+                                <defaultValue>SNAPSHOT</defaultValue>
+                            </files>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
