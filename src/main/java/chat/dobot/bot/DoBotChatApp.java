@@ -15,8 +15,6 @@ import io.github.classgraph.ScanResult;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.rendering.template.JavalinThymeleaf;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +23,17 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.yorm.Yorm;
 
-import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class DoBotChatApp {
 
@@ -84,7 +86,7 @@ public class DoBotChatApp {
             if (bots.isEmpty())
                 throw new DoBotException("Nenhuma classe anotada com @DoBotChat foi encontrada");
 
-            logger.debug(bots.size()+" chatBots instanciados: {}.", bots.keySet());
+            logger.debug(bots.size() + " chatBots instanciados: {}.", bots.keySet());
 
             // Inicializa o Javalin
             Javalin app = Javalin.create(config -> {
@@ -110,9 +112,9 @@ public class DoBotChatApp {
             // TODO : inicializar controlador com a lista de bots
             DoBotController controlador = new DoBotController();
 
-            app.get("/",controlador::processarPaginaHome);
-            app.get("/chatbot/{botID}",controlador::processarGetPaginaChat);
-            app.post("/chatbot/{botID}",controlador::processarPostPaginaChat);
+            app.get("/", controlador::processarPaginaHome);
+            app.get("/chatbot/{botID}", controlador::processarGetPaginaChat);
+            app.post("/chatbot/{botID}", controlador::processarPostPaginaChat);
 
             ConsoleUtil.printConsole("Aplicação inicializada com sucesso!\nAcesse http://localhost:" + portaDoBot + " para acessar o chatbot.");
         } catch (Exception e) {
@@ -145,8 +147,9 @@ public class DoBotChatApp {
 
     /**
      * Busca as classes anotadas com @DoBotChat.
-     * @throws DoBotException se ocorrer um erro ao instanciar alguma classe DoBot
+     *
      * @return um mapa com os bots carregados
+     * @throws DoBotException se ocorrer um erro ao instanciar alguma classe DoBot
      */
     private Map<String, DoBot> carregarInstanciasChatbot() {
         Map<String, DoBot> bots = new LinkedHashMap<>();
@@ -154,10 +157,10 @@ public class DoBotChatApp {
 
         try (ScanResult scanResult = new ClassGraph().enableAnnotationInfo().scan()) {
             for (Class<?> classe : scanResult.getClassesWithAnnotation(DoBotChat.class).loadClasses()) {
-                if(classe.getName().startsWith(PACOTE_EXEMPLOS) && !carregarExemplos){
+                if (classe.getName().startsWith(PACOTE_EXEMPLOS) && !carregarExemplos) {
                     continue;
-                }else{
-                    ConsoleUtil.printConsole("Carregando exemplo: "+classe.getName());
+                } else {
+                    ConsoleUtil.printConsole("Carregando exemplo: " + classe.getName());
                 }
                 Object instancia = classe.getDeclaredConstructor().newInstance();
                 DoBotChat annotation = classe.getAnnotation(DoBotChat.class);
@@ -166,16 +169,16 @@ public class DoBotChatApp {
                     String nome = annotation.nome();
                     String descricao = annotation.descricao();
                     DoBot novoBot = new DoBot(id, nome, descricao);
-                    ConsoleUtil.printConsole("\n💬⚙️ Carregando chatbot '" + nome + "'("+id+")...");
-                    try{
+                    ConsoleUtil.printConsole("\n💬⚙️ Carregando chatbot '" + nome + "'(" + id + ")...");
+                    try {
                         varrerMetodos(novoBot, instancia);
-                    }catch (DoBotException e){
+                    } catch (DoBotException e) {
                         ConsoleUtil.printWarning(e.getMessage());
-                        ConsoleUtil.printConsole("💬❌ Chatbot  '" + nome + "'("+id+") não foi inicializado!");
+                        ConsoleUtil.printConsole("💬❌ Chatbot  '" + nome + "'(" + id + ") não foi inicializado!");
                         continue;
                     }
-                    ConsoleUtil.printConsole("💬⚙️ Estados: "+novoBot.getEstados().toString());
-                    ConsoleUtil.printConsole("💬✅ Chatbot '" + nome + "'("+id+") carregado com sucesso!");
+                    ConsoleUtil.printConsole("💬⚙️ Estados: " + novoBot.getEstados().toString());
+                    ConsoleUtil.printConsole("💬✅ Chatbot '" + nome + "'(" + id + ") carregado com sucesso!");
                     bots.put(novoBot.getId(), novoBot);
                 }
             }
@@ -192,19 +195,18 @@ public class DoBotChatApp {
      * O método de configuração é mapeado a partir do método anotado com @Config.
      *
      * @param chatbotImpl objeto do usuario dev que contém a anotação @DoBotChat
-     * @return um mapa com os estados do bot
      */
     private void varrerMetodos(DoBot bot, Object chatbotImpl) {
         Map<String, BotStateMethod> estadosMap = new HashMap<>();
 
         for (Method metodo : chatbotImpl.getClass().getDeclaredMethods()) {
 
-            if(metodo.isAnnotationPresent(Config.class)){
+            if (metodo.isAnnotationPresent(Config.class)) {
                 conferirAssinaturaMetodoConfig(metodo);
                 try {
                     metodo.invoke(chatbotImpl, bot.getConfig());
                 } catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new DoBotException("BUG!? Problema ao executar o método de configuração do bot. Método"+metodo.getName(), e);
+                    throw new DoBotException("BUG!? Problema ao executar o método de configuração do bot. Método" + metodo.getName(), e);
                 }
                 bot.setMensagemInicial(bot.getConfig().getMensagemInicial());
             }
@@ -223,7 +225,7 @@ public class DoBotChatApp {
                     try {
                         metodo.invoke(chatbotImpl, contexto);
                     } catch (IllegalAccessException | InvocationTargetException e) {
-                        throw new DoBotException("BUG!? Problema ao executar o método que implementa estado ao bot. Estado:" + nomeEstado + ", método"+metodo.getName(), e);
+                        throw new DoBotException("BUG!? Problema ao executar o método que implementa estado ao bot. Estado:" + nomeEstado + ", método" + metodo.getName(), e);
                     }
                 });
             }
@@ -258,7 +260,7 @@ public class DoBotChatApp {
     @NotNull
     private String getNomeEstado(Method metodo) {
         EstadoChat estadoChat = metodo.getAnnotation(EstadoChat.class);
-        if(estadoChat == null){
+        if (estadoChat == null) {
             throw new IllegalArgumentException("BUG! Método " + metodo.getName() + " deveria possuir anotação @EstadoChat!");
         }
         final String estado;
@@ -302,13 +304,32 @@ public class DoBotChatApp {
                 """;
     }
 
+
+    /**
+     * Retorna a versão da aplicação DoBotChat.
+     * A versão é lida a partir do arquivo VERSION, que é atualizado automaticamente pelo GitHub Actions.
+     *
+     * @return a versão da aplicação DoBotChat
+     */
     private String getApplicationVersion() {
-        try {
-            MavenXpp3Reader reader = new MavenXpp3Reader();
-            Model model = reader.read(new FileReader("pom.xml"));
-            return model.getVersion();
+        try (InputStreamReader isr = new InputStreamReader(
+            Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("VERSION")), StandardCharsets.UTF_8)) {
+
+            try (BufferedReader reader = new BufferedReader(isr)) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    line = line.trim();
+                    if (!line.isEmpty() && !line.startsWith("#")) {
+                        return line;
+                    }
+                }
+                return "desconhecida";
+            }
+        } catch (NullPointerException e) {
+            logger.error("Arquivo VERSION não encontrado no diretório \"resources\"", e);
+            return "desconhecida";
         } catch (Exception e) {
-            logger.error("Erro ao ler a versão do pom.xml", e);
+            logger.error("Erro ao ler a versão do arquivo VERSION", e);
             return "desconhecida";
         }
     }
