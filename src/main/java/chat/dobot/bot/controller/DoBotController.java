@@ -77,7 +77,7 @@ public class DoBotController {
         try {
             doBot.receberMensagem(new Contexto(msgUsuario, estadoAtual, servicos));
         } catch (EstadoInvalidoException e){
-            logger.error("Erro no processamento da mensagem:",e);
+            logger.debug("Erro no processamento da mensagem:",e);
             ConsoleUtil.printErro("Erro no processamento da mensagem!",e);
             doBot.addMensagem(Autor.BOT, "🌿👀🌿\n Oops! Ocorreu um erro no processamento da mensagem. <br/> Estou retornando para o estado inicial. 😬");
             doBot.addMensagem(Autor.BOT, doBot.getConfig().getMensagemInicial());

@@ -2,19 +2,22 @@ package chat.dobot.bot;
 
 import chat.dobot.bot.service.DoBotService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Contexto {
 
     private final String mensagemUsuario;
     private String estado;
-    private String resposta;
+    private final List<String> respostas;
     private final Map<String, DoBotService<Record>> servicos;
 
     public Contexto(String mensagemUsuario, String estado, Map<String, DoBotService<Record>> servicos) {
         this.mensagemUsuario = mensagemUsuario;
         this.estado = estado.toLowerCase();
         this.servicos = servicos;
+        respostas = new ArrayList<>(20);
     }
 
     public String getMensagemUsuario() {
@@ -30,16 +33,11 @@ public class Contexto {
     }
 
     public void responder(String resposta) {
-        this.resposta = resposta;
+        this.respostas.add(resposta);
     }
 
-    public void responder(String resposta, String estado) {
-        this.resposta = resposta;
-        this.estado = estado;
-    }
-
-    public String getResposta() {
-        return resposta;
+    public List<String> getRespostas() {
+        return respostas;
     }
 
     public <T extends Record> DoBotService<T> getServico(Class<T> recordClass) {

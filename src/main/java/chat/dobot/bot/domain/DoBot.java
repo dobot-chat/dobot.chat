@@ -21,8 +21,9 @@ public class DoBot {
     private Map<String, BotStateMethod> estados;
     public static final String ESTADO_INICIAL = "main";
     private final DoBotConfig doBotConfig;
-    private String ultimaMensagemUsuario;
-    private String ultimaMensagemBot;
+   // TODO: verificar se é necessario
+   // private String ultimaMensagemUsuario;
+
     private String estadoAtual;
 
     private final String id;
@@ -44,7 +45,7 @@ public class DoBot {
      * @param contexto contexto do chat
      */
     public void receberMensagem(Contexto contexto) throws EstadoInvalidoException {
-        ultimaMensagemUsuario = contexto.getMensagemUsuario();
+        //ultimaMensagemUsuario = contexto.getMensagemUsuario();
 
         if (!estados.containsKey(contexto.getEstado())) {
             throw new DoBotException("Estado '" + contexto.getEstado() + "' não encontrado!");
@@ -52,7 +53,8 @@ public class DoBot {
 
         estados.get(contexto.getEstado()).execute(contexto);
 
-        ultimaMensagemBot = contexto.getResposta() != null ? contexto.getResposta() : ultimaMensagemBot;
+        //TODO: verificar se é necessário
+        //ultimaMensagemBot = contexto.getRespostas() != null ? contexto.getRespostas() : ultimaMensagemBot;
 
         this.setEstadoAtual(contexto.getEstado());
 
@@ -67,8 +69,8 @@ public class DoBot {
         if (contexto.getMensagemUsuario() != null) {
             mensagens.add(new Mensagem(Autor.USUARIO, contexto.getMensagemUsuario()));
         }
-        if (contexto.getResposta() != null) {
-            mensagens.add(new Mensagem(Autor.BOT, contexto.getResposta()));
+        if (!contexto.getRespostas().isEmpty()) {
+            contexto.getRespostas().stream().map(resposta -> new Mensagem(Autor.BOT, resposta)).forEach(mensagens::add);
         }
     }
 
@@ -109,13 +111,10 @@ public class DoBot {
         return estadoAtual;
     }
 
-    public String getUltimaMensagemUsuario() {
-        return ultimaMensagemUsuario;
-    }
+//    public String getUltimaMensagemUsuario() {
+//        return ultimaMensagemUsuario;
+//    }
 
-    public String getUltimaMensagemBot() {
-        return ultimaMensagemBot;
-    }
 
 
     // TODO: Refatorar para não chamar getDoBotTema() e sim getDoBotConfig().getTema()
