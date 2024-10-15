@@ -102,6 +102,11 @@ jobs:
           git add src/main/resources/VERSION
           git status  # Verifica se o arquivo foi realmente adicionado
 
+      - name: COMMIT - Fazer commit da mudança
+        if: env.UPDATED == 'true'
+        run: |
+          git commit -m "Github Action: atualiza resources/VERSION automaticamente: ${{ github.ref_name }}"
+
       - name: COMMIT - Atualizar as últimas alterações da branch main (git pull)
         if: env.UPDATED == 'true'
         run: |
@@ -111,11 +116,6 @@ jobs:
         if: env.UPDATED == 'true'
         run: |
           git status
-
-      - name: COMMIT - Fazer commit da mudança
-        if: env.UPDATED == 'true'
-        run: |
-          git commit -m "Github Action: atualiza resources/VERSION automaticamente: ${{ github.ref_name }}"
 
       - name: COMMIT - Verificar status após commit
         if: env.UPDATED == 'true'
@@ -128,12 +128,6 @@ jobs:
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git remote -v  # Verificar se o URL remoto foi configurado corretamente
-
-      - name: COMMIT - Puxar novamente antes de empurrar (git pull --rebase)
-        if: env.UPDATED == 'true'
-        run: |
-          git pull --rebase origin main
-          git status
 
       - name: COMMIT - Enviar as mudanças para o repositório (git push)
         if: env.UPDATED == 'true'
