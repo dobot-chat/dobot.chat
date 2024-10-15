@@ -43,7 +43,7 @@ jobs:
 
       # Etapa: Verificar e atualizar o arquivo resources/VERSION se necessário
       - name: Update VERSION file if necessary
-        id: update-version
+        id: update-version-file
         run: |
           TAG_NAME="${{ github.ref_name }}"
           TAG_NAME=$(echo "$TAG_NAME" | tr -d '[:space:]')  # Remove espaços em branco da tag
@@ -64,6 +64,11 @@ jobs:
             fi
           fi
           echo "UPDATED=$UPDATED" >> $GITHUB_ENV
+
+      - name: Update POM version
+        if: env.UPDATED == 'true'
+        run: |
+          mvn versions:set -DnewVersion=${{ github.ref_name }}
 
         # Etapa: Commit da alteração no VERSION somente se foi atualizado
 #      - name: Commit updated VERSION file if necessary
@@ -96,16 +101,17 @@ jobs:
           git branch -a
           git status
 
-      - name: COMMIT - Adicionar arquivo VERSION ao commit
+      - name: COMMIT - Adicionar arquivo pom.xml e VERSION ao commit
         if: env.UPDATED == 'true'
         run: |
           git add src/main/resources/VERSION
-          git status  # Verifica se o arquivo foi realmente adicionado
+          git add pom.xml
+          git status  # Verifica se os arquivos foram adicionados
 
       - name: COMMIT - Fazer commit da mudança
         if: env.UPDATED == 'true'
         run: |
-          git commit -m "Github Action: atualiza resources/VERSION automaticamente: ${{ github.ref_name }}"
+          git commit -m "Github Action: atualiza pom.xml e resources/VERSION automaticamente: ${{ github.ref_name }}"
 
       - name: COMMIT - Atualizar as últimas alterações da branch main (git pull)
         if: env.UPDATED == 'true'
