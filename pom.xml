@@ -6,7 +6,7 @@
 
     <groupId>chat.dobot.bot</groupId>
     <artifactId>DoBot.chat</artifactId>
-    <version>${version}</version>
+    <version>${project.version}</version>
     <packaging>jar</packaging>
 
     <distributionManagement>
@@ -201,9 +201,11 @@
                         <configuration>
                             <files>
                                 <file>${project.basedir}/src/main/resources/VERSION</file>
-                                <optional>true</optional>
-                                <defaultValue>SNAPSHOT</defaultValue>
                             </files>
+                            <properties>
+                                <version>${project.version}</version> <!-- Atualiza a versão usando o arquivo -->
+                            </properties>
+                            <defaultValue>SNAPSHOT</defaultValue> <!-- Valor padrão se não for encontrado -->
                         </configuration>
                     </execution>
                 </executions>
