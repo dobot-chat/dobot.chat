@@ -46,6 +46,7 @@ jobs:
         id: update-version
         run: |
           TAG_NAME="${{ github.ref_name }}"
+          TAG_NAME=$(echo "$TAG_NAME" | tr -d '[:space:]')  # Remove espaços em branco da tag
           VERSION_FILE="src/main/resources/VERSION"
           if [ ! -f "$VERSION_FILE" ]; then
             echo "# This file is auto-generated. Do not update manually." > "$VERSION_FILE"
@@ -71,9 +72,12 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
       
+          # Atualiza a branch local com as mudanças remotas para evitar conflitos
+          git pull --rebase origin main
+
           git add src/main/resources/VERSION
           git commit -m "Github Action: atualiza resources/VERSION automaticamente: ${{ github.ref_name }}"
-      
+
           # Configura a URL remota com autenticação usando o GITHUB_TOKEN
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       
