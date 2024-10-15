@@ -66,23 +66,85 @@ jobs:
           echo "UPDATED=$UPDATED" >> $GITHUB_ENV
 
         # Etapa: Commit da alteração no VERSION somente se foi atualizado
-      - name: Commit updated VERSION file if necessary
+#      - name: Commit updated VERSION file if necessary
+#        if: env.UPDATED == 'true'
+#        run: |
+#          git config --global user.name "github-actions[bot]"
+#          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+#      
+#          # Atualiza a branch local com as mudanças remotas para evitar conflitos
+#          git pull --rebase origin main
+#
+#          git add src/main/resources/VERSION
+#          git commit -m "Github Action: atualiza resources/VERSION automaticamente: ${{ github.ref_name }}"
+#
+#          # Configura a URL remota com autenticação usando o GITHUB_TOKEN
+#          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+#      
+#          # Envia as mudanças para a branch main
+#          git push origin HEAD:main
+# -------------------------------------
+      - name: COMMIT - Configura usuário Git
         if: env.UPDATED == 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      
-          # Atualiza a branch local com as mudanças remotas para evitar conflitos
+
+      - name: COMMIT - Verificar branch e estado atual do repositório
+        if: env.UPDATED == 'true'
+        run: |
+          git branch -a
+          git status
+
+      - name: COMMIT - Puxar as últimas alterações da branch main (git pull)
+        if: env.UPDATED == 'true'
+        run: |
           git pull --rebase origin main
 
+      - name: COMMIT - Verificar status após o pull
+        if: env.UPDATED == 'true'
+        run: |
+          git status
+
+      - name: COMMIT - Adicionar arquivo VERSION ao commit
+        if: env.UPDATED == 'true'
+        run: |
           git add src/main/resources/VERSION
+          git status  # Verifica se o arquivo foi realmente adicionado
+
+      - name: COMMIT - Fazer commit da mudança
+        if: env.UPDATED == 'true'
+        run: |
           git commit -m "Github Action: atualiza resources/VERSION automaticamente: ${{ github.ref_name }}"
 
-          # Configura a URL remota com autenticação usando o GITHUB_TOKEN
+      - name: COMMIT - Verificar status após commit
+        if: env.UPDATED == 'true'
+        run: |
+          git log -1
+          git status
+
+      - name: COMMIT - Configura URL remota
+        if: env.UPDATED == 'true'
+        run: |
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-      
-          # Envia as mudanças para a branch main
+          git remote -v  # Verificar se o URL remoto foi configurado corretamente
+
+      - name: COMMIT - Puxar novamente antes de empurrar (git pull --rebase)
+        if: env.UPDATED == 'true'
+        run: |
+          git pull --rebase origin main
+          git status
+
+      - name: COMMIT - Enviar as mudanças para o repositório (git push)
+        if: env.UPDATED == 'true'
+        run: |
           git push origin HEAD:main
+
+# -------------------------------------
+
+
+
+
 
       - name: Check version type (Snapshot or Release)
         id: version-check
