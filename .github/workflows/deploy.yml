@@ -96,7 +96,7 @@ jobs:
           git branch -a
           git status
 
-      - name: COMMIT - Puxar as últimas alterações da branch main (git pull)
+      - name: COMMIT - Atualizar as últimas alterações da branch main (git pull)
         if: env.UPDATED == 'true'
         run: |
           git pull --rebase origin main
