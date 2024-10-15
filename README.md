@@ -34,7 +34,7 @@ Adicione a seguinte dependência no seu arquivo pom.xml:
 <dependency>
    <groupId>chat.dobot.bot</groupId>
    <artifactId>DoBot.chat</artifactId>
-   <version>1.1.0</version>
+   <version>1.1.1</version>
    <type>pom</type>
 </dependency>
 ```
