@@ -65,86 +65,40 @@ jobs:
           fi
           echo "UPDATED=$UPDATED" >> $GITHUB_ENV
 
-      - name: Update POM version
+      - name: Update POM and README.md version
         if: env.UPDATED == 'true'
         run: |
           mvn versions:set -DnewVersion=${{ github.ref_name }}
+          sed -i "s/<version>.*<\/version>/<version>${{ github.ref_name }}<\/version>/" README.md
 
-        # Etapa: Commit da alteração no VERSION somente se foi atualizado
-#      - name: Commit updated VERSION file if necessary
-#        if: env.UPDATED == 'true'
-#        run: |
-#          git config --global user.name "github-actions[bot]"
-#          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-#      
-#          # Atualiza a branch local com as mudanças remotas para evitar conflitos
-#          git pull --rebase origin main
-#
-#          git add src/main/resources/VERSION
-#          git commit -m "Github Action: atualiza resources/VERSION automaticamente: ${{ github.ref_name }}"
-#
-#          # Configura a URL remota com autenticação usando o GITHUB_TOKEN
-#          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-#      
-#          # Envia as mudanças para a branch main
-#          git push origin HEAD:main
-# -------------------------------------
-      - name: COMMIT - Configura usuário Git
+      - name: GIT - COMMIT AND PUSH
         if: env.UPDATED == 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: COMMIT - Verificar branch e estado atual do repositório
-        if: env.UPDATED == 'true'
-        run: |
+          # Verificar branch e estado atual do repositório
           git branch -a
           git status
 
-      - name: COMMIT - Adicionar arquivo pom.xml e VERSION ao commit
-        if: env.UPDATED == 'true'
-        run: |
+          # Adicionar arquivo pom.xml, README.md e VERSION ao commit
           git add src/main/resources/VERSION
           git add pom.xml
+          git add README.md
           git status  # Verifica se os arquivos foram adicionados
 
-      - name: COMMIT - Fazer commit da mudança
-        if: env.UPDATED == 'true'
-        run: |
+          # Fazer commit das mudanças
           git commit -m "Github Action: atualiza pom.xml e resources/VERSION automaticamente: ${{ github.ref_name }}"
 
-      - name: COMMIT - Atualizar as últimas alterações da branch main (git pull)
-        if: env.UPDATED == 'true'
-        run: |
+          # Atualizar as últimas alterações da branch main (git pull)
           git pull --rebase origin main
 
-      - name: COMMIT - Verificar status após o pull
-        if: env.UPDATED == 'true'
-        run: |
-          git status
-
-      - name: COMMIT - Verificar status após commit
-        if: env.UPDATED == 'true'
-        run: |
-          git log -1
-          git status
-
-      - name: COMMIT - Configura URL remota
-        if: env.UPDATED == 'true'
-        run: |
+          # Configura URL remota
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git remote -v  # Verificar se o URL remoto foi configurado corretamente
 
-      - name: COMMIT - Enviar as mudanças para o repositório (git push)
-        if: env.UPDATED == 'true'
-        run: |
+          # Enviar as mudanças para o repositório (git push)
           git push origin HEAD:main
-
-# -------------------------------------
-
-
-
-
 
       - name: Check version type (Snapshot or Release)
         id: version-check
